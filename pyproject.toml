@@ -1,0 +1,17 @@
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "-ra",
+    "-q",
+    "--cov=pidcalib2",
+]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:uproot"
+]
+markers = [
+    "xrootd: tests requiring xrootd EOS authentication (deselect with '-m \"not xrootd\"')",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
