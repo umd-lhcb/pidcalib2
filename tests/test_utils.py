@@ -45,13 +45,9 @@ def test_extract_branches_to_dataframe():
 
 def test_translate_pid_cuts_to_branch_cuts():
     assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK<4", "ProbNNPi>3"], ["P", "ETA"]
+        "probe", ["DLLK<4", "ProbNNPi>3"]
     ) == ["probe_PIDK<4", "ProbNNPi>3"]
 
     assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK<4", "ProbNNPi>3"], ["ETA"]
-    ) == ["probe_PIDK<4", "ProbNNPi>3"]
-
-    assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK < 4", "ProbNNPi > 3"], ["ETA"]
+        "probe", ["DLLK < 4", "ProbNNPi > 3"]
     ) == ["probe_PIDK<4", "ProbNNPi>3"]
