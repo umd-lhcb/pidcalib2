@@ -1,0 +1,14 @@
+image: gitlab-registry.cern.ch/ci-tools/ci-worker:cc7
+
+stages:
+    - test
+
+before_script:
+    - source /cvmfs/lhcb.cern.ch/lib/LbEnv
+    - lb-conda-dev virtual-env default/2020-11-18 .venv
+    - .venv/run pip install "attrs==20.3.0" "coverage==5.3" "iniconfig==1.1.1" "logzero==1.6.3" "packaging==20.7" "pluggy==0.13.1" "py==1.9.0" "pyparsing==2.4.7" "pytest==6.1.2" "pytest-cov==2.10.1" "toml==0.10.2"
+
+run_tests:
+    stage: test
+    script:
+        - .venv/run pytest -v -m "not xrootd"
