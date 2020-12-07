@@ -1,11 +1,13 @@
 import re
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
-from tqdm import tqdm
-import uproot4
+import boost_histogram as bh
 import pandas as pd
+import uproot4
 from logzero import logger as log
+from tqdm import tqdm
 from XRootD import client as xrdclient
+from . import binning
 
 # Dict of mothers for each particle type
 mothers = {"pi": ["DSt"], "K": ["DSt"], "mu": ["Jpsi"]}
@@ -67,24 +69,31 @@ def pidcalib_sample_dir(year: int, magnet: str) -> str:
     return dirs[year][magnet]
 
 
-# Make a list of variables to put into calib DataFrame, based on user-supplied
-# PID and binning variables
-# TODO: Write doc string
-# TODO: Add type hints
-def get_relevant_branch_names(name: str, pid_cuts: str, bin_vars: str) -> List[str]:
-    """Return a list of variables to """
-    branch_names = create_branch_names(name)
-    vars = []
+def get_relevant_branch_names(
+    prefix: str, pid_cuts: List[str], bin_vars: List[str]
+) -> List[str]:
+    """Return a list of branch names relevant to the PID cuts and binning vars.
+
+    Args:
+        prefix: A prefix for the branch names, i.e., "probe".
+        pid_cuts: Simplified user-level cut list, e.g., ["DLLK < 4"].
+        bin_vars: Variables used for the binning.
+    """
+    branch_names = create_branch_names(prefix)
+    relevant_branch_names = []
     # Add sWeight if calib sample
-    if name == "probe":
-        vars.append(branch_names["sw"])
+    if prefix == "probe":
+        relevant_branch_names.append(branch_names["sw"])
     for bin_var in bin_vars:
-        vars.append(branch_names[bin_var])
+        relevant_branch_names.append(branch_names[bin_var])
     for pid_cut in pid_cuts:
         for branch_name in branch_names:
-            if branch_name in pid_cut and branch_names[branch_name] not in vars:
-                vars.append(branch_names[branch_name])
-    return vars
+            if (
+                branch_name in pid_cut
+                and branch_names[branch_name] not in relevant_branch_names
+            ):
+                relevant_branch_names.append(branch_names[branch_name])
+    return relevant_branch_names
 
 
 def get_eos_paths(year: int, magnet: str) -> List[str]:
@@ -128,7 +137,7 @@ def extract_branches_to_dataframe(
                 df = tree.arrays(branches, library="pd")  # type: ignore
                 df_tot = df_tot.append(df)
 
-    log.info(f"Read {len(paths)} files")
+    log.info(f"Read {len(paths)} files with a total of {len(df_tot.index)} events")
     return df_tot
 
 
@@ -148,14 +157,67 @@ def translate_pid_cuts_to_branch_cuts(prefix: str, pid_cuts: List[str]) -> List[
             translation).
     """
     branch_cuts = []
-    branch_names = create_branch_names(prefix)
-    whitespace = re.compile(r"\s+")
     for pid_cut in pid_cuts:
-        # Remove whitespace in the cut string
-        pid_cut = re.sub(whitespace, "", pid_cut)
-        pid_cut_var, _ = re.split(r"<|>", pid_cut)
-        if pid_cut_var in branch_names:
-            branch_cuts.append(pid_cut.replace(pid_cut_var, branch_names[pid_cut_var]))
-        else:
-            branch_cuts.append(pid_cut)
+        pid_cut_var, pid_cut_string = pid_cut_to_branch_name_and_cut(prefix, pid_cut)
+        branch_cuts.append(pid_cut_var + pid_cut_string)
     return branch_cuts
+
+
+def make_hist(particle: str, df: pd.DataFrame, bin_vars: List[str]) -> bh.Histogram:
+    """Create a histogram of sWeighted events with appropriate binning
+
+    Args:
+        particle: Particle type (K, pi, etc.)
+        df: DataFrame from which to histogram events
+        bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"]
+
+    Returns:
+        bh.Histogram: [description]
+    """
+    axis_list = []
+    vals_list = []
+
+    # The first branch should always be the sWeight
+    sweights = df.iloc[:, [0]]
+    binning_branches = list(df.columns)[1 : 1 + len(bin_vars)]
+
+    # Loop over bin dimensions and define the axes
+    for i, bin_var in enumerate(bin_vars):
+        axis_list.append(bh.axis.Variable(binning.binnings[particle][bin_var]))
+        vals = df[binning_branches[i]].values
+        vals_list.append(vals)
+
+    # Create boost-histogram with the desired axes, and fill with sWeight applied
+    hist = bh.Histogram(*axis_list)
+    hist.fill(*vals_list, weight=sweights)
+
+    return hist
+
+
+def pid_cut_to_branch_name_and_cut(prefix: str, pid_cut: str) -> Tuple[str, str]:
+    """Translate a PID cut in the simplified notation to a branch name.
+
+    Args:
+        prefix: A prefix to be prepended to the branch name, e.g., "probe".
+        pid_cut: PID cut in the simplified notation, e.g., "DLLK > 4".
+
+    Returns:
+        A tuple of (translated branch name, cut string), e.g., ("probe_PIDK", "<4").
+    """
+    branch_names = create_branch_names(prefix)
+    # Remove whitespace in the cut string
+    whitespace = re.compile(r"\s+")
+    pid_cut = re.sub(whitespace, "", pid_cut)
+    pid_cut_var, delimiter, cut_string = re.split(r"(<|>)", pid_cut)
+    # The cut variable must be in the branch_names - we can't cut on something
+    # that is not present in the DataFrame
+    try:
+        return branch_names[pid_cut_var], delimiter + cut_string
+    except KeyError:
+        log.error(
+            (
+                f"The PID cut variable {pid_cut_var} is not among "
+                f"known branch names: {branch_names.keys()}"
+            )
+        )
+        raise

@@ -1,3 +1,4 @@
+import pandas as pd
 import pytest
 from pidcalib2 import utils
 
@@ -27,6 +28,9 @@ def test_get_eos_paths():
         == "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision18/PIDCALIB.ROOT/00082947/0000/00082947_00000001_1.pidcalib.root"
     )
 
+    with pytest.raises(Exception):
+        utils.get_eos_paths(2222, "sideways")
+
 
 @pytest.mark.xrootd
 @pytest.mark.slow
@@ -45,9 +49,39 @@ def test_extract_branches_to_dataframe():
 
 def test_translate_pid_cuts_to_branch_cuts():
     assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK<4", "ProbNNPi>3"]
-    ) == ["probe_PIDK<4", "ProbNNPi>3"]
+        "probe", ["DLLK<4", "ProbNNpi>3"]
+    ) == ["probe_PIDK<4", "probe_MC15TuneV1_ProbNNpi>3"]
 
     assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK < 4", "ProbNNPi > 3"]
-    ) == ["probe_PIDK<4", "ProbNNPi>3"]
+        "probe", ["DLLK < 4", "ProbNNpi > 3"]
+    ) == ["probe_PIDK<4", "probe_MC15TuneV1_ProbNNpi>3"]
+
+
+def test_make_hist():
+    df = pd.read_csv("tests/data/test_data.csv", index_col=0)
+    hist = utils.make_hist("pi", df, ["P"])
+    assert hist.size == 20
+    assert hist.sum() == pytest.approx(3.748673378380427)
+    assert hist[3] == pytest.approx(2.9029769518773865)
+
+
+def test_get_relevant_branch_names():
+    assert utils.get_relevant_branch_names("probe", ["DLLK < 4"], ["P"]) == [
+        "probe_sWeight",
+        "probe_P",
+        "probe_PIDK",
+    ]
+
+    assert utils.get_relevant_branch_names("probe", ["DLLp > 4"], ["P", "ETA"]) == [
+        "probe_sWeight",
+        "probe_P",
+        "probe_ETA",
+        "probe_PIDp",
+    ]
+
+
+def test_pid_cut_to_branch_name_and_cut():
+    assert utils.pid_cut_to_branch_name_and_cut("probe", "DLLK > 4") == ("probe_PIDK", ">4")
+
+    with pytest.raises(KeyError):
+        utils.pid_cut_to_branch_name_and_cut("probe", "DLLX > 4")
