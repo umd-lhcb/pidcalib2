@@ -181,7 +181,7 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
 
     # The first branch should always be the sWeight
     sweights = df.iloc[:, [0]]
-    binning_branches = list(df.columns)[1 : 1 + len(bin_vars)]
+    binning_branches = list(df.columns)[1 : 1 + len(bin_vars)]  # noqa: E203
 
     # Loop over bin dimensions and define the axes
     for i, bin_var in enumerate(bin_vars):
@@ -225,32 +225,43 @@ def pid_cut_to_branch_name_and_cut(prefix: str, pid_cut: str) -> Tuple[str, str]
         raise
 
 
-def create_histograms(
+def create_eff_histograms(
     df_total: pd.DataFrame, particle: str, pid_cuts: List[str], bin_vars: List[str]
 ) -> Dict[str, bh.Histogram]:
-    hists = {}
+    """Create efficiency histograms for all supplied PID cuts.
 
-    hists["total"] = make_hist(df_total, particle, bin_vars)
-    zero_bins = np.count_nonzero(hists["total"].view(flow=False) == 0)
+    Args:
+        df_total: DataFrame with all events
+        particle: Particle type (K, pi, etc.)
+        pid_cuts: Branch-level cut list, e.g., ["probe_PIDK<4"].
+        bin_vars: Variables used for binning.
+
+    Returns:
+        A dictionary with all the efficiency histograms, with the PID cuts as
+        keys.
+    """
+
+    hist_total = make_hist(df_total, particle, bin_vars)
+    zero_bins = np.count_nonzero(hist_total.view(flow=False) == 0)
     if zero_bins:
         log.warning(f"There are {zero_bins} empty bins in the total histogram!")
-        print(hists["total"].view(flow=False))
 
+    eff_hists = {}
     n_total = len(df_total.index)
     for i, pid_cut in enumerate(pid_cuts):
-        log.debug(f"Processing '{pid_cuts[i]}' cut")
+        log.info(f"Processing '{pid_cuts[i]}' cut")
         df_passing = df_total.query(pid_cut)
         n_passing = len(df_passing.index)
-        log.debug(
+        log.info(
             f"{n_passing}/{n_total} ({n_passing / n_total * 100:.2f}%) events passed the cut"
         )
-        hists[f"pass_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
-        log.debug(f"Created 'pass_{pid_cut}' histogram")
+        hist_passing = make_hist(df_passing, particle, bin_vars)
+        log.debug(f"Created 'passing' histogram")
 
-        hists[f"eff_{pid_cut}"] = hists[f"pass_{pid_cut}"].copy()
-        hists[f"eff_{pid_cut}"][...] = hists[f"pass_{pid_cut}"].view(
+        eff_hists[f"eff_{pid_cut}"] = hist_passing.copy()
+        eff_hists[f"eff_{pid_cut}"][...] = hist_passing.view(
             flow=False
-        ) / hists["total"].view(flow=False)
+        ) / hist_total.view(flow=False)
         log.debug(f"Created 'eff_{pid_cut}' histogram")
 
-    return hists
+    return eff_hists

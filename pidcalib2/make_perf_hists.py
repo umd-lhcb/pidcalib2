@@ -2,6 +2,7 @@ import argparse
 import pathlib
 
 import pandas as pd
+import pickle
 from logzero import logger as log
 
 from . import utils
@@ -113,12 +114,23 @@ def make_perf_hists(config: dict) -> None:
         calib_par_name, config["pid_cuts"]
     )
 
-    hists = utils.create_histograms(
+    eff_hists = utils.create_eff_histograms(
         df_total, config["particle"], pid_cuts, config["bin_vars"]
     )
 
-    log.debug(f"bins = {hists['tot'].size}")
-    log.debug(f"sum  = {hists['tot'].sum()}")
+    for name, hist in eff_hists.items():
+        hist_filename = (
+            f"effhist_"
+            f"{config['year']}_"
+            f"{config['magnet']}_"
+            f"{config['particle']}_"
+            f"{name.replace('eff_', '')}"
+            ".pkl"
+        )
+        eff_hist_path = output_dir / hist_filename
+        with open(eff_hist_path, "wb") as f:
+            pickle.dump(hist, f)
+            log.info(f"Efficiency histogram saved to '{eff_hist_path}'")
 
 
 if __name__ == "__main__":
