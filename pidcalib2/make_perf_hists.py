@@ -1,7 +1,7 @@
 import argparse
 import pathlib
 
-import pandas
+import pandas as pd
 from logzero import logger as log
 
 from . import utils
@@ -83,7 +83,8 @@ def make_perf_hists(config: dict) -> None:
     # config["pid_cuts"] = [re.sub(pattern, '', pid_cut) for pid_cut in config["pid_cuts"]]
     log_config(config)
 
-    pathlib.Path(config["output_dir"]).mkdir(parents=True, exist_ok=True)
+    output_dir = pathlib.Path(config["output_dir"])
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # TODO Change name/review if necessary
     calib_par_name = "probe"
@@ -95,27 +96,26 @@ def make_perf_hists(config: dict) -> None:
     eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
     log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
 
-    df_tot = None
+    df_total = None
     if config["local_dataframe"] is not None:
-        df_tot = pandas.read_pickle(config["local_dataframe"])
+        df_total = pd.read_pickle(config["local_dataframe"])
         log.info(
-            f"Read {config['local_dataframe']} with a total of {len(df_tot.index)} events"
+            f"Read {config['local_dataframe']} with a total of {len(df_total.index)} events"
         )
     else:
-        df_tot = utils.extract_branches_to_dataframe(
+        df_total = utils.extract_branches_to_dataframe(
             eos_paths, config["particle"], branch_names
         )
-    # df_tot.to_pickle("local_dataframe.pkl")
+    # df_total.to_pickle("local_dataframe.pkl")
+    # df_total.to_csv("local_dataframe.csv")
 
     pid_cuts = utils.translate_pid_cuts_to_branch_cuts(
         calib_par_name, config["pid_cuts"]
     )
 
-    hists = {}
-    # Hist of total sample (last argument is the sWeight)
-    hists["tot"] = utils.make_hist(config["particle"], df_tot, config["bin_vars"],)
-
-    df_tot.head().to_csv("test_data.csv")
+    hists = utils.create_histograms(
+        df_total, config["particle"], pid_cuts, config["bin_vars"]
+    )
 
     log.debug(f"bins = {hists['tot'].size}")
     log.debug(f"sum  = {hists['tot'].sum()}")

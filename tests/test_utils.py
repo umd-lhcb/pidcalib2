@@ -28,9 +28,6 @@ def test_get_eos_paths():
         == "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision18/PIDCALIB.ROOT/00082947/0000/00082947_00000001_1.pidcalib.root"
     )
 
-    with pytest.raises(Exception):
-        utils.get_eos_paths(2222, "sideways")
-
 
 @pytest.mark.xrootd
 @pytest.mark.slow
@@ -59,10 +56,10 @@ def test_translate_pid_cuts_to_branch_cuts():
 
 def test_make_hist():
     df = pd.read_csv("tests/data/test_data.csv", index_col=0)
-    hist = utils.make_hist("pi", df, ["P"])
+    hist = utils.make_hist(df, "pi", ["P"])
     assert hist.size == 20
-    assert hist.sum() == pytest.approx(3.748673378380427)
-    assert hist[3] == pytest.approx(2.9029769518773865)
+    assert hist.sum() == pytest.approx(71.55106080517815)
+    assert hist[3] == pytest.approx(13.581349537355582)
 
 
 def test_get_relevant_branch_names():
@@ -81,7 +78,18 @@ def test_get_relevant_branch_names():
 
 
 def test_pid_cut_to_branch_name_and_cut():
-    assert utils.pid_cut_to_branch_name_and_cut("probe", "DLLK > 4") == ("probe_PIDK", ">4")
+    assert utils.pid_cut_to_branch_name_and_cut("probe", "DLLK > 4") == (
+        "probe_PIDK",
+        ">4",
+    )
 
     with pytest.raises(KeyError):
         utils.pid_cut_to_branch_name_and_cut("probe", "DLLX > 4")
+
+
+def test_create_histograms():
+    df = pd.read_csv("tests/data/test_data.csv", index_col=0)
+    hists = utils.create_histograms(df, "pi", ["probe_PIDK>4"], ["P"])
+    assert hists["eff_probe_PIDK>4"].sum() / hists[
+        "eff_probe_PIDK>4"
+    ].size == pytest.approx(0.18751578358705173 / 20)

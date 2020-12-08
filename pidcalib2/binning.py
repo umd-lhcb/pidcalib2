@@ -1,7 +1,6 @@
 from typing import List
 
 import numpy as np
-from logzero import logger as log
 
 valid_particles = ["pi", "K", "p", "mu"]
 

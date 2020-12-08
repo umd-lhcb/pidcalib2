@@ -2,11 +2,13 @@ import re
 from typing import Dict, List, Tuple
 
 import boost_histogram as bh
+import numpy as np
 import pandas as pd
 import uproot4
 from logzero import logger as log
 from tqdm import tqdm
 from XRootD import client as xrdclient
+
 from . import binning
 
 # Dict of mothers for each particle type
@@ -163,12 +165,12 @@ def translate_pid_cuts_to_branch_cuts(prefix: str, pid_cuts: List[str]) -> List[
     return branch_cuts
 
 
-def make_hist(particle: str, df: pd.DataFrame, bin_vars: List[str]) -> bh.Histogram:
+def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histogram:
     """Create a histogram of sWeighted events with appropriate binning
 
     Args:
-        particle: Particle type (K, pi, etc.)
         df: DataFrame from which to histogram events
+        particle: Particle type (K, pi, etc.)
         bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"]
 
     Returns:
@@ -221,3 +223,34 @@ def pid_cut_to_branch_name_and_cut(prefix: str, pid_cut: str) -> Tuple[str, str]
             )
         )
         raise
+
+
+def create_histograms(
+    df_total: pd.DataFrame, particle: str, pid_cuts: List[str], bin_vars: List[str]
+) -> Dict[str, bh.Histogram]:
+    hists = {}
+
+    hists["total"] = make_hist(df_total, particle, bin_vars)
+    zero_bins = np.count_nonzero(hists["total"].view(flow=False) == 0)
+    if zero_bins:
+        log.warning(f"There are {zero_bins} empty bins in the total histogram!")
+        print(hists["total"].view(flow=False))
+
+    n_total = len(df_total.index)
+    for i, pid_cut in enumerate(pid_cuts):
+        log.debug(f"Processing '{pid_cuts[i]}' cut")
+        df_passing = df_total.query(pid_cut)
+        n_passing = len(df_passing.index)
+        log.debug(
+            f"{n_passing}/{n_total} ({n_passing / n_total * 100:.2f}%) events passed the cut"
+        )
+        hists[f"pass_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
+        log.debug(f"Created 'pass_{pid_cut}' histogram")
+
+        hists[f"eff_{pid_cut}"] = hists[f"pass_{pid_cut}"].copy()
+        hists[f"eff_{pid_cut}"][...] = hists[f"pass_{pid_cut}"].view(
+            flow=False
+        ) / hists["total"].view(flow=False)
+        log.debug(f"Created 'eff_{pid_cut}' histogram")
+
+    return hists
