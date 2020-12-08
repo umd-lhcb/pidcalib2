@@ -69,7 +69,7 @@ def log_config(config: dict) -> None:
     log.info("=" * longest_key)
 
 
-def make_perf_hists(config: dict) -> None:
+def make_eff_hists(config: dict) -> None:
     """Create sWeighted PID calibration histograms and save them to disk.
 
     Bla bla.
@@ -135,4 +135,4 @@ def make_perf_hists(config: dict) -> None:
 
 if __name__ == "__main__":
     config = vars(decode_arguments())
-    make_perf_hists(config)
+    make_eff_hists(config)
