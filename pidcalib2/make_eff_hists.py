@@ -101,10 +101,7 @@ def make_eff_hists(config: dict) -> None:
 
     df_total = None
     if config["local_dataframe"] is not None:
-        df_total = pd.read_pickle(config["local_dataframe"])
-        log.info(
-            f"Read {config['local_dataframe']} with a total of {len(df_total.index)} events"
-        )
+        df_total = utils.dataframe_from_local_file(config["local_dataframe"])
     else:
         df_total = utils.extract_branches_to_dataframe(
             eos_paths, config["particle"], branch_names

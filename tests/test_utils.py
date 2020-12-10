@@ -93,3 +93,9 @@ def test_create_eff_histograms():
     assert hists["eff_probe_PIDK>4"].sum() / hists[
         "eff_probe_PIDK>4"
     ].size == pytest.approx(0.18751578358705173 / 20)
+
+
+def test_dataframe_from_local_file():
+    df = utils.dataframe_from_local_file("tests/data/test_data.csv")
+    assert df.shape[0] == 99
+    assert df["probe_sWeight"][0] == pytest.approx(1.1081801082842266)

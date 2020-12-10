@@ -242,6 +242,7 @@ def create_eff_histograms(
     zero_bins = np.count_nonzero(hist_total.view(flow=False) == 0)
     if zero_bins:
         log.warning(f"There are {zero_bins} empty bins in the total histogram!")
+        log.warning(hist_total.view(flow=False))
 
     eff_hists = {}
     n_total = len(df_total.index)
@@ -262,3 +263,27 @@ def create_eff_histograms(
         log.debug(f"Created 'eff_{pid_cut}' histogram")
 
     return eff_hists
+
+
+def dataframe_from_local_file(path: str) -> pd.DataFrame:
+    """Return a dataframe read from a local file (instead of EOS)
+
+    Args:
+        path: Path to the local file
+    """
+    if path.endswith("pkl"):
+        df = pd.read_pickle(path)
+    elif path.endswith("csv"):
+        df = pd.read_csv(path, index_col=0)
+    else:
+        log.error(
+            (
+                f"Local dataframe file '{path}' "
+                f"has an unknown suffix (csv and pkl supported)"
+            )
+        )
+        raise Exception("Only csv and pkl files supported")
+    log.info(
+        f"Read {path} with a total of {len(df.index)} events"
+    )
+    return df
