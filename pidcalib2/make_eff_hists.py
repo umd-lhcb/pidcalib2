@@ -96,13 +96,12 @@ def make_eff_hists(config: dict) -> None:
     )
     log.info(f"Branches to be read: {branch_names}")
 
-    eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
-    log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
-
     df_total = None
-    if config["local_dataframe"] is not None:
+    if config["local_dataframe"]:
         df_total = utils.dataframe_from_local_file(config["local_dataframe"])
     else:
+        eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
+        log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
         df_total = utils.extract_branches_to_dataframe(
             eos_paths, config["particle"], branch_names
         )
