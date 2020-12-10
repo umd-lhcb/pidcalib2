@@ -172,9 +172,6 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
         df: DataFrame from which to histogram events
         particle: Particle type (K, pi, etc.)
         bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"]
-
-    Returns:
-        bh.Histogram: [description]
     """
     axis_list = []
     vals_list = []

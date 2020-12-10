@@ -1,7 +1,6 @@
 import argparse
 import pathlib
 
-import pandas as pd
 import pickle
 from logzero import logger as log
 
@@ -72,8 +71,12 @@ def log_config(config: dict) -> None:
 def make_eff_hists(config: dict) -> None:
     """Create sWeighted PID calibration histograms and save them to disk.
 
-    Bla bla.
-    #TODO Finish docstring
+    Calibration samples from EOS are read and relevant branches extracted to
+    a DataFrame. Each PID cut is applied to the DataFrame in turn and the
+    results are histogrammed (each event with its associated sWeight).
+    Particle type and binning variables are used to select an appropriate
+    predefined binning. The efficiency histograms are saved to a requested
+    output directory.
     """
     # log_format = '%(color)s[%(levelname)1.1s %(module)s:%(lineno)d]%(end_color)s %(message)s'
     # formatter = logzero.LogFormatter(fmt=log_format)
@@ -87,10 +90,9 @@ def make_eff_hists(config: dict) -> None:
     output_dir = pathlib.Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # TODO Change name/review if necessary
-    calib_par_name = "probe"
+    calibration_prefix = "probe"
     branch_names = utils.get_relevant_branch_names(
-        calib_par_name, config["pid_cuts"], config["bin_vars"]
+        calibration_prefix, config["pid_cuts"], config["bin_vars"]
     )
     log.info(f"Branches to be read: {branch_names}")
 
@@ -111,7 +113,7 @@ def make_eff_hists(config: dict) -> None:
     # df_total.to_csv("local_dataframe.csv")
 
     pid_cuts = utils.translate_pid_cuts_to_branch_cuts(
-        calib_par_name, config["pid_cuts"]
+        calibration_prefix, config["pid_cuts"]
     )
 
     eff_hists = utils.create_eff_histograms(
