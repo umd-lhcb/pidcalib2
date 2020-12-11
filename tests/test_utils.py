@@ -44,16 +44,6 @@ def test_calib_root_to_dataframe():
     )
 
 
-def test_translate_pid_cuts_to_branch_cuts():
-    assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK<4", "ProbNNpi>3"]
-    ) == ["probe_PIDK<4", "probe_MC15TuneV1_ProbNNpi>3"]
-
-    assert utils.translate_pid_cuts_to_branch_cuts(
-        "probe", ["DLLK < 4", "ProbNNpi > 3"]
-    ) == ["probe_PIDK<4", "probe_MC15TuneV1_ProbNNpi>3"]
-
-
 def test_make_hist():
     df = pd.read_csv("tests/data/test_data.csv", index_col=0)
     hist = utils.make_hist(df, "pi", ["P"])
@@ -75,16 +65,6 @@ def test_get_relevant_branch_names():
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
     }
-
-
-def test_pid_cut_to_branch_name_and_cut():
-    assert utils.pid_cut_to_branch_name_and_cut("probe", "DLLK > 4") == (
-        "probe_PIDK",
-        ">4",
-    )
-
-    with pytest.raises(KeyError):
-        utils.pid_cut_to_branch_name_and_cut("probe", "DLLX > 4")
 
 
 def test_create_eff_histograms():

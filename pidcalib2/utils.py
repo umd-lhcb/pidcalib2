@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import boost_histogram as bh
 import numpy as np
@@ -195,28 +195,6 @@ def calib_root_to_dataframe(
     return df_tot
 
 
-# TODO See if the prefix should be removed from the arguments
-def translate_pid_cuts_to_branch_cuts(prefix: str, pid_cuts: List[str]) -> List[str]:
-    """Return a list cuts that can be applied to the calib. DataFrame.
-
-    The PID cuts are usually specified in a simplified notation such as 'DLLK
-    < 4'. However, the calibration sample doesn't contain a 'DLLK' column,
-    but rather 'probe_PIDK'. This function translates cuts in the simplified
-    notation to the actual variable names in the calibration datasets.
-
-    Args:
-        prefix: A string to be prepended to each branch name, except nTracks.
-        pid_cuts: Simplified user-level cut list, e.g., ["DLLK < 4"].
-        bin_vars: Variables used for the binning (will be excluded from the
-            translation).
-    """
-    branch_cuts = []
-    for pid_cut in pid_cuts:
-        pid_cut_var, pid_cut_string = pid_cut_to_branch_name_and_cut(prefix, pid_cut)
-        branch_cuts.append(pid_cut_var + pid_cut_string)
-    return branch_cuts
-
-
 def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histogram:
     """Create a histogram of sWeighted events with appropriate binning
 
@@ -239,35 +217,6 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
     hist.fill(*vals_list, weight=df["sw"])
 
     return hist
-
-
-def pid_cut_to_branch_name_and_cut(prefix: str, pid_cut: str) -> Tuple[str, str]:
-    """Translate a PID cut in the simplified notation to a branch name.
-
-    Args:
-        prefix: A prefix to be prepended to the branch name, e.g., "probe".
-        pid_cut: PID cut in the simplified notation, e.g., "DLLK > 4".
-
-    Returns:
-        A tuple of (translated branch name, cut string), e.g., ("probe_PIDK", "<4").
-    """
-    branch_names = create_branch_names(prefix)
-    # Remove whitespace in the cut string
-    whitespace = re.compile(r"\s+")
-    pid_cut = re.sub(whitespace, "", pid_cut)
-    pid_cut_var, delimiter, cut_string = re.split(r"(<|>)", pid_cut)
-    # The cut variable must be in the branch_names - we can't cut on something
-    # that is not present in the DataFrame
-    try:
-        return branch_names[pid_cut_var], delimiter + cut_string
-    except KeyError:
-        log.error(
-            (
-                f"The PID cut variable {pid_cut_var} is not among "
-                f"known branch names: {branch_names.keys()}"
-            )
-        )
-        raise
 
 
 def create_eff_histograms(
