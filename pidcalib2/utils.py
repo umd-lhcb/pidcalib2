@@ -148,7 +148,7 @@ def get_eos_paths(year: int, magnet: str, max_files: int = None) -> List[str]:
 
 
 def root_to_dataframe(
-    path: str, tree_name: str, branches: Dict[str, str]
+    path: str, tree_name: str, branches: List[str]
 ) -> pd.DataFrame:
     """Return DataFrame with requested branches from tree in ROOT file.
 
@@ -159,11 +159,7 @@ def root_to_dataframe(
         branches: Branches to put in the DataFrame.
     """
     tree = uproot4.open(path)[tree_name]
-    df = tree.arrays(branches.values(), library="pd")  # type: ignore
-    # Rename colums of the dataset from branch names to simple user-level
-    # names, e.g., probe_PIDK -> DLLK.
-    inverse_branch_dict = {val: key for key, val in branches.items()}
-    df = df.rename(columns=inverse_branch_dict)
+    df = tree.arrays(branches, library="pd")  # type: ignore
     return df
 
 
@@ -171,6 +167,10 @@ def calib_root_to_dataframe(
     paths: List[str], particle: str, branches: Dict[str, str]
 ) -> pd.DataFrame:
     """Read ROOT files via XRootD, extract branches, and save to a Pandas DF.
+
+    DataFrame columns are not named after the branches in the ROOT trees, but
+    rather by their associated 'simple user-level' analogues. E.g., 'DLLK'
+    instead of 'probe_PIDK'.
 
     Args:
         paths: Paths to ROOT files; either file system paths or URLs, e.g.
@@ -188,8 +188,13 @@ def calib_root_to_dataframe(
         for mother in mothers[particle]:
             for charge in charges[particle]:
                 tree_path = f"{mother}_{particle.capitalize()}{charge}Tuple/DecayTree"
-                df = root_to_dataframe(path, tree_path, branches)
+                df = root_to_dataframe(path, tree_path, list(branches.values()))
                 df_tot = df_tot.append(df)
+
+    # Rename colums of the dataset from branch names to simple user-level
+    # names, e.g., probe_PIDK -> DLLK.
+    inverse_branch_dict = {val: key for key, val in branches.items()}
+    df_tot = df_tot.rename(columns=inverse_branch_dict)  # type: ignore
 
     log.info(f"Read {len(paths)} files with a total of {len(df_tot.index)} events")
     return df_tot
