@@ -31,9 +31,9 @@ def test_get_eos_paths():
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_extract_branches_to_dataframe():
+def test_calib_root_to_dataframe():
     assert (
-        utils.extract_branches_to_dataframe(
+        utils.calib_root_to_dataframe(
             [
                 "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision15/PIDCALIB.ROOT/00064787/0000/00064787_00000037_1.pidcalib.root"  # noqa: E501
             ],

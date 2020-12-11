@@ -59,15 +59,6 @@ def decode_arguments():
     return args
 
 
-def log_config(config: dict) -> None:
-    log.info("Running PIDCalib2 make_perf_hists with the following config:")
-    longest_key = len(max(config, key=len))
-    log.info("=" * longest_key)
-    for entry in config:
-        log.info(f"{entry:{longest_key}}: {config[entry]}")
-    log.info("=" * longest_key)
-
-
 def make_eff_hists(config: dict) -> None:
     """Create sWeighted PID calibration histograms and save them to disk.
 
@@ -85,7 +76,8 @@ def make_eff_hists(config: dict) -> None:
     # TODO Setup log file
     # pattern = re.compile(r"\s+")
     # config["pid_cuts"] = [re.sub(pattern, '', pid_cut) for pid_cut in config["pid_cuts"]]
-    log_config(config)
+    log.info("Running PIDCalib2 make_perf_hists with the following config:")
+    utils.log_config(config)
 
     output_dir = pathlib.Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -102,7 +94,7 @@ def make_eff_hists(config: dict) -> None:
     else:
         eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
-        df_total = utils.extract_branches_to_dataframe(
+        df_total = utils.calib_root_to_dataframe(
             eos_paths, config["particle"], branch_names
         )
     # df_total.to_pickle("local_dataframe.pkl")

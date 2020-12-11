@@ -98,6 +98,33 @@ def get_relevant_branch_names(
     return relevant_branch_names
 
 
+def get_reference_branch_names(
+    ref_pars: Dict[str, List[str]], bin_vars: Dict[str, str]
+) -> List[str]:
+    """Return a list of relevant branch names in the reference sample.
+
+    Args:
+        ref_pars: A dict of {particle branch prefix : [particle type, PID cut]}
+
+    Returns:
+        List[str]: [description]
+    """
+    branch_names = []
+
+    # TODO: Review these hardcoded branch names (maybe consolidate them
+    # somewhere)
+    if "nTracks" in bin_vars:
+        branch_names.append(bin_vars["nTracks"])
+    if "nSPDHits" in bin_vars:
+        branch_names.append(bin_vars["nTracks"])
+
+    for ref_par_name in ref_pars:
+        for bin_var, bin_var_branch in bin_vars.items():
+            if bin_var != "nTracks" and bin_var != "nSPDHits":
+                branch_names.append(f"{ref_par_name}_{bin_var_branch}")
+    return branch_names
+
+
 def get_eos_paths(year: int, magnet: str) -> List[str]:
     """Get EOS paths of calibration files for a given year and magnet."""
     eos_url = "root://eoslhcb.cern.ch/"
@@ -112,13 +139,30 @@ def get_eos_paths(year: int, magnet: str) -> List[str]:
     return [f"{eos_url}{calib_path}{xrdpath.name}" for xrdpath in listing]
 
 
-def extract_branches_to_dataframe(
+def root_to_dataframe(
+    path: str, tree_name: str, branches: List[str]
+) -> pd.DataFrame:
+    """Return DataFrame with requested branches from tree in ROOT file.
+
+    Args:
+        path: Path to the ROOT file; either file system path or URL, e.g.
+            root:///eos/lhcb/file.root.
+        tree_name: Name of a tree inside the ROOT file.
+        branches: Branches to put in the DataFrame.
+    """
+    tree = uproot4.open(path)[tree_name]
+    df = tree.arrays(branches, library="pd")  # type: ignore
+    return df
+
+
+def calib_root_to_dataframe(
     paths: List[str], particle: str, branches: List[str]
 ) -> pd.DataFrame:
     """Read ROOT files via XRootD, extract branches, and save to a Pandas DF.
 
     Args:
-        paths: List of XRootD URLs to the files to be read.
+        paths: Paths to ROOT files; either file system paths or URLs, e.g.
+            ["root:///eos/lhcb/file.root"].
         particle: Particle whose decay tree branches are to be extracted.
         branches: Names of the branches to include in the DataFrame.
 
@@ -130,13 +174,10 @@ def extract_branches_to_dataframe(
     log.info(f"Reading files...")
     # TODO Read *all* files
     for path in tqdm(paths[:50], leave=False):
-        # log.info(f"Loading {path}")
         for mother in mothers[particle]:
             for charge in charges[particle]:
                 tree_path = f"{mother}_{particle.capitalize()}{charge}Tuple/DecayTree"
-                tree = uproot4.open(path)[tree_path]
-                # Convert to a Pandas DF with a subset of branches
-                df = tree.arrays(branches, library="pd")  # type: ignore
+                df = root_to_dataframe(path, tree_path, branches)
                 df_tot = df_tot.append(df)
 
     log.info(f"Read {len(paths)} files with a total of {len(df_tot.index)} events")
@@ -283,7 +324,14 @@ def dataframe_from_local_file(path: str) -> pd.DataFrame:
             )
         )
         raise Exception("Only csv and pkl files supported")
-    log.info(
-        f"Read {path} with a total of {len(df.index)} events"
-    )
+    log.info(f"Read {path} with a total of {len(df.index)} events")
     return df
+
+
+def log_config(config: dict) -> None:
+    """Pretty-print a config/dict."""
+    longest_key = len(max(config, key=len))
+    log.info("=" * longest_key)
+    for entry in config:
+        log.info(f"{entry:{longest_key}}: {config[entry]}")
+    log.info("=" * longest_key)
