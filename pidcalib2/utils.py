@@ -73,7 +73,7 @@ def pidcalib_sample_dir(year: int, magnet: str) -> str:
 
 def get_relevant_branch_names(
     prefix: str, pid_cuts: List[str], bin_vars: List[str]
-) -> List[str]:
+) -> Dict[str, str]:
     """Return a list of branch names relevant to the PID cuts and binning vars.
 
     Args:
@@ -82,20 +82,25 @@ def get_relevant_branch_names(
         bin_vars: Variables used for the binning.
     """
     branch_names = create_branch_names(prefix)
-    relevant_branch_names = []
-    # Add sWeight if calib sample
-    if prefix == "probe":
-        relevant_branch_names.append(branch_names["sw"])
-    for bin_var in bin_vars:
-        relevant_branch_names.append(branch_names[bin_var])
+
+    # Remove sWeight if not a calib sample
+    if prefix != "probe":
+        del branch_names["sw"]
+
+    # Create a list of vars in the PID cuts
+    pid_cuts_vars = []
+    whitespace = re.compile(r"\s+")
     for pid_cut in pid_cuts:
-        for branch_name in branch_names:
-            if (
-                branch_name in pid_cut
-                and branch_names[branch_name] not in relevant_branch_names
-            ):
-                relevant_branch_names.append(branch_names[branch_name])
-    return relevant_branch_names
+        pid_cut = re.sub(whitespace, "", pid_cut)
+        pid_cut_var, _, _ = re.split(r"(<|>)", pid_cut)
+        pid_cuts_vars.append(pid_cut_var)
+
+    # Remove all vars that are not used for binning or PID cuts
+    for branch in tuple(branch_names):
+        if branch not in [*pid_cuts_vars, *bin_vars, "sw"]:
+            del branch_names[branch]
+
+    return branch_names
 
 
 def get_reference_branch_names(
@@ -140,7 +145,7 @@ def get_eos_paths(year: int, magnet: str) -> List[str]:
 
 
 def root_to_dataframe(
-    path: str, tree_name: str, branches: List[str]
+    path: str, tree_name: str, branches: Dict[str, str]
 ) -> pd.DataFrame:
     """Return DataFrame with requested branches from tree in ROOT file.
 
@@ -151,12 +156,16 @@ def root_to_dataframe(
         branches: Branches to put in the DataFrame.
     """
     tree = uproot4.open(path)[tree_name]
-    df = tree.arrays(branches, library="pd")  # type: ignore
+    df = tree.arrays(branches.values(), library="pd")  # type: ignore
+    # Rename colums of the dataset from branch names to simple user-level
+    # names, e.g., probe_PIDK -> DLLK.
+    inverse_branch_dict = {val: key for key, val in branches.items()}
+    df = df.rename(columns=inverse_branch_dict)
     return df
 
 
 def calib_root_to_dataframe(
-    paths: List[str], particle: str, branches: List[str]
+    paths: List[str], particle: str, branches: Dict[str, str]
 ) -> pd.DataFrame:
     """Read ROOT files via XRootD, extract branches, and save to a Pandas DF.
 
@@ -164,7 +173,8 @@ def calib_root_to_dataframe(
         paths: Paths to ROOT files; either file system paths or URLs, e.g.
             ["root:///eos/lhcb/file.root"].
         particle: Particle whose decay tree branches are to be extracted.
-        branches: Names of the branches to include in the DataFrame.
+        branches: Dict of the branches {simple_name: branch_name} to include
+           in the DataFrame.
 
     Returns:
         Pandas DataFrame with the requested branches from a decay tree of a
@@ -217,19 +227,15 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
     axis_list = []
     vals_list = []
 
-    # The first branch should always be the sWeight
-    sweights = df.iloc[:, [0]]
-    binning_branches = list(df.columns)[1 : 1 + len(bin_vars)]  # noqa: E203
-
     # Loop over bin dimensions and define the axes
-    for i, bin_var in enumerate(bin_vars):
+    for bin_var in bin_vars:
         axis_list.append(bh.axis.Variable(binning.binnings[particle][bin_var]))
-        vals = df[binning_branches[i]].values
+        vals = df[bin_var].values
         vals_list.append(vals)
 
     # Create boost-histogram with the desired axes, and fill with sWeight applied
     hist = bh.Histogram(*axis_list)
-    hist.fill(*vals_list, weight=sweights)
+    hist.fill(*vals_list, weight=df["sw"])
 
     return hist
 
@@ -271,7 +277,7 @@ def create_eff_histograms(
     Args:
         df_total: DataFrame with all events
         particle: Particle type (K, pi, etc.)
-        pid_cuts: Branch-level cut list, e.g., ["probe_PIDK<4"].
+        pid_cuts: Simple user-level cut list, e.g., ["DLLK<4"].
         bin_vars: Variables used for binning.
 
     Returns:

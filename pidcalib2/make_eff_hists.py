@@ -1,5 +1,6 @@
 import argparse
 import pathlib
+import re
 
 import pickle
 from logzero import logger as log
@@ -74,8 +75,12 @@ def make_eff_hists(config: dict) -> None:
     # logzero.setup_default_logger(formatter=formatter)
 
     # TODO Setup log file
-    # pattern = re.compile(r"\s+")
-    # config["pid_cuts"] = [re.sub(pattern, '', pid_cut) for pid_cut in config["pid_cuts"]]
+    # Remove whitespace from PID cuts to avoid DLLK < 4 != DLLK<4
+    pattern = re.compile(r"\s+")
+    config["pid_cuts"] = [
+        re.sub(pattern, "", pid_cut) for pid_cut in config["pid_cuts"]
+    ]
+
     log.info("Running PIDCalib2 make_perf_hists with the following config:")
     utils.log_config(config)
 
@@ -100,12 +105,8 @@ def make_eff_hists(config: dict) -> None:
     # df_total.to_pickle("local_dataframe.pkl")
     # df_total.to_csv("local_dataframe.csv")
 
-    pid_cuts = utils.translate_pid_cuts_to_branch_cuts(
-        calibration_prefix, config["pid_cuts"]
-    )
-
     eff_hists = utils.create_eff_histograms(
-        df_total, config["particle"], pid_cuts, config["bin_vars"]
+        df_total, config["particle"], config["pid_cuts"], config["bin_vars"]
     )
 
     for name, hist in eff_hists.items():
@@ -114,7 +115,8 @@ def make_eff_hists(config: dict) -> None:
             f"{config['year']}_"
             f"{config['magnet']}_"
             f"{config['particle']}_"
-            f"{name.replace('eff_', '')}"
+            f"{name.replace('eff_', '')}_"
+            f"{'_'.join(config['bin_vars'])}"
             ".pkl"
         )
         eff_hist_path = output_dir / hist_filename

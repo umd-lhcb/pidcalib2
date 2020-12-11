@@ -38,7 +38,7 @@ def test_calib_root_to_dataframe():
                 "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision15/PIDCALIB.ROOT/00064787/0000/00064787_00000037_1.pidcalib.root"  # noqa: E501
             ],
             "pi",
-            ["probe_PIDK"],
+            {"DLLK": "probe_PIDK"},
         ).shape[0]
         == 18400
     )
@@ -63,18 +63,18 @@ def test_make_hist():
 
 
 def test_get_relevant_branch_names():
-    assert utils.get_relevant_branch_names("probe", ["DLLK < 4"], ["P"]) == [
-        "probe_sWeight",
-        "probe_P",
-        "probe_PIDK",
-    ]
+    assert utils.get_relevant_branch_names("probe", ["DLLK < 4"], ["P"]) == {
+        "sw": "probe_sWeight",
+        "P": "probe_P",
+        "DLLK": "probe_PIDK",
+    }
 
-    assert utils.get_relevant_branch_names("probe", ["DLLp > 4"], ["P", "ETA"]) == [
-        "probe_sWeight",
-        "probe_P",
-        "probe_ETA",
-        "probe_PIDp",
-    ]
+    assert utils.get_relevant_branch_names("probe", ["DLLp > 4"], ["P", "ETA"]) == {
+        "sw": "probe_sWeight",
+        "P": "probe_P",
+        "ETA": "probe_ETA",
+        "DLLp": "probe_PIDp",
+    }
 
 
 def test_pid_cut_to_branch_name_and_cut():
@@ -89,13 +89,13 @@ def test_pid_cut_to_branch_name_and_cut():
 
 def test_create_eff_histograms():
     df = pd.read_csv("tests/data/test_data.csv", index_col=0)
-    hists = utils.create_eff_histograms(df, "pi", ["probe_PIDK>4"], ["P"])
-    assert hists["eff_probe_PIDK>4"].sum() / hists[
-        "eff_probe_PIDK>4"
+    hists = utils.create_eff_histograms(df, "pi", ["DLLK>4"], ["P"])
+    assert hists["eff_DLLK>4"].sum() / hists[
+        "eff_DLLK>4"
     ].size == pytest.approx(0.18751578358705173 / 20)
 
 
 def test_dataframe_from_local_file():
-    df = utils.dataframe_from_local_file("tests/data/test_data.csv")
+    df = utils.dataframe_from_local_file("tests/data/test_data.csv", ["sw"])
     assert df.shape[0] == 99
-    assert df["probe_sWeight"][0] == pytest.approx(1.1081801082842266)
+    assert df["sw"][0] == pytest.approx(1.1081801082842266)
