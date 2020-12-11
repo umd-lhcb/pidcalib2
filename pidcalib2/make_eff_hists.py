@@ -95,15 +95,17 @@ def make_eff_hists(config: dict) -> None:
 
     df_total = None
     if config["local_dataframe"]:
-        df_total = utils.dataframe_from_local_file(config["local_dataframe"])
+        df_total = utils.dataframe_from_local_file(
+            config["local_dataframe"], list(branch_names)
+        )
     else:
-        eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
+        eos_paths = utils.get_eos_paths(config["year"], config["magnet"], 50)
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
         df_total = utils.calib_root_to_dataframe(
             eos_paths, config["particle"], branch_names
         )
-    # df_total.to_pickle("local_dataframe.pkl")
-    # df_total.to_csv("local_dataframe.csv")
+        # df_total.to_pickle("local_dataframe.pkl")
+        # df_total.to_csv("local_dataframe.csv")
 
     eff_hists = utils.create_eff_histograms(
         df_total, config["particle"], config["pid_cuts"], config["bin_vars"]

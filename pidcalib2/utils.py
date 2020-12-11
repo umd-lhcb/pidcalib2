@@ -130,7 +130,7 @@ def get_reference_branch_names(
     return branch_names
 
 
-def get_eos_paths(year: int, magnet: str) -> List[str]:
+def get_eos_paths(year: int, magnet: str, max_files: int = None) -> List[str]:
     """Get EOS paths of calibration files for a given year and magnet."""
     eos_url = "root://eoslhcb.cern.ch/"
     calib_subpath = pidcalib_sample_dir(year, magnet)
@@ -141,7 +141,10 @@ def get_eos_paths(year: int, magnet: str) -> List[str]:
     if not status.ok:  # type: ignore
         raise Exception(status)
 
-    return [f"{eos_url}{calib_path}{xrdpath.name}" for xrdpath in listing]
+    paths = [f"{eos_url}{calib_path}{xrdpath.name}" for xrdpath in listing]
+    if max_files:
+        paths = paths[:max_files]
+    return paths
 
 
 def root_to_dataframe(
@@ -181,9 +184,7 @@ def calib_root_to_dataframe(
         single particle.
     """
     df_tot = pd.DataFrame()
-    log.info(f"Reading files...")
-    # TODO Read *all* files
-    for path in tqdm(paths[:50], leave=False):
+    for path in tqdm(paths, leave=False, desc="Reading files"):
         for mother in mothers[particle]:
             for charge in charges[particle]:
                 tree_path = f"{mother}_{particle.capitalize()}{charge}Tuple/DecayTree"
@@ -312,11 +313,12 @@ def create_eff_histograms(
     return eff_hists
 
 
-def dataframe_from_local_file(path: str) -> pd.DataFrame:
-    """Return a dataframe read from a local file (instead of EOS)
+def dataframe_from_local_file(path: str, branch_names: List[str]) -> pd.DataFrame:
+    """Return a dataframe read from a local file (instead of EOS).
 
     Args:
-        path: Path to the local file
+        path: Path to the local file.
+        branch_names: Columns to read from the DataFrame.
     """
     if path.endswith("pkl"):
         df = pd.read_pickle(path)
@@ -331,6 +333,13 @@ def dataframe_from_local_file(path: str) -> pd.DataFrame:
         )
         raise Exception("Only csv and pkl files supported")
     log.info(f"Read {path} with a total of {len(df.index)} events")
+
+    try:
+        df = df[branch_names]
+    except KeyError:
+        log.error("The requested branches are missing from the local file")
+        raise
+
     return df
 
 
