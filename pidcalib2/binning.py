@@ -1,22 +1,35 @@
 from typing import List
 
 import numpy as np
+from logzero import logger as log
 
 valid_particles = ["pi", "K", "p", "mu"]
 
 
-def P_binning(par: str, low: float = 3000, high: float = 100000) -> List[float]:
-    assert par in valid_particles
+def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[float]:
+    """Return a binning for the momentum.
+
+    Args:
+        particle (str): Particle type ["pi", "K", "p"]
+        low (float, optional): [description]. Defaults to 3000.
+        high (float, optional): [description]. Defaults to 100000.
+
+    Returns:
+        List[float]: [description]
+    """
+    if particle not in valid_particles:
+        log.error(f"'{particle}' is not a valid particle for P binning")
+        raise KeyError
+
     bins = []
-    if par in ["pi", "K", "p"]:
+    if particle in ["pi", "K", "p"]:
         bins.append(low)
         bins.append(9300)  # R1 kaon threshold
         bins.append(15600)  # R2 kaon threshold
         # Uniform bin boundaries
         uniform_bins = np.linspace(19000, high, 16).tolist()
-        for b in uniform_bins:
-            bins.append(b)
-    elif par == "Mu":
+        bins.extend(uniform_bins)
+    elif particle == "Mu":
         bins = [
             low,
             6000,
@@ -36,17 +49,17 @@ def P_binning(par: str, low: float = 3000, high: float = 100000) -> List[float]:
     return bins
 
 
-def ETA_binning(par, low=1.5, high=5.0):
+def eta_binning(particle, low: float = 1.5, high: float = 5.0) -> List[float]:
     bins = np.linspace(low, high, 5).tolist()
     return bins
 
 
-def nTracks_binning(par, low=0, high=500):
+def ntracks_binning(particle, low: float = 0, high: float = 500) -> List[float]:
     bins = [low, 50, 200, 300, high]
     return bins
 
 
-def TRCHI2_binning(par, low=0.0, high=3.0):
+def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]:
     bins = np.linspace(low, high, 4).tolist()
     return bins
 
@@ -55,15 +68,15 @@ def TRCHI2_binning(par, low=0.0, high=3.0):
 binnings = {}
 
 binnings["pi"] = {
-    "P": P_binning("pi"),
-    "ETA": ETA_binning("pi"),
-    "nTracks": nTracks_binning("pi"),
-    "TRCHI2NDOF": TRCHI2_binning("pi"),
+    "P": p_binning("pi"),
+    "ETA": eta_binning("pi"),
+    "nTracks": ntracks_binning("pi"),
+    "TRCHI2NDOF": trchi2_binning("pi"),
 }
 
 binnings["K"] = {
-    "P": P_binning("K"),
-    "ETA": ETA_binning("K"),
-    "nTracks": nTracks_binning("K"),
-    "TRCHI2NDOF": TRCHI2_binning("K"),
+    "P": p_binning("K"),
+    "ETA": eta_binning("K"),
+    "nTracks": ntracks_binning("K"),
+    "TRCHI2NDOF": trchi2_binning("K"),
 }
