@@ -1,12 +1,25 @@
 image: gitlab-registry.cern.ch/ci-tools/ci-worker:cc7
 
 stages:
+    - lint
     - test
 
 before_script:
     - source /cvmfs/lhcb.cern.ch/lib/LbEnv
     - lb-conda-dev virtual-env default/2020-11-18 .venv
-    - .venv/run pip install "attrs==20.3.0" "coverage==5.3" "iniconfig==1.1.1" "logzero==1.6.3" "packaging==20.7" "pluggy==0.13.1" "py==1.9.0" "pyparsing==2.4.7" "pytest==6.1.2" "pytest-cov==2.10.1" "toml==0.10.2"
+    - .venv/run pip install -r requirements.txt
+
+flake8:
+    stage: lint
+    script:
+        - .venv/run flake8 pidcalib2
+    allow_failure: true
+
+mypy:
+    stage: lint
+    script:
+        - .venv/run mypy pidcalib2
+    allow_failure: true
 
 run_tests:
     stage: test

@@ -65,7 +65,7 @@ def pidcalib_sample_dir(year: int, magnet: str) -> str:
         },
     }
 
-    assert magnet == "up" or magnet == "down"
+    assert magnet in ("up", "down")
     assert year in dirs
 
     return dirs[year][magnet]
@@ -125,7 +125,7 @@ def get_reference_branch_names(
 
     for ref_par_name in ref_pars:
         for bin_var, bin_var_branch in bin_vars.items():
-            if bin_var != "nTracks" and bin_var != "nSPDHits":
+            if bin_var not in ("nTracks", "nSPDHits"):
                 branch_names.append(f"{ref_par_name}_{bin_var_branch}")
     return branch_names
 
@@ -147,9 +147,7 @@ def get_eos_paths(year: int, magnet: str, max_files: int = None) -> List[str]:
     return paths
 
 
-def root_to_dataframe(
-    path: str, tree_name: str, branches: List[str]
-) -> pd.DataFrame:
+def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.DataFrame:
     """Return DataFrame with requested branches from tree in ROOT file.
 
     Args:
@@ -252,11 +250,12 @@ def create_eff_histograms(
         log.info(f"Processing '{pid_cuts[i]}' cut")
         df_passing = df_total.query(pid_cut)
         n_passing = len(df_passing.index)
+        percent_passing = n_passing / n_total * 100
         log.info(
-            f"{n_passing}/{n_total} ({n_passing / n_total * 100:.2f}%) events passed the cut"
+            f"{n_passing}/{n_total} ({percent_passing:.2f}%) events passed the cut"
         )
         hist_passing = make_hist(df_passing, particle, bin_vars)
-        log.debug(f"Created 'passing' histogram")
+        log.debug("Created 'passing' histogram")
 
         eff_hists[f"eff_{pid_cut}"] = hist_passing.copy()
         eff_hists[f"eff_{pid_cut}"][...] = hist_passing.view(
