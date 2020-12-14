@@ -32,7 +32,10 @@ def decode_arguments():
     parser.add_argument(
         "-c",
         "--pid-cut",
-        help="PID cut string, e.g., 'DLLK<4.0' (-c can be used multiple times for multiple cuts)",
+        help=(
+            "PID cut string, e.g., 'DLLK<4.0' (-c can be used multiple times for "
+            "multiple cuts)"
+        ),
         action="append",
         dest="pid_cuts",
         required=True,
@@ -70,7 +73,7 @@ def make_eff_hists(config: dict) -> None:
     predefined binning. The efficiency histograms are saved to a requested
     output directory.
     """
-    # log_format = '%(color)s[%(levelname)1.1s %(module)s:%(lineno)d]%(end_color)s %(message)s'
+    # log_format = '%(color)s[%(levelname)1.1s %(module)s:%(lineno)d]%(end_color)s %(message)s'  # noqa
     # formatter = logzero.LogFormatter(fmt=log_format)
     # logzero.setup_default_logger(formatter=formatter)
 
