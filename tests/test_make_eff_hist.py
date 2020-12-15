@@ -13,7 +13,7 @@ def test_make_eff_hists():
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "bin_vars": ["P"],
         "output_dir": "tests/test_output",
-        "local_dataframe": "tests/data/test_data.csv",
+        "local_dataframe": "tests/data/cal_test_data.csv",
     }
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle("tests/test_output/effhist_2018_up_pi_DLLK<4_P.pkl")
@@ -24,7 +24,7 @@ def test_make_eff_hists():
     assert eff_histo.sum(flow=True) == pytest.approx(23.57053953265155)
     assert eff_histo[1] == 0.8978157343833105
 
-    eff_histo_reference = pd.read_pickle("tests/data/effhist_2018_up_pi_probe_PIDK<4.pkl")
+    eff_histo_reference = pd.read_pickle("tests/data/effhist_2018_up_pi_DLLK<4_P.pkl")
     assert eff_histo == eff_histo_reference
 
     shutil.rmtree("tests/test_output")

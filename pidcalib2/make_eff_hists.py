@@ -102,7 +102,7 @@ def make_eff_hists(config: dict) -> None:
             config["local_dataframe"], list(branch_names)
         )
     else:
-        eos_paths = utils.get_eos_paths(config["year"], config["magnet"], 50)
+        eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
         df_total = utils.calib_root_to_dataframe(
             eos_paths, config["particle"], branch_names

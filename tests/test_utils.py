@@ -1,3 +1,5 @@
+import pickle
+
 import pandas as pd
 import pytest
 from pidcalib2 import utils
@@ -45,7 +47,7 @@ def test_calib_root_to_dataframe():
 
 
 def test_make_hist():
-    df = pd.read_csv("tests/data/test_data.csv", index_col=0)
+    df = pd.read_csv("tests/data/cal_test_data.csv", index_col=0)
     hist = utils.make_hist(df, "pi", ["P"])
     assert hist.size == 20
     assert hist.sum() == pytest.approx(71.55106080517815)
@@ -66,16 +68,49 @@ def test_get_relevant_branch_names():
         "DLLp": "probe_PIDp",
     }
 
+    assert utils.get_relevant_branch_names("probe", ["DLLp == 4"], ["P", "ETA"]) == {
+        "sw": "probe_sWeight",
+        "P": "probe_P",
+        "ETA": "probe_ETA",
+        "DLLp": "probe_PIDp",
+    }
+
+    assert utils.get_relevant_branch_names("probe", ["DLLp != 4"], ["P", "ETA"]) == {
+        "sw": "probe_sWeight",
+        "P": "probe_P",
+        "ETA": "probe_ETA",
+        "DLLp": "probe_PIDp",
+    }
+
+    with pytest.raises(ValueError):
+        utils.get_relevant_branch_names("probe", ["DLLp = 4"], ["P", "ETA"])
+
 
 def test_create_eff_histograms():
-    df = pd.read_csv("tests/data/test_data.csv", index_col=0)
+    df = pd.read_csv("tests/data/cal_test_data.csv", index_col=0)
     hists = utils.create_eff_histograms(df, "pi", ["DLLK>4"], ["P"])
-    assert hists["eff_DLLK>4"].sum() / hists[
-        "eff_DLLK>4"
-    ].size == pytest.approx(0.18751578358705173 / 20)
+    assert hists["eff_DLLK>4"].sum() / hists["eff_DLLK>4"].size == pytest.approx(
+        0.18751578358705173 / 20
+    )
 
 
 def test_dataframe_from_local_file():
-    df = utils.dataframe_from_local_file("tests/data/test_data.csv", ["sw"])
+    df = utils.dataframe_from_local_file("tests/data/cal_test_data.csv", ["sw"])
     assert df.shape[0] == 99
     assert df["sw"][0] == pytest.approx(1.1081801082842266)
+
+    with pytest.raises(KeyError):
+        utils.dataframe_from_local_file(
+            "tests/data/cal_test_data.csv", ["this key doesn't exist"]
+        )
+
+
+def test_get_per_event_effs():
+    df_ref = pd.read_csv("tests/data/ref_test_data.csv", index_col=0)
+    ref_pars = {"Bach": ["K", "DLLK > 4"]}
+    bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
+    hists = {}
+    with open("tests/data/effhist_2018_up_K_DLLK>4_P_ETA_nTracks.pkl", "rb") as f:
+        hists["Bach"] = pickle.load(f)
+    df = utils.get_per_event_effs(df_ref, ref_pars, bin_vars, hists)
+    assert df["Bach_eff"].mean() == pytest.approx(0.8761629499006948)

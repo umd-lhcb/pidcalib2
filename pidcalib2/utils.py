@@ -1,3 +1,4 @@
+import pickle
 import re
 from typing import Dict, List
 
@@ -92,7 +93,7 @@ def get_relevant_branch_names(
     whitespace = re.compile(r"\s+")
     for pid_cut in pid_cuts:
         pid_cut = re.sub(whitespace, "", pid_cut)
-        pid_cut_var, _, _ = re.split(r"(<|>)", pid_cut)
+        pid_cut_var, _, _ = re.split(r"(<|>|==|!=)", pid_cut)
         pid_cuts_vars.append(pid_cut_var)
 
     # Remove all vars that are not used for binning or PID cuts
@@ -110,24 +111,36 @@ def get_reference_branch_names(
 
     Args:
         ref_pars: A dict of {particle branch prefix : [particle type, PID cut]}
-
-    Returns:
-        List[str]: [description]
     """
     branch_names = []
 
-    # TODO: Review these hardcoded branch names (maybe consolidate them
-    # somewhere)
-    if "nTracks" in bin_vars:
-        branch_names.append(bin_vars["nTracks"])
-    if "nSPDHits" in bin_vars:
-        branch_names.append(bin_vars["nTracks"])
-
     for ref_par_name in ref_pars:
         for bin_var, bin_var_branch in bin_vars.items():
-            if bin_var not in ("nTracks", "nSPDHits"):
-                branch_names.append(f"{ref_par_name}_{bin_var_branch}")
+            branch_name = get_reference_branch_name(
+                ref_par_name, bin_var, bin_var_branch
+            )
+            # Avoid duplicate entries
+            if branch_name not in branch_names:
+                branch_names.append(branch_name)
     return branch_names
+
+
+def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) -> str:
+    """Return a full name of a binning branch in the reference data.
+
+    Args:
+        prefix: Branch prefix of the particle in the reference sample.
+        bin_var: Variable used for the binning.
+        bin_var_branch: Branch name of the variable used for binning.
+    """
+    # TODO: Review these hardcoded branch names (maybe consolidate them
+    # somewhere). Maybe add some checks that the bin_var is known.
+    if "nTracks" == bin_var:
+        return bin_var_branch
+    if "nSPDHits" == bin_var:
+        return bin_var_branch
+    else:
+        return f"{prefix}_{bin_var_branch}"
 
 
 def get_eos_paths(year: int, magnet: str, max_files: int = None) -> List[str]:
@@ -211,7 +224,11 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
 
     # Loop over bin dimensions and define the axes
     for bin_var in bin_vars:
-        axis_list.append(bh.axis.Variable(binning.binnings[particle][bin_var]))
+        axis_list.append(
+            bh.axis.Variable(
+                binning.binnings[particle][bin_var], metadata={"name": bin_var}
+            )
+        )
         vals = df[bin_var].values
         vals_list.append(vals)
 
@@ -303,3 +320,115 @@ def log_config(config: dict) -> None:
     for entry in config:
         log.info(f"{entry:{longest_key}}: {config[entry]}")
     log.info("=" * longest_key)
+
+
+# Load calib hists from file
+def get_calib_hists(
+    hist_dir: str,
+    year: int,
+    magnet: str,
+    ref_pars: Dict[str, List[str]],
+    bin_vars: Dict[str, str],
+) -> Dict[str, bh.Histogram]:
+    """Get calibration efficiency histograms from all necessary files.
+
+    Args:
+        hist_dir: Directory where to look for the required files.
+        year: Data-taking year
+        magnet: Magnet polarity (up, down)
+        ref_pars (Dict[str, List[str]]): [description]
+        bin_vars (Dict[str, str]): [description]
+        TODO: Finish the docstring
+
+    Returns:
+        Dict[str, bh.Histogram]: [description]
+    """
+    hists = {}
+    for ref_par in ref_pars:
+        particle = ref_pars[ref_par][0]
+
+        pid_cut = ref_pars[ref_par][1]
+        whitespace = re.compile(r"\s+")
+        pid_cut = re.sub(whitespace, "", pid_cut)
+
+        bin_str = ""
+        for bin_var in bin_vars:
+            bin_str += f"_{bin_var}"
+        calib_name = f"{hist_dir}/effhist_{year}_{magnet}_{particle}_{pid_cut}{bin_str}"
+
+        log.debug(f"Loading efficiency histogram from '{calib_name}'")
+
+        with open(calib_name + ".pkl", "rb") as f:
+            hists[ref_par] = pickle.load(f)
+    return hists
+
+
+# Calculate per-event effs for a given sample
+def get_per_event_effs(df_ref, ref_pars, bin_vars, hists):
+
+    # Create new column to hold the eff values
+    df_ref["eff"] = -1.0
+    # Per-particle effs
+    for ref_par in ref_pars:
+        df_ref[f"{ref_par}_eff"] = -1.0
+
+    log.info("Calculating per event efficiencies...")
+    # Loop over events and calculate per-event efficiency as the product of
+    # individual track efficiencies
+    for index, row in tqdm(
+        df_ref.iterrows(), total=len(df_ref.index), leave=False, desc="Events"
+    ):
+        # Loop over tracks
+        isAcc = True
+        vals = {}
+        for ref_par in ref_pars:
+            # print(f"Track : {p}")
+            # Get branch names of binning variables
+            event_vals = {}
+            axis_range = {}
+            # Loop over hist axes (works for any number of bin dims)
+            for i, bin_var in enumerate(bin_vars):
+                branch_name = get_reference_branch_name(
+                    ref_par, bin_var, bin_vars[bin_var]
+                )
+                event_vals[i] = row[branch_name]
+                # print(f"{event_vals[i]}")
+                for axe in hists[ref_par].axes:
+                    if axe.metadata is None:
+                        log.error("No axe metadata found!")
+                        raise Exception("No axe metadata found!")
+                    if axe.metadata["name"] == bin_var:
+                        axis_range[i] = axe.edges
+                # Check if track falls within hist range for this axis
+                if (
+                    event_vals[i] >= axis_range[i][0]
+                    and event_vals[i] < axis_range[i][-1]
+                ):
+                    pass
+                else:
+                    isAcc = False
+            event_vals_list = []
+            if isAcc:
+                for i, bin_var in enumerate(bin_vars):
+                    event_vals_list.append(event_vals[i])
+                # Get global index of the bin the track falls in
+                index_num = hists[ref_par].axes.index(*event_vals_list)
+                # Get bin content (eff value)
+                vals[ref_par] = hists[ref_par].view()[index_num]
+                # log.debug(f"Eff = {vals[ref_par]}")
+
+        # Determine efficiency for the event
+        if isAcc:
+            eff = 1.0
+            for ref_par in vals:
+                # Fill track efficiency branch
+                df_ref.loc[index, f"{ref_par}_eff"] = vals[ref_par]
+                eff *= vals[ref_par]
+            # log.debug(f"Event eff: {eff}")
+        else:
+            eff = -1.0
+        # Fill total event efficiency branch
+        df_ref.loc[index, "eff"] = eff
+
+    # Return df with additional efficiency column
+    return df_ref
