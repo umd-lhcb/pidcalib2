@@ -4,6 +4,7 @@ addopts = [
     "-ra",
     "-q",
     "--cov=pidcalib2",
+    "--cov-report=xml:.coverage.xml"
 ]
 testpaths = [
     "tests",
