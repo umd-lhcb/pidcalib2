@@ -433,11 +433,24 @@ def get_per_event_effs(df_ref, ref_pars, bin_vars, hists):
     return df_ref
 
 
-def get_per_event_effs2(df_ref, ref_pars, bin_vars, hists):
-    log.info("Calculating per event efficiencies...")
-    tqdm.pandas(desc="Events")
+def get_per_event_effs2(
+    df_ref: pd.DataFrame,
+    prefixes: List[str],
+    bin_vars: Dict[str, str],
+    eff_hists: Dict[str, bh.Histogram],
+) -> pd.DataFrame:
+    """Return input DataFrame with added 'eff' column with PID efficiency.
+
+    Args:
+        df_ref: DataFrame for which to calculate per-event efficiencies.
+        prefixes: Prefixes for binning vars for each particle involved in PID cuts.
+        bin_vars: Variables used for the binning.
+        eff_hists: Efficiency histograms for each particle/prefix.
+    """
+    log.info("Calculating per-event efficiencies...")
+    tqdm.pandas(desc="Events", leave=False)
     df_ref["eff"] = df_ref.progress_apply(
-        calc_event_efficiency, axis=1, args=(ref_pars, bin_vars, hists)
+        calc_event_efficiency, axis=1, args=(prefixes, bin_vars, eff_hists)
     )
 
     num_in_range = len(df_ref[df_ref["eff"] == -1].index)
@@ -446,41 +459,45 @@ def get_per_event_effs2(df_ref, ref_pars, bin_vars, hists):
     return df_ref
 
 
-def is_event_in_range(row, ref_pars, bin_vars, hists):
-    for ref_par in ref_pars:
-        for bin_var in bin_vars:
-            min = 0
-            max = 0
-            for axis in hists[ref_par].axes:
-                if axis.metadata["name"] == bin_var:
-                    min = axis.edges[0]
-                    max = axis.edges[-1]
-            branch_name = get_reference_branch_name(ref_par, bin_var, bin_vars[bin_var])
-            if row[branch_name] < min or row[branch_name] > max:
-                return False
+def calc_event_efficiency(
+    row: pd.Series,
+    prefixes: List[str],
+    bin_vars: Dict[str, str],
+    eff_hists: Dict[str, bh.Histogram],
+) -> float:
+    """Return the PID efficiency of the event.
 
-    return True
+    This function is intended to be used by the Pandas' apply() function.
+    The event efficiency is a product of individual particle efficiencies.
+    The involved particles are defined by the 'prefixes' list. The particle
+    efficiencies are looked up in the relevant histogram in 'eff_hists'.
 
+    Args:
+        row: A row with a single event from a DataFrame.
+        prefixes: Prefixes for binning vars for each particle involved in PID cuts.
+        bin_vars: Variables used for the binning.
+        eff_hists: Efficiency histograms for each particle/prefix.
+    """
+    efficiency = 1
+    for prefix in prefixes:
+        # Get an *ordered* list of branch names. For boost_histogram's
+        # index() to work, the row[axes] values must come in the same order
+        # as the axes in the histogram.
+        axes = [
+            get_reference_branch_name(
+                prefix, axis.metadata["name"], bin_vars[axis.metadata["name"]]
+            )
+            for axis in eff_hists[prefix].axes
+        ]
+        # Get global index of the bin the track falls in
+        index_num = eff_hists[prefix].axes.index(*row[axes])
 
-def calc_event_efficiency(row, ref_pars, bin_vars, hists):
-    if is_event_in_range(row, ref_pars, bin_vars, hists):
-        particle_efficiencies = {}
-        for ref_par in ref_pars:
-            axes = [
-                get_reference_branch_name(
-                    ref_par, axis.metadata["name"], bin_vars[axis.metadata["name"]]
-                )
-                for axis in hists[ref_par].axes
-            ]
-            # Get global index of the bin the track falls in
-            index_num = hists[ref_par].axes.index(*row[axes])
-            # Get bin content (eff value)
-            particle_efficiencies[ref_par] = hists[ref_par].view()[index_num]
+        # Event efficiency is calculated as a product of every involved
+        # particle efficiency. IndexError indicates the event is outside of the
+        # efficiency histogram's range.
+        try:
+            efficiency *= eff_hists[prefix].view()[index_num]
+        except IndexError:
+            return -1
 
-        efficiency = 1
-        for particle_efficiency in particle_efficiencies.values():
-            efficiency *= particle_efficiency
-        return efficiency
-
-    else:
-        return -1
+    return efficiency
