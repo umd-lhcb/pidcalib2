@@ -363,77 +363,7 @@ def get_calib_hists(
     return hists
 
 
-# Calculate per-event effs for a given sample
-def get_per_event_effs(df_ref, ref_pars, bin_vars, hists):
-    # Create new column to hold the eff values
-    df_ref["eff"] = -1.0
-    # Per-particle effs
-    for ref_par in ref_pars:
-        df_ref[f"{ref_par}_eff"] = -1.0
-
-    log.info("Calculating per event efficiencies...")
-    # Loop over events and calculate per-event efficiency as the product of
-    # individual track efficiencies
-    for index, row in tqdm(
-        df_ref.iterrows(), total=len(df_ref.index), leave=False, desc="Events"
-    ):
-        # Loop over tracks
-        isAcc = True
-        vals = {}
-        for ref_par in ref_pars:
-            # print(f"Track : {p}")
-            # Get branch names of binning variables
-            event_vals = {}
-            axis_range = {}
-            # Loop over hist axes (works for any number of bin dims)
-            for i, bin_var in enumerate(bin_vars):
-                branch_name = get_reference_branch_name(
-                    ref_par, bin_var, bin_vars[bin_var]
-                )
-                event_vals[i] = row[branch_name]
-                # print(f"{event_vals[i]}")
-                for axe in hists[ref_par].axes:
-                    if axe.metadata is None:
-                        log.error("No axe metadata found!")
-                        raise Exception("No axe metadata found!")
-                    if axe.metadata["name"] == bin_var:
-                        axis_range[i] = axe.edges
-                # Check if track falls within hist range for this axis
-                if (
-                    event_vals[i] >= axis_range[i][0]
-                    and event_vals[i] < axis_range[i][-1]
-                ):
-                    pass
-                else:
-                    isAcc = False
-            event_vals_list = []
-            if isAcc:
-                for i, bin_var in enumerate(bin_vars):
-                    event_vals_list.append(event_vals[i])
-                # Get global index of the bin the track falls in
-                index_num = hists[ref_par].axes.index(*event_vals_list)
-                # Get bin content (eff value)
-                vals[ref_par] = hists[ref_par].view()[index_num]
-                # log.debug(f"Eff = {vals[ref_par]}")
-
-        # Determine efficiency for the event
-        if isAcc:
-            eff = 1.0
-            for ref_par in vals:
-                # Fill track efficiency branch
-                df_ref.loc[index, f"{ref_par}_eff"] = vals[ref_par]
-                eff *= vals[ref_par]
-            # log.debug(f"Event eff: {eff}")
-        else:
-            eff = -1.0
-        # Fill total event efficiency branch
-        df_ref.loc[index, "eff"] = eff
-
-    # Return df with additional efficiency column
-    return df_ref
-
-
-def get_per_event_effs2(
+def get_per_event_effs(
     df_ref: pd.DataFrame,
     prefixes: List[str],
     bin_vars: Dict[str, str],

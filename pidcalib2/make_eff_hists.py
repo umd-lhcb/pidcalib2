@@ -127,7 +127,8 @@ def make_eff_hists(config: dict) -> None:
         eff_hist_path = output_dir / hist_filename
         with open(eff_hist_path, "wb") as f:
             pickle.dump(hist, f)
-            log.info(f"Efficiency histogram saved to '{eff_hist_path}'")
+
+        log.info(f"Efficiency histogram saved to '{eff_hist_path}'")
 
 
 if __name__ == "__main__":

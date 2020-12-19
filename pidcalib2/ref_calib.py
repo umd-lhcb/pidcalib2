@@ -95,11 +95,9 @@ def ref_calib(config):
     )
 
     start = time.perf_counter()
-    df_ref_eff = utils.get_per_event_effs2(df_ref, ref_pars, bin_vars, eff_histos)
+    df_ref_eff = utils.get_per_event_effs(df_ref, ref_pars, bin_vars, eff_histos)
     end = time.perf_counter()
     log.debug(f"Efficiency calculation took {end-start:.2f}s")
-
-    log.debug("Per-event efficiencies calculated")
 
     # Calculate average of the per-event effs
     # Use only data with valid eff values (those events falling inside the

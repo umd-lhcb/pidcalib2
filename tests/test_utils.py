@@ -112,7 +112,5 @@ def test_get_per_event_effs():
     hists = {}
     with open("tests/data/effhist_2018_up_K_DLLK>4_P_ETA_nTracks.pkl", "rb") as f:
         hists["Bach"] = pickle.load(f)
-    df = utils.get_per_event_effs(df_ref, ref_pars, bin_vars, hists)
-    df2 = utils.get_per_event_effs2(df_ref, list(ref_pars), bin_vars, hists)
+    df = utils.get_per_event_effs(df_ref, list(ref_pars), bin_vars, hists)
     assert df["eff"].mean() == pytest.approx(0.8761629499006948)
-    assert df2["eff"].mean() == pytest.approx(0.8761629499006948)
