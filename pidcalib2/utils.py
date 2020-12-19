@@ -365,7 +365,6 @@ def get_calib_hists(
 
 # Calculate per-event effs for a given sample
 def get_per_event_effs(df_ref, ref_pars, bin_vars, hists):
-
     # Create new column to hold the eff values
     df_ref["eff"] = -1.0
     # Per-particle effs
@@ -432,3 +431,56 @@ def get_per_event_effs(df_ref, ref_pars, bin_vars, hists):
 
     # Return df with additional efficiency column
     return df_ref
+
+
+def get_per_event_effs2(df_ref, ref_pars, bin_vars, hists):
+    log.info("Calculating per event efficiencies...")
+    tqdm.pandas(desc="Events")
+    df_ref["eff"] = df_ref.progress_apply(
+        calc_event_efficiency, axis=1, args=(ref_pars, bin_vars, hists)
+    )
+
+    num_in_range = len(df_ref[df_ref["eff"] == -1].index)
+    num_in_range_frac = len(df_ref[df_ref["eff"] == -1].index) / len(df_ref.index)
+    log.debug(f"Events outside range: {num_in_range} ({num_in_range_frac:.2%})")
+    return df_ref
+
+
+def is_event_in_range(row, ref_pars, bin_vars, hists):
+    for ref_par in ref_pars:
+        for bin_var in bin_vars:
+            min = 0
+            max = 0
+            for axis in hists[ref_par].axes:
+                if axis.metadata["name"] == bin_var:
+                    min = axis.edges[0]
+                    max = axis.edges[-1]
+            branch_name = get_reference_branch_name(ref_par, bin_var, bin_vars[bin_var])
+            if row[branch_name] < min or row[branch_name] > max:
+                return False
+
+    return True
+
+
+def calc_event_efficiency(row, ref_pars, bin_vars, hists):
+    if is_event_in_range(row, ref_pars, bin_vars, hists):
+        particle_efficiencies = {}
+        for ref_par in ref_pars:
+            axes = [
+                get_reference_branch_name(
+                    ref_par, axis.metadata["name"], bin_vars[axis.metadata["name"]]
+                )
+                for axis in hists[ref_par].axes
+            ]
+            # Get global index of the bin the track falls in
+            index_num = hists[ref_par].axes.index(*row[axes])
+            # Get bin content (eff value)
+            particle_efficiencies[ref_par] = hists[ref_par].view()[index_num]
+
+        efficiency = 1
+        for particle_efficiency in particle_efficiencies.values():
+            efficiency *= particle_efficiency
+        return efficiency
+
+    else:
+        return -1

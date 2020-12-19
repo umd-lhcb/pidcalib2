@@ -1,5 +1,6 @@
 import argparse
 import ast
+import time
 
 from logzero import logger as log
 
@@ -93,11 +94,24 @@ def ref_calib(config):
         config["output_dir"], config["year"], config["magnet"], ref_pars, bin_vars
     )
 
+    start = time.perf_counter()
     df_ref_eff = utils.get_per_event_effs(df_ref, ref_pars, bin_vars, eff_histos)
+    end = time.perf_counter()
+    log.debug(f"Efficiency calculation took {end-start:.2f}s")
 
-    log.debug(
-        "Per-event efficiencies calculated"
-    )
+    start = time.perf_counter()
+    df_ref_eff = utils.get_per_event_effs2(df_ref, ref_pars, bin_vars, eff_histos)
+    end = time.perf_counter()
+    log.debug(f"Efficiency calculation took {end-start:.2f}s")
+
+    log.debug("Per-event efficiencies calculated")
+
+    # Calculate average of the per-event effs
+    # Use only data with valid eff values (those events falling inside the
+    # calibration hist)
+    df_ref_eff = df_ref_eff.query("eff != -1")
+    av_eff = df_ref_eff["eff"].mean()
+    log.info(f"Average of per-event PID effs: {av_eff}")
 
 
 if __name__ == "__main__":
