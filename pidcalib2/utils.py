@@ -399,7 +399,7 @@ def calc_event_efficiency(
 
     This function is intended to be used by the Pandas' apply() function.
     The event efficiency is a product of individual particle efficiencies.
-    The involved particles are defined by the 'prefixes' list. The particle
+    The involved particles are defined by the 'prefixes' list. The--ref-pars={\"Bach\": [\"K\",\"DLLK > 4\"]} particle
     efficiencies are looked up in the relevant histogram in 'eff_hists'.
 
     Args:
@@ -431,3 +431,52 @@ def calc_event_efficiency(
             return -1
 
     return efficiency
+
+
+def add_bin_numbers(df, prefixes, bin_vars, eff_hists):
+    for prefix in prefixes:
+        axes = [
+            get_reference_branch_name(
+                prefix, axis.metadata["name"], bin_vars[axis.metadata["name"]]
+            )
+            for axis in eff_hists[prefix].axes
+        ]
+        for bin_var, branch_name in bin_vars.items():
+            ref_branch_name = get_reference_branch_name(prefix, bin_var, branch_name)
+            bins = []
+            for axis in eff_hists[prefix].axes:
+                if axis.metadata["name"] == bin_var:
+                    bins = axis.edges
+            df[f"{ref_branch_name}_index"] = pd.cut(
+                df[ref_branch_name],
+                bins,
+                labels=False,
+                include_lowest=True,
+                right=False,
+            )
+
+        df_nan = df[df.isna().any(axis=1)]
+        df.dropna(inplace=True)
+        index_names = [f"{axis}_index" for axis in axes]
+        indices = np.ravel_multi_index(
+            df[index_names].transpose().to_numpy().astype(int),
+            eff_hists[prefix].axes.size,
+        )
+        df[f"{prefix}_index"] = indices
+        df = pd.concat([df, df_nan]).sort_index()
+    log.debug("Bin indexes assigned")
+    return df
+
+
+def add_efficiencies(df, prefixes, eff_hists):
+    df_nan = df[df.isna().any(axis=1)]
+    df.dropna(inplace=True)
+    df["eff"] = 1
+    for prefix in prefixes:
+        efficiency_table = eff_hists[prefix].view().flatten()
+        df[f"{prefix}_eff"] = np.take(efficiency_table, df[f"{prefix}_index"])
+        df["eff"] = df["eff"] * df[f"{prefix}_eff"]
+
+    df = pd.concat([df, df_nan]).sort_index()
+    log.debug("Particle efficiencies assigned")
+    return df
