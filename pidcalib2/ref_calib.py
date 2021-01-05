@@ -94,6 +94,8 @@ def ref_calib(config):
         config["output_dir"], config["year"], config["magnet"], ref_pars, bin_vars
     )
 
+    df_ref2 = df_ref.copy(deep=True)
+
     start = time.perf_counter()
     df_ref_eff = utils.get_per_event_effs(df_ref, ref_pars, bin_vars, eff_histos)
     end = time.perf_counter()
@@ -107,7 +109,7 @@ def ref_calib(config):
     log.info(f"Average per-event PID efficiency: {av_eff:.2%}")
 
     start = time.perf_counter()
-    df_ref_indices = utils.add_bin_numbers(df_ref, ref_pars, bin_vars, eff_histos)
+    df_ref_indices = utils.add_bin_numbers(df_ref2, ref_pars, bin_vars, eff_histos)
     df_ref_eff2 = utils.add_efficiencies(df_ref_indices, ref_pars, eff_histos)
     end = time.perf_counter()
     log.debug(f"Efficiency calculation took {end-start:.2f}s")

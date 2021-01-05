@@ -383,9 +383,11 @@ def get_per_event_effs(
         calc_event_efficiency, axis=1, args=(prefixes, bin_vars, eff_hists)
     )
 
-    num_in_range = len(df_ref[df_ref["eff"] == -1].index)
-    num_in_range_frac = len(df_ref[df_ref["eff"] == -1].index) / len(df_ref.index)
-    log.debug(f"Events outside range: {num_in_range} ({num_in_range_frac:.2%})")
+    num_outside_range = len(df_ref[df_ref["eff"] == -1].index)
+    num_outside_range_frac = len(df_ref[df_ref["eff"] == -1].index) / len(df_ref.index)
+    log.debug(
+        f"Events outside range: {num_outside_range} ({num_outside_range_frac:.2%})"
+    )
     return df_ref
 
 
@@ -399,7 +401,7 @@ def calc_event_efficiency(
 
     This function is intended to be used by the Pandas' apply() function.
     The event efficiency is a product of individual particle efficiencies.
-    The involved particles are defined by the 'prefixes' list. The--ref-pars={\"Bach\": [\"K\",\"DLLK > 4\"]} particle
+    The involved particles are defined by the 'prefixes' list. The particle
     efficiencies are looked up in the relevant histogram in 'eff_hists'.
 
     Args:
@@ -459,7 +461,7 @@ def add_bin_numbers(df, prefixes, bin_vars, eff_hists):
         df.dropna(inplace=True)
         index_names = [f"{axis}_index" for axis in axes]
         indices = np.ravel_multi_index(
-            df[index_names].transpose().to_numpy().astype(int),
+            df[index_names].transpose().to_numpy().astype(int),  # type: ignore
             eff_hists[prefix].axes.size,
         )
         df[f"{prefix}_index"] = indices
@@ -479,4 +481,10 @@ def add_efficiencies(df, prefixes, eff_hists):
 
     df = pd.concat([df, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
+
+    num_outside_range = len(df_nan.index)
+    num_outside_range_frac = len(df_nan.index) / len(df.index)
+    log.debug(
+        f"Events out of range: {num_outside_range} ({num_outside_range_frac:.2%})"
+    )
     return df
