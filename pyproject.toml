@@ -3,8 +3,7 @@ minversion = "6.0"
 addopts = [
     "-ra",
     "-q",
-    "--cov=pidcalib2",
-    "--cov-report=xml:.coverage.xml"
+    "--cov=pidcalib2"
 ]
 testpaths = [
     "tests",
