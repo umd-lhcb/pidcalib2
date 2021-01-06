@@ -94,27 +94,16 @@ def ref_calib(config):
         config["output_dir"], config["year"], config["magnet"], ref_pars, bin_vars
     )
 
-    df_ref2 = df_ref.copy(deep=True)
-
     start = time.perf_counter()
-    df_ref_eff = utils.get_per_event_effs(df_ref, ref_pars, bin_vars, eff_histos)
+    df_ref = utils.add_bin_indexes(df_ref, ref_pars, bin_vars, eff_histos)
+    df_ref = utils.add_efficiencies(df_ref, ref_pars, eff_histos)
     end = time.perf_counter()
     log.debug(f"Efficiency calculation took {end-start:.2f}s")
 
     # Calculate average of the per-event effs
     # Use only data with valid eff values (those events falling inside the
     # calibration hist)
-    df_ref_eff = df_ref_eff.query("eff != -1")
-    av_eff = df_ref_eff["eff"].mean()
-    log.info(f"Average per-event PID efficiency: {av_eff:.2%}")
-
-    start = time.perf_counter()
-    df_ref_indices = utils.add_bin_numbers(df_ref2, ref_pars, bin_vars, eff_histos)
-    df_ref_eff2 = utils.add_efficiencies(df_ref_indices, ref_pars, eff_histos)
-    end = time.perf_counter()
-    log.debug(f"Efficiency calculation took {end-start:.2f}s")
-
-    av_eff2 = df_ref_eff2["eff"].dropna().mean()
+    av_eff2 = df_ref["eff"].dropna().mean()
     log.info(f"Average per-event PID efficiency: {av_eff2:.2%}")
 
 

@@ -334,14 +334,14 @@ def get_calib_hists(
 
     Args:
         hist_dir: Directory where to look for the required files.
-        year: Data-taking year
-        magnet: Magnet polarity (up, down)
-        ref_pars (Dict[str, List[str]]): [description]
-        bin_vars (Dict[str, str]): [description]
-        TODO: Finish the docstring
+        year: Data-taking year.
+        magnet: Magnet polarity (up, down).
+        ref_pars: Reference particle prefixes with a particle type and PID cut.
+        bin_vars: Binning variables ({standard name: reference sample branch name}).
 
     Returns:
-        Dict[str, bh.Histogram]: [description]
+        Dictionary with an efficiency histogram for each reference particle.
+        The reference particle prefixes are the dictionary keys.
     """
     hists = {}
     for ref_par in ref_pars:
@@ -363,79 +363,29 @@ def get_calib_hists(
     return hists
 
 
-def get_per_event_effs(
-    df_ref: pd.DataFrame,
+def add_bin_indexes(
+    df: pd.DataFrame,
     prefixes: List[str],
     bin_vars: Dict[str, str],
     eff_hists: Dict[str, bh.Histogram],
 ) -> pd.DataFrame:
-    """Return input DataFrame with added 'eff' column with PID efficiency.
+    """Return a DataFrame with added indexes of bins for each event.
+
+    The binnings of binning variables are taken from efficiency histograms.
+    Each event falls into a certain bin in each binning variable. This bin's
+    index is added to the DataFrame. The same procedure is repeated for each
+    variable. Finally, a global index of the N-dimensional bin of the
+    efficiency histogram where the event belongs is added. Multiple
+    efficiency histograms can be specified since the total PID efficiency for
+    the event can depend on multiple particles.
 
     Args:
-        df_ref: DataFrame for which to calculate per-event efficiencies.
-        prefixes: Prefixes for binning vars for each particle involved in PID cuts.
-        bin_vars: Variables used for the binning.
-        eff_hists: Efficiency histograms for each particle/prefix.
+        df: Input dataframe.
+        prefixes: Branch prefixes of the particles in the reference sample.
+        bin_vars: Variables used for binning.
+        eff_hists: Efficiency histograms for each prefix/particle.
     """
-    log.info("Calculating per-event efficiencies...")
-    tqdm.pandas(desc="Events", leave=False)
-    df_ref["eff"] = df_ref.progress_apply(
-        calc_event_efficiency, axis=1, args=(prefixes, bin_vars, eff_hists)
-    )
-
-    num_outside_range = len(df_ref[df_ref["eff"] == -1].index)
-    num_outside_range_frac = len(df_ref[df_ref["eff"] == -1].index) / len(df_ref.index)
-    log.debug(
-        f"Events outside range: {num_outside_range} ({num_outside_range_frac:.2%})"
-    )
-    return df_ref
-
-
-def calc_event_efficiency(
-    row: pd.Series,
-    prefixes: List[str],
-    bin_vars: Dict[str, str],
-    eff_hists: Dict[str, bh.Histogram],
-) -> float:
-    """Return the PID efficiency of the event.
-
-    This function is intended to be used by the Pandas' apply() function.
-    The event efficiency is a product of individual particle efficiencies.
-    The involved particles are defined by the 'prefixes' list. The particle
-    efficiencies are looked up in the relevant histogram in 'eff_hists'.
-
-    Args:
-        row: A row with a single event from a DataFrame.
-        prefixes: Prefixes for binning vars for each particle involved in PID cuts.
-        bin_vars: Variables used for the binning.
-        eff_hists: Efficiency histograms for each particle/prefix.
-    """
-    efficiency = 1
-    for prefix in prefixes:
-        # Get an *ordered* list of branch names. For boost_histogram's
-        # index() to work, the row[axes] values must come in the same order
-        # as the axes in the histogram.
-        axes = [
-            get_reference_branch_name(
-                prefix, axis.metadata["name"], bin_vars[axis.metadata["name"]]
-            )
-            for axis in eff_hists[prefix].axes
-        ]
-        # Get global index of the bin the track falls in
-        index_num = eff_hists[prefix].axes.index(*row[axes])
-
-        # Event efficiency is calculated as a product of every involved
-        # particle efficiency. IndexError indicates the event is outside of the
-        # efficiency histogram's range.
-        try:
-            efficiency *= eff_hists[prefix].view()[index_num]
-        except IndexError:
-            return -1
-
-    return efficiency
-
-
-def add_bin_numbers(df, prefixes, bin_vars, eff_hists):
+    df_new = df.copy()
     for prefix in prefixes:
         axes = [
             get_reference_branch_name(
@@ -449,42 +399,55 @@ def add_bin_numbers(df, prefixes, bin_vars, eff_hists):
             for axis in eff_hists[prefix].axes:
                 if axis.metadata["name"] == bin_var:
                     bins = axis.edges
-            df[f"{ref_branch_name}_index"] = pd.cut(
-                df[ref_branch_name],
+            df_new[f"{ref_branch_name}_index"] = pd.cut(
+                df_new[ref_branch_name],
                 bins,
                 labels=False,
                 include_lowest=True,
                 right=False,
             )
 
-        df_nan = df[df.isna().any(axis=1)]
-        df.dropna(inplace=True)
+        df_nan = df_new[df_new.isna().any(axis=1)]
+        df_new.dropna(inplace=True)
         index_names = [f"{axis}_index" for axis in axes]
         indices = np.ravel_multi_index(
-            df[index_names].transpose().to_numpy().astype(int),  # type: ignore
+            df_new[index_names].transpose().to_numpy().astype(int),  # type: ignore
             eff_hists[prefix].axes.size,
         )
-        df[f"{prefix}_index"] = indices
-        df = pd.concat([df, df_nan]).sort_index()
+        df_new[f"{prefix}_index"] = indices
+        df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Bin indexes assigned")
-    return df
+    return df_new
 
 
-def add_efficiencies(df, prefixes, eff_hists):
-    df_nan = df[df.isna().any(axis=1)]
-    df.dropna(inplace=True)
-    df["eff"] = 1
+def add_efficiencies(
+    df: pd.DataFrame, prefixes: List[str], eff_hists: Dict[str, bh.Histogram]
+) -> pd.DataFrame:
+    """Return a DataFrame with added efficiencies for each event.
+
+    Each particle correspondig to a prefix is assigned an efficiency. The
+    total event efficiency is the product of individual efficiencies.
+
+    Args:
+        df: Input dataframe.
+        prefixes: Branch prefixes of the particles in the reference sample.
+        eff_hists: Efficiency histograms for each prefix/particle.
+    """
+    df_new = df.copy()
+    df_nan = df_new[df_new.isna().any(axis=1)]
+    df_new.dropna(inplace=True)
+    df_new["eff"] = 1
     for prefix in prefixes:
         efficiency_table = eff_hists[prefix].view().flatten()
-        df[f"{prefix}_eff"] = np.take(efficiency_table, df[f"{prefix}_index"])
-        df["eff"] = df["eff"] * df[f"{prefix}_eff"]
+        df_new[f"{prefix}_eff"] = np.take(efficiency_table, df_new[f"{prefix}_index"])
+        df_new["eff"] = df_new["eff"] * df_new[f"{prefix}_eff"]
 
-    df = pd.concat([df, df_nan]).sort_index()
+    df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
 
     num_outside_range = len(df_nan.index)
-    num_outside_range_frac = len(df_nan.index) / len(df.index)
+    num_outside_range_frac = len(df_nan.index) / len(df_new.index)
     log.debug(
         f"Events out of range: {num_outside_range} ({num_outside_range_frac:.2%})"
     )
-    return df
+    return df_new
