@@ -290,9 +290,9 @@ def dataframe_from_local_file(path: str, branch_names: List[str]) -> pd.DataFram
         path: Path to the local file.
         branch_names: Columns to read from the DataFrame.
     """
-    if path.endswith("pkl"):
+    if path.endswith(".pkl"):
         df = pd.read_pickle(path)
-    elif path.endswith("csv"):
+    elif path.endswith(".csv"):
         df = pd.read_csv(path, index_col=0)
     else:
         log.error(
@@ -363,13 +363,13 @@ def get_calib_hists(
     return hists
 
 
-def add_bin_indexes(
+def add_bin_indices(
     df: pd.DataFrame,
     prefixes: List[str],
     bin_vars: Dict[str, str],
     eff_hists: Dict[str, bh.Histogram],
 ) -> pd.DataFrame:
-    """Return a DataFrame with added indexes of bins for each event.
+    """Return a DataFrame with added indices of bins for each event.
 
     The binnings of binning variables are taken from efficiency histograms.
     Each event falls into a certain bin in each binning variable. This bin's
@@ -416,7 +416,7 @@ def add_bin_indexes(
         )
         df_new[f"{prefix}_index"] = indices
         df_new = pd.concat([df_new, df_nan]).sort_index()
-    log.debug("Bin indexes assigned")
+    log.debug("Bin indices assigned")
     return df_new
 
 

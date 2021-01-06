@@ -95,7 +95,7 @@ def ref_calib(config):
     )
 
     start = time.perf_counter()
-    df_ref = utils.add_bin_indexes(df_ref, ref_pars, bin_vars, eff_histos)
+    df_ref = utils.add_bin_indices(df_ref, ref_pars, bin_vars, eff_histos)
     df_ref = utils.add_efficiencies(df_ref, ref_pars, eff_histos)
     end = time.perf_counter()
     log.debug(f"Efficiency calculation took {end-start:.2f}s")

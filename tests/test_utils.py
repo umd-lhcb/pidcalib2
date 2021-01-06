@@ -25,6 +25,7 @@ def test_get_eos_paths():
     assert len(utils.get_eos_paths(2016, "down")) == 154
     assert len(utils.get_eos_paths(2015, "up")) == 43
     assert len(utils.get_eos_paths(2015, "down")) == 78
+    assert len(utils.get_eos_paths(2015, "down", 10)) == 10
     assert (
         utils.get_eos_paths(2018, "up")[0]
         == "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision18/PIDCALIB.ROOT/00082947/0000/00082947_00000001_1.pidcalib.root"  # noqa: E501
@@ -82,6 +83,12 @@ def test_get_relevant_branch_names():
         "DLLp": "probe_PIDp",
     }
 
+    assert utils.get_relevant_branch_names("notprobe", ["DLLp != 4"], ["P", "ETA"]) == {
+        "P": "notprobe_P",
+        "ETA": "notprobe_ETA",
+        "DLLp": "notprobe_PIDp",
+    }
+
     with pytest.raises(ValueError):
         utils.get_relevant_branch_names("probe", ["DLLp = 4"], ["P", "ETA"])
 
@@ -104,14 +111,60 @@ def test_dataframe_from_local_file():
             "tests/data/cal_test_data.csv", ["this key doesn't exist"]
         )
 
+    with pytest.raises(Exception):
+        utils.dataframe_from_local_file(
+            "tests/data/file.root", ["sw"]
+        )
+
 
 def test_get_per_event_effs():
     df_ref = pd.read_csv("tests/data/ref_test_data.csv", index_col=0)
-    ref_pars = {"Bach": ["K", "DLLK > 4"]}
+    prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
     with open("tests/data/effhist_2018_up_K_DLLK>4_P_ETA_nTracks.pkl", "rb") as f:
         hists["Bach"] = pickle.load(f)
-    df_ref = utils.add_bin_indexes(df_ref, ref_pars, bin_vars, hists)
-    df_ref = utils.add_efficiencies(df_ref, ref_pars, hists)
+    df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
+    df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
     assert df_ref.eff.mean() == pytest.approx(0.8951140908087826)
+
+
+def test_get_reference_branch_names():
+    ref_pars = {"Bach": ["K", "DLLK > 4"]}
+    bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
+    branch_names = utils.get_reference_branch_names(ref_pars, bin_vars)
+    assert branch_names == ["Bach_P", "Bach_ETA", "nTracks"]
+
+
+def test_get_reference_branch_name():
+    assert utils.get_reference_branch_name("Bach", "foo", "bar") == "Bach_bar"
+    assert utils.get_reference_branch_name("Bach", "nTracks", "bar") == "bar"
+    assert utils.get_reference_branch_name("Bach", "nSPDHits", "bar") == "bar"
+    assert utils.get_reference_branch_name("Bach", "foo", "nTracks") == "Bach_nTracks"
+
+
+def test_get_calib_hists():
+    ref_pars = {"Bach": ["K", "DLLK > 4"]}
+    bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
+    eff_histos = utils.get_calib_hists(
+        "tests/data", 2018, "up", ref_pars, bin_vars
+    )
+    assert eff_histos["Bach"].sum() == pytest.approx(199.01361598888047)
+
+    with pytest.raises(FileNotFoundError):
+        utils.get_calib_hists(
+            "tests/data", 18, "up", ref_pars, bin_vars
+        )
+
+
+def test_add_bin_indices():
+    df_ref = pd.read_csv("tests/data/ref_test_data.csv", index_col=0)
+    prefixes = ["Bach"]
+    bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
+    hists = {}
+    with open("tests/data/effhist_2018_up_K_DLLK>4_P_ETA_nTracks.pkl", "rb") as f:
+        hists["Bach"] = pickle.load(f)
+    df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
+    assert df_ref["Bach_P_index"].sum() == 623
+    assert df_ref["Bach_ETA_index"].sum() == 120
+    assert df_ref["Bach_index"].sum() == 10438
