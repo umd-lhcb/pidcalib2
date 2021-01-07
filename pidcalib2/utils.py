@@ -135,12 +135,10 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     """
     # TODO: Review these hardcoded branch names (maybe consolidate them
     # somewhere). Maybe add some checks that the bin_var is known.
-    if "nTracks" == bin_var:
+    if bin_var in ("nTracks", "nSPDHits"):
         return bin_var_branch
-    if "nSPDHits" == bin_var:
-        return bin_var_branch
-    else:
-        return f"{prefix}_{bin_var_branch}"
+
+    return f"{prefix}_{bin_var_branch}"
 
 
 def get_eos_paths(year: int, magnet: str, max_files: int = None) -> List[str]:
@@ -407,7 +405,7 @@ def add_bin_indices(
                 right=False,
             )
 
-        df_nan = df_new[df_new.isna().any(axis=1)]
+        df_nan = df_new[df_new.isna().any(axis=1)]  # type: ignore
         df_new.dropna(inplace=True)
         index_names = [f"{axis}_index" for axis in axes]
         indices = np.ravel_multi_index(
@@ -417,7 +415,7 @@ def add_bin_indices(
         df_new[f"{prefix}_index"] = indices
         df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Bin indices assigned")
-    return df_new
+    return df_new  # type: ignore
 
 
 def add_efficiencies(
