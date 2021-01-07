@@ -1,5 +1,6 @@
 import argparse
 import ast
+from typing import Dict
 import time
 
 from logzero import logger as log
@@ -58,7 +59,7 @@ def decode_arguments():
     return args
 
 
-def ref_calib(config):
+def ref_calib(config: Dict) -> float:
     """TODO: Write docstring
 
     Args:
@@ -103,8 +104,9 @@ def ref_calib(config):
     # Calculate average of the per-event effs
     # Use only data with valid eff values (those events falling inside the
     # calibration hist)
-    av_eff2 = df_ref["eff"].dropna().mean()
-    log.info(f"Average per-event PID efficiency: {av_eff2:.2%}")
+    avg_eff = df_ref["eff"].dropna().mean()
+    log.info(f"Average per-event PID efficiency: {avg_eff:.2%}")
+    return avg_eff  # type: ignore
 
 
 if __name__ == "__main__":
