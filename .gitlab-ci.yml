@@ -5,6 +5,8 @@ stages:
     - test
 
 before_script:
+    - echo $LBDATARO_KEYTAB | base64 -d > .keytab && kinit lbdataro@CERN.CH -k -t .keytab && rm .keytab
+    - klist
     - source /cvmfs/lhcb.cern.ch/lib/LbEnv
     - lb-conda-dev virtual-env default/2020-11-18 .venv
     - .venv/run pip install -r requirements.txt
@@ -24,4 +26,4 @@ mypy:
 run_tests:
     stage: test
     script:
-        - .venv/run pytest -v -m "not xrootd"
+        - .venv/run pytest -v
