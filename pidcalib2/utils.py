@@ -316,7 +316,8 @@ def log_config(config: dict) -> None:
     longest_key = len(max(config, key=len))
     log.info("=" * longest_key)
     for entry in config:
-        log.info(f"{entry:{longest_key}}: {config[entry]}")
+        if config[entry] is not None:
+            log.info(f"{entry:{longest_key}}: {config[entry]}")
     log.info("=" * longest_key)
 
 
