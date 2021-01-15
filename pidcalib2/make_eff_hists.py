@@ -59,6 +59,12 @@ def decode_arguments():
         "--local-dataframe",
         help="(debug) read a calibration DataFrame from file",
     )
+    parser.add_argument(
+        "-n",
+        "--max-files",
+        type=int,
+        help="(debug) a max number of files to read",
+    )
     args = parser.parse_args()
     return args
 
@@ -102,7 +108,7 @@ def make_eff_hists(config: dict) -> None:
             config["local_dataframe"], list(branch_names)
         )
     else:
-        eos_paths = utils.get_eos_paths(config["year"], config["magnet"])
+        eos_paths = utils.get_eos_paths(config["year"], config["magnet"], config["max_files"])
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
         df_total = utils.calib_root_to_dataframe(
             eos_paths, config["particle"], branch_names
