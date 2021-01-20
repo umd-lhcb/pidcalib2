@@ -139,7 +139,7 @@ def test_get_reference_branch_names():
 def test_get_reference_branch_name():
     assert utils.get_reference_branch_name("Bach", "foo", "bar") == "Bach_bar"
     assert utils.get_reference_branch_name("Bach", "nTracks", "bar") == "bar"
-    assert utils.get_reference_branch_name("Bach", "nSPDHits", "bar") == "bar"
+    assert utils.get_reference_branch_name("Bach", "nSPDhits", "bar") == "bar"
     assert utils.get_reference_branch_name("Bach", "foo", "nTracks") == "Bach_nTracks"
 
 

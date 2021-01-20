@@ -59,6 +59,11 @@ def ntracks_binning(particle, low: float = 0, high: float = 500) -> List[float]:
     return bins
 
 
+def nspdhits_binning(particle, low: float = 0, high: float = 1000) -> List[float]:
+    bins = [low, 200, 400, 600, 800, high]
+    return bins
+
+
 def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]:
     bins = np.linspace(low, high, 4).tolist()
     return bins
@@ -71,6 +76,9 @@ binnings["pi"] = {
     "P": p_binning("pi"),
     "ETA": eta_binning("pi"),
     "nTracks": ntracks_binning("pi"),
+    "nTracks_Brunel": ntracks_binning("pi"),
+    "nSPDhits": ntracks_binning("pi"),
+    "nSPDhits_Brunel": ntracks_binning("pi"),
     "TRCHI2NDOF": trchi2_binning("pi"),
 }
 
@@ -78,5 +86,8 @@ binnings["K"] = {
     "P": p_binning("K"),
     "ETA": eta_binning("K"),
     "nTracks": ntracks_binning("K"),
+    "nTracks_Brunel": ntracks_binning("K"),
+    "nSPDhits": ntracks_binning("K"),
+    "nSPDhits_Brunel": ntracks_binning("K"),
     "TRCHI2NDOF": trchi2_binning("K"),
 }

@@ -23,7 +23,8 @@ def create_branch_names(prefix: str) -> Dict[str, str]:
     """Return a dict of {var name: branch name in the calib. tuple}.
 
     Args:
-        prefix: A string to be prepended to each branch name, except nTracks.
+        prefix: A string to be prepended to each particle-specific branch
+            name.
     """
     branch_names = {
         "DLLK": f"{prefix}_PIDK",
@@ -32,7 +33,10 @@ def create_branch_names(prefix: str) -> Dict[str, str]:
         "ProbNNk": f"{prefix}_MC15TuneV1_ProbNNk",
         "P": f"{prefix}_P",
         "ETA": f"{prefix}_ETA",
-        "nTracks": "nTracks_Brunel",
+        "nTracks": "nTracks",
+        "nTracks_Brunel": "nTracks_Brunel",
+        "nSPDhits": "nSPDhits",
+        "nSPDhits_Brunel": "nSPDhits_Brunel",
         "sw": f"{prefix}_sWeight",
         "TRCHI2NDOF": f"{prefix}_TRCHI2NDOF",
     }
@@ -135,7 +139,8 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     """
     # TODO: Review these hardcoded branch names (maybe consolidate them
     # somewhere). Maybe add some checks that the bin_var is known.
-    if bin_var in ("nTracks", "nSPDHits"):
+    global_branches = ("nTracks", "nTracks_Brunel", "nSPDhits", "nSPDhits_Brunel")
+    if bin_var in global_branches:
         return bin_var_branch
 
     return f"{prefix}_{bin_var_branch}"
