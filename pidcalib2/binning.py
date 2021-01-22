@@ -77,8 +77,8 @@ binnings["pi"] = {
     "ETA": eta_binning("pi"),
     "nTracks": ntracks_binning("pi"),
     "nTracks_Brunel": ntracks_binning("pi"),
-    "nSPDhits": ntracks_binning("pi"),
-    "nSPDhits_Brunel": ntracks_binning("pi"),
+    "nSPDhits": nspdhits_binning("pi"),
+    "nSPDhits_Brunel": nspdhits_binning("pi"),
     "TRCHI2NDOF": trchi2_binning("pi"),
 }
 
@@ -87,7 +87,7 @@ binnings["K"] = {
     "ETA": eta_binning("K"),
     "nTracks": ntracks_binning("K"),
     "nTracks_Brunel": ntracks_binning("K"),
-    "nSPDhits": ntracks_binning("K"),
-    "nSPDhits_Brunel": ntracks_binning("K"),
+    "nSPDhits": nspdhits_binning("K"),
+    "nSPDhits_Brunel": nspdhits_binning("K"),
     "TRCHI2NDOF": trchi2_binning("K"),
 }
