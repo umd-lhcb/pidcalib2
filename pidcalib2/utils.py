@@ -5,7 +5,7 @@ from typing import Dict, List
 import boost_histogram as bh
 import numpy as np
 import pandas as pd
-import uproot4
+import uproot
 from logzero import logger as log
 from tqdm import tqdm
 from XRootD import client as xrdclient
@@ -172,7 +172,7 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
         tree_name: Name of a tree inside the ROOT file.
         branches: Branches to put in the DataFrame.
     """
-    tree = uproot4.open(path)[tree_name]
+    tree = uproot.open(path)[tree_name]
     df = tree.arrays(branches, library="pd")  # type: ignore
     return df
 
