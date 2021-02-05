@@ -57,16 +57,16 @@ def pidcalib_sample_dir(year: int, magnet: str) -> str:
             "down": "Collision15/PIDCALIB.ROOT/00064785",
         },
         2016: {
-            "up": "Collision16/PIDCALIB.ROOT/00064793",
-            "down": "Collision16/PIDCALIB.ROOT/00064795",
+            "up": "Collision16/PIDCALIB.ROOT/00111823",
+            "down": "Collision16/PIDCALIB.ROOT/00111825",
         },
         2017: {
-            "up": "Collision17/PIDCALIB.ROOT/00090825",
-            "down": "Collision17/PIDCALIB.ROOT/00090823",
+            "up": "Collision17/PIDCALIB.ROOT/00106050",
+            "down": "Collision17/PIDCALIB.ROOT/00106052",
         },
         2018: {
-            "up": "Collision18/PIDCALIB.ROOT/00082947",
-            "down": "Collision18/PIDCALIB.ROOT/00082949",
+            "up": "Collision18/PIDCALIB.ROOT/00109276",
+            "down": "Collision18/PIDCALIB.ROOT/00109278",
         },
     }
 

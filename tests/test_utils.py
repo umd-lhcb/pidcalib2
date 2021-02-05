@@ -6,7 +6,7 @@ from pidcalib2 import utils
 
 
 def test_pid_calib_sample_dir():
-    assert utils.pidcalib_sample_dir(2018, "up") == "Collision18/PIDCALIB.ROOT/00082947"
+    assert utils.pidcalib_sample_dir(2018, "up") == "Collision18/PIDCALIB.ROOT/00109276"
 
     with pytest.raises(AssertionError):
         utils.pidcalib_sample_dir(2018, "middle")
@@ -17,18 +17,18 @@ def test_pid_calib_sample_dir():
 
 @pytest.mark.xrootd
 def test_get_eos_paths():
-    assert len(utils.get_eos_paths(2018, "up")) == 419
-    assert len(utils.get_eos_paths(2018, "down")) == 423
-    assert len(utils.get_eos_paths(2017, "up")) == 371
-    assert len(utils.get_eos_paths(2017, "down")) == 477
-    assert len(utils.get_eos_paths(2016, "up")) == 146
-    assert len(utils.get_eos_paths(2016, "down")) == 154
+    assert len(utils.get_eos_paths(2018, "up")) == 428
+    assert len(utils.get_eos_paths(2018, "down")) == 401
+    assert len(utils.get_eos_paths(2017, "up")) == 312
+    assert len(utils.get_eos_paths(2017, "down")) == 371
+    assert len(utils.get_eos_paths(2016, "up")) == 238
+    assert len(utils.get_eos_paths(2016, "down")) == 258
     assert len(utils.get_eos_paths(2015, "up")) == 43
     assert len(utils.get_eos_paths(2015, "down")) == 78
     assert len(utils.get_eos_paths(2015, "down", 10)) == 10
     assert (
         utils.get_eos_paths(2018, "up")[0]
-        == "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision18/PIDCALIB.ROOT/00082947/0000/00082947_00000001_1.pidcalib.root"  # noqa: E501
+        == "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision18/PIDCALIB.ROOT/00109276/0000/00109276_00000001_1.pidcalib.root"  # noqa: E501
     )
 
 
