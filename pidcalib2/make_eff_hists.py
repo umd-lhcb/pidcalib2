@@ -119,21 +119,25 @@ def make_eff_hists(config: dict) -> None:
         df_total, config["particle"], config["pid_cuts"], config["bin_vars"]
     )
 
-    for name, hist in eff_hists.items():
-        hist_filename = (
-            f"effhist_"
-            f"{config['year']}_"
-            f"{config['magnet']}_"
-            f"{config['particle']}_"
-            f"{name.replace('eff_', '')}_"
-            f"{'_'.join(config['bin_vars'])}"
-            ".pkl"
-        )
-        eff_hist_path = output_dir / hist_filename
-        with open(eff_hist_path, "wb") as f:
-            pickle.dump(hist, f)
+    for name in eff_hists:
+        if name.startswith("eff_"):
+            cut = name.replace("eff_", "")
+            hist_filename = (
+                f"effhists_"
+                f"{config['year']}_"
+                f"{config['magnet']}_"
+                f"{config['particle']}_"
+                f"{cut}_"
+                f"{'_'.join(config['bin_vars'])}"
+                ".pkl"
+            )
+            eff_hist_path = output_dir / hist_filename
+            with open(eff_hist_path, "wb") as f:
+                pickle.dump(eff_hists[f"eff_{cut}"], f)
+                pickle.dump(eff_hists[f"passing_{cut}"], f)
+                pickle.dump(eff_hists["total"], f)
 
-        log.info(f"Efficiency histogram saved to '{eff_hist_path}'")
+            log.info(f"Efficiency histograms saved to '{eff_hist_path}'")
 
 
 if __name__ == "__main__":

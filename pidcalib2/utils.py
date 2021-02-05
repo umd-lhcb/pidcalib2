@@ -258,13 +258,14 @@ def create_eff_histograms(
         keys.
     """
 
-    hist_total = make_hist(df_total, particle, bin_vars)
-    zero_bins = np.count_nonzero(hist_total.view(flow=False) == 0)
+    hists = {}
+    hists["total"] = make_hist(df_total, particle, bin_vars)
+
+    zero_bins = np.count_nonzero(hists["total"].view(flow=False) == 0)
     if zero_bins:
         log.warning(f"There are {zero_bins} empty bins in the total histogram!")
-        log.warning(hist_total.view(flow=False))
+        log.warning(hists["total"].view(flow=False))
 
-    eff_hists = {}
     n_total = len(df_total.index)
     for i, pid_cut in enumerate(pid_cuts):
         log.info(f"Processing '{pid_cuts[i]}' cut")
@@ -274,16 +275,16 @@ def create_eff_histograms(
         log.info(
             f"{n_passing}/{n_total} ({percent_passing:.2f}%) events passed the cut"
         )
-        hist_passing = make_hist(df_passing, particle, bin_vars)
+        hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
         log.debug("Created 'passing' histogram")
 
-        eff_hists[f"eff_{pid_cut}"] = hist_passing.copy()
-        eff_hists[f"eff_{pid_cut}"][...] = hist_passing.view(
+        hists[f"eff_{pid_cut}"] = hists[f"passing_{pid_cut}"].copy()
+        hists[f"eff_{pid_cut}"][...] = hists[f"passing_{pid_cut}"].view(
             flow=False
-        ) / hist_total.view(flow=False)
+        ) / hists["total"].view(flow=False)
         log.debug(f"Created 'eff_{pid_cut}' histogram")
 
-    return eff_hists
+    return hists
 
 
 def dataframe_from_local_file(path: str, branch_names: List[str]) -> pd.DataFrame:

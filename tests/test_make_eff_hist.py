@@ -16,7 +16,7 @@ def test_make_eff_hists():
         "local_dataframe": "tests/data/cal_test_data.csv",
     }
     make_eff_hists.make_eff_hists(config)
-    eff_histo = pd.read_pickle("tests/test_output/effhist_2018_up_pi_DLLK<4_P.pkl")
+    eff_histo = pd.read_pickle("tests/test_output/effhists_2018_up_pi_DLLK<4_P.pkl")
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
