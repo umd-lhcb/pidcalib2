@@ -113,7 +113,6 @@ def make_eff_hists(config: dict) -> None:
         if config["file_list"]:
             with open(config["file_list"]) as f:
                 eos_paths = f.read().splitlines()
-                print(eos_paths)
         else:
             eos_paths = utils.get_eos_paths(
                 config["year"], config["magnet"], config["max_files"]
