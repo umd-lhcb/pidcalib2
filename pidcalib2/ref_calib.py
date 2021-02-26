@@ -17,7 +17,7 @@ def decode_arguments():
         help="year of data-taking",
         required=True,
         type=int,
-        choices=[2018, 2017, 2016, 2015],
+        choices=[2018, 2017, 2016, 2015, 2014, 2013],
     )
     parser.add_argument(
         "-m", "--magnet", help="magnet polarity", required=True, choices=["up", "down"],
