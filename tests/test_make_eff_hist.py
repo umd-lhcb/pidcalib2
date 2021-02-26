@@ -24,7 +24,7 @@ def test_make_eff_hists():
     assert eff_histo.sum(flow=True) == pytest.approx(23.57053953265155)
     assert eff_histo[1] == 0.8978157343833105
 
-    eff_histo_reference = pd.read_pickle("tests/data/effhist_2018_up_pi_DLLK<4_P.pkl")
+    eff_histo_reference = pd.read_pickle("tests/data/effhists_2018_up_pi_DLLK<4_P.pkl")
     assert eff_histo == eff_histo_reference
 
     shutil.rmtree("tests/test_output")

@@ -379,7 +379,9 @@ def get_calib_hists(
         bin_str = ""
         for bin_var in bin_vars:
             bin_str += f"_{bin_var}"
-        calib_name = f"{hist_dir}/effhists_{year}_{magnet}_{particle}_{pid_cut}{bin_str}"
+        calib_name = (
+            f"{hist_dir}/effhists_{year}_{magnet}_{particle}_{pid_cut}{bin_str}"
+        )
 
         log.debug(f"Loading efficiency histogram from '{calib_name}'")
 
