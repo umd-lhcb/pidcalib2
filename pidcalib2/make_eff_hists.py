@@ -17,7 +17,7 @@ def decode_arguments():
         help="year of data-taking",
         required=True,
         type=int,
-        choices=[2018, 2017, 2016, 2015],
+        choices=[2018, 2017, 2016, 2015, 2014, 2013],
     )
     parser.add_argument(
         "-m", "--magnet", help="magnet polarity", required=True, choices=["up", "down"],
@@ -58,6 +58,11 @@ def decode_arguments():
         "-l",
         "--local-dataframe",
         help="(debug) read a calibration DataFrame from file",
+    )
+    parser.add_argument(
+        "-f",
+        "--file-list",
+        help="(debug) read calibration file paths from a text file",
     )
     parser.add_argument(
         "-n", "--max-files", type=int, help="(debug) a max number of files to read",
@@ -105,9 +110,14 @@ def make_eff_hists(config: dict) -> None:
             config["local_dataframe"], list(branch_names)
         )
     else:
-        eos_paths = utils.get_eos_paths(
-            config["year"], config["magnet"], config["max_files"]
-        )
+        if config["file_list"]:
+            with open(config["file_list"]) as f:
+                eos_paths = f.read().splitlines()
+                print(eos_paths)
+        else:
+            eos_paths = utils.get_eos_paths(
+                config["year"], config["magnet"], config["max_files"]
+            )
         tree_paths = utils.get_tree_paths(config["particle"], config["year"])
 
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
