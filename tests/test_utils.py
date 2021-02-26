@@ -40,11 +40,23 @@ def test_calib_root_to_dataframe():
             [
                 "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision15/PIDCALIB.ROOT/00064787/0000/00064787_00000037_1.pidcalib.root"  # noqa: E501
             ],
-            "pi",
+            ["DSt_PiMTuple/DecayTree", "DSt_PiPTuple/DecayTree"],
             {"DLLK": "probe_PIDK"},
         ).shape[0]
         == 18400
     )
+
+
+def test_get_tree_paths():
+    assert utils.get_tree_paths("pi", 2014) == ["DecayTree"]
+    assert utils.get_tree_paths("pi", 2015) == [
+        "DSt_PiPTuple/DecayTree",
+        "DSt_PiMTuple/DecayTree",
+    ]
+    assert utils.get_tree_paths("mu", 2015) == [
+        "Jpsi_MuPTuple/DecayTree",
+        "Jpsi_MuMTuple/DecayTree",
+    ]
 
 
 def test_make_hist():
@@ -112,9 +124,7 @@ def test_dataframe_from_local_file():
         )
 
     with pytest.raises(Exception):
-        utils.dataframe_from_local_file(
-            "tests/data/file.root", ["sw"]
-        )
+        utils.dataframe_from_local_file("tests/data/file.root", ["sw"])
 
 
 def test_get_per_event_effs():
@@ -146,15 +156,11 @@ def test_get_reference_branch_name():
 def test_get_calib_hists():
     ref_pars = {"Bach": ["K", "DLLK > 4"]}
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
-    eff_histos = utils.get_calib_hists(
-        "tests/data", 2018, "up", ref_pars, bin_vars
-    )
+    eff_histos = utils.get_calib_hists("tests/data", 2018, "up", ref_pars, bin_vars)
     assert eff_histos["Bach"].sum() == pytest.approx(199.01361598888047)
 
     with pytest.raises(FileNotFoundError):
-        utils.get_calib_hists(
-            "tests/data", 18, "up", ref_pars, bin_vars
-        )
+        utils.get_calib_hists("tests/data", 18, "up", ref_pars, bin_vars)
 
 
 def test_add_bin_indices():

@@ -178,7 +178,7 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
 
 
 def calib_root_to_dataframe(
-    paths: List[str], particle: str, branches: Dict[str, str]
+    paths: List[str], tree_paths: List[str], branches: Dict[str, str]
 ) -> pd.DataFrame:
     """Read ROOT files via XRootD, extract branches, and save to a Pandas DF.
 
@@ -189,7 +189,7 @@ def calib_root_to_dataframe(
     Args:
         paths: Paths to ROOT files; either file system paths or URLs, e.g.
             ["root:///eos/lhcb/file.root"].
-        particle: Particle whose decay tree branches are to be extracted.
+        tree_paths: Internal ROOT file paths to the relevant trees
         branches: Dict of the branches {simple_name: branch_name} to include
            in the DataFrame.
 
@@ -199,11 +199,9 @@ def calib_root_to_dataframe(
     """
     df_tot = pd.DataFrame()
     for path in tqdm(paths, leave=False, desc="Reading files"):
-        for mother in mothers[particle]:
-            for charge in charges[particle]:
-                tree_path = f"{mother}_{particle.capitalize()}{charge}Tuple/DecayTree"
-                df = root_to_dataframe(path, tree_path, list(branches.values()))
-                df_tot = df_tot.append(df)
+        for tree_path in tree_paths:
+            df = root_to_dataframe(path, tree_path, list(branches.values()))
+            df_tot = df_tot.append(df)
 
     # Rename colums of the dataset from branch names to simple user-level
     # names, e.g., probe_PIDK -> DLLK.
@@ -212,6 +210,28 @@ def calib_root_to_dataframe(
 
     log.info(f"Read {len(paths)} files with a total of {len(df_tot.index)} events")
     return df_tot
+
+
+def get_tree_paths(particle: str, year: int) -> List[str]:
+    """Return a list of internal ROOT paths to relevant trees in the files
+
+    Args:
+        particle: Particle type (K, pi, etc.)
+        year: Year of data taking used to distinguish Run1/Run2 datasets
+    """
+    tree_paths = []
+    if year > 2014:
+        # Run 2 ROOT file structure with multiple trees
+        for mother in mothers[particle]:
+            for charge in charges[particle]:
+                tree_paths.append(
+                    f"{mother}_{particle.capitalize()}{charge}Tuple/DecayTree"
+                )
+    else:
+        # Run 1 files have a simple structure with a single tree
+        tree_paths.append("DecayTree")
+
+    return tree_paths
 
 
 def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histogram:
@@ -420,7 +440,7 @@ def add_bin_indices(
             eff_hists[prefix].axes.size,
         )
         df_new[f"{prefix}_index"] = indices
-        df_new = pd.concat([df_new, df_nan]).sort_index()
+        df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
     log.debug("Bin indices assigned")
     return df_new  # type: ignore
 
@@ -444,6 +464,7 @@ def add_efficiencies(
     df_new["eff"] = 1
     for prefix in prefixes:
         efficiency_table = eff_hists[prefix].view().flatten()
+        np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
         df_new[f"{prefix}_eff"] = np.take(efficiency_table, df_new[f"{prefix}_index"])
         df_new["eff"] = df_new["eff"] * df_new[f"{prefix}_eff"]
 
