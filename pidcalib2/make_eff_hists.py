@@ -131,14 +131,12 @@ def make_eff_hists(config: dict) -> None:
     for name in eff_hists:
         if name.startswith("eff_"):
             cut = name.replace("eff_", "")
-            hist_filename = (
-                f"effhists_"
-                f"{config['year']}_"
-                f"{config['magnet']}_"
-                f"{config['particle']}_"
-                f"{cut}_"
-                f"{'_'.join(config['bin_vars'])}"
-                ".pkl"
+            hist_filename = utils.create_hist_filename(
+                config["year"],
+                config["magnet"],
+                config["particle"],
+                cut,
+                config["bin_vars"],
             )
             eff_hist_path = output_dir / hist_filename
             with open(eff_hist_path, "wb") as f:

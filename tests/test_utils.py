@@ -132,7 +132,7 @@ def test_get_per_event_effs():
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
-    with open("tests/data/effhists_2018_up_K_DLLK>4_P_ETA_nTracks.pkl", "rb") as f:
+    with open("tests/data/effhists_2018_up_K_DLLK>4_P-ETA-nTracks.pkl", "rb") as f:
         hists["Bach"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
@@ -168,7 +168,7 @@ def test_add_bin_indices():
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
-    with open("tests/data/effhists_2018_up_K_DLLK>4_P_ETA_nTracks.pkl", "rb") as f:
+    with open("tests/data/effhists_2018_up_K_DLLK>4_P-ETA-nTracks.pkl", "rb") as f:
         hists["Bach"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     assert df_ref["Bach_P_index"].sum() == 623

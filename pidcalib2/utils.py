@@ -1,3 +1,4 @@
+from pathlib import Path
 import pickle
 import re
 from typing import Dict, List
@@ -379,13 +380,14 @@ def get_calib_hists(
         bin_str = ""
         for bin_var in bin_vars:
             bin_str += f"_{bin_var}"
-        calib_name = (
-            f"{hist_dir}/effhists_{year}_{magnet}_{particle}_{pid_cut}{bin_str}"
+        calib_name = Path(
+            hist_dir,
+            create_hist_filename(year, magnet, particle, pid_cut, list(bin_vars)),
         )
 
         log.debug(f"Loading efficiency histogram from '{calib_name}'")
 
-        with open(calib_name + ".pkl", "rb") as f:
+        with open(calib_name, "rb") as f:
             hists[ref_par] = pickle.load(f)
     return hists
 
@@ -479,3 +481,12 @@ def add_efficiencies(
         f"Events out of range: {num_outside_range} ({num_outside_range_frac:.2%})"
     )
     return df_new
+
+
+def create_hist_filename(
+    year: int, magnet: str, particle: str, cut: str, bin_vars: List[str]
+) -> str:
+    whitespace = re.compile(r"\s+")
+    pid_cut = re.sub(whitespace, "", cut)
+
+    return f"effhists_{year}_{magnet}_{particle}_{pid_cut}_{'-'.join(bin_vars)}.pkl"
