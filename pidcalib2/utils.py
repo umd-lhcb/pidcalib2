@@ -484,9 +484,18 @@ def add_efficiencies(
 
 
 def create_hist_filename(
-    year: int, magnet: str, particle: str, cut: str, bin_vars: List[str]
+    year: int, magnet: str, particle: str, pid_cut: str, bin_vars: List[str]
 ) -> str:
-    whitespace = re.compile(r"\s+")
-    pid_cut = re.sub(whitespace, "", cut)
+    """Return effhists filename corresponding to parameters.
 
-    return f"effhists_{year}_{magnet}_{particle}_{pid_cut}_{'-'.join(bin_vars)}.pkl"
+    Args:
+        year: Data-taking year
+        magnet: Magnet polarity (up, down)
+        particle: Particle type (K, pi, etc.)
+        pid_cut: Simplified user-level cut, e.g., "DLLK < 4".
+        bin_vars: Variables used for binning.
+    """
+    whitespace = re.compile(r"\s+")
+    cut = re.sub(whitespace, "", pid_cut)
+
+    return f"effhists_{year}_{magnet}_{particle}_{cut}_{'-'.join(bin_vars)}.pkl"
