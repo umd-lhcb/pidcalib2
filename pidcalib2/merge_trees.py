@@ -12,6 +12,7 @@ Example:
     $ python -m pidcalib2.merge_trees eff.root eff_tree ref.root DecayTree
 """
 
+from logzero import logger as log
 import sys
 
 import ROOT
@@ -33,7 +34,7 @@ def copy_tree_and_set_as_friend(
     """
     source_file = ROOT.TFile(source_file_name, "read")  # type: ignore
     source_tree = source_file.Get(source_tree_name)
-    print(f"Reading {source_tree_name} from {source_file_name}")
+    log.info(f"Reading {source_tree_name} from {source_file_name}")
     if not source_tree:
         print(f"ERROR: '{source_tree_name}' not found in '{source_file_name}'.")
         sys.exit(1)
@@ -41,7 +42,7 @@ def copy_tree_and_set_as_friend(
     dest_file = ROOT.TFile(dest_file_name, "update")  # type: ignore
     dest_file.cd()
 
-    print(f"Reading {dest_tree_name} from {dest_file_name}")
+    log.info(f"Reading {dest_tree_name} from {dest_file_name}")
     dest_tree = dest_file.Get(dest_tree_name)
     if not dest_tree:
         print(f"ERROR: '{dest_tree_name}' not found in '{dest_file_name}'.")
@@ -49,7 +50,7 @@ def copy_tree_and_set_as_friend(
 
     dest_tree.AddFriend(source_tree)
 
-    print(f"Copying {source_tree_name} to {dest_file_name}")
+    log.info(f"Copying {source_tree_name} to {dest_file_name}")
     source_tree.CloneTree().Write()
     # Avoid ROOT adding a new tree with an incremented cycle number
     dest_tree.Write("", ROOT.TObject.kOverwrite)  # type: ignore

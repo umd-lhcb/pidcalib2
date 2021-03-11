@@ -7,6 +7,7 @@ import boost_histogram as bh
 import numpy as np
 import pandas as pd
 import uproot
+import uproot3
 from logzero import logger as log
 from tqdm import tqdm
 from XRootD import client as xrdclient
@@ -428,22 +429,23 @@ def add_bin_indices(
             for axis in eff_hists[prefix].axes:
                 if axis.metadata["name"] == bin_var:
                     bins = axis.edges
-            df_new[f"{ref_branch_name}_index"] = pd.cut(
+            df_new[f"{ref_branch_name}_PID_index"] = pd.cut(
                 df_new[ref_branch_name],
                 bins,
                 labels=False,
                 include_lowest=True,
                 right=False,
+                precision=0,
             )
 
         df_nan = df_new[df_new.isna().any(axis=1)]  # type: ignore
         df_new.dropna(inplace=True)
-        index_names = [f"{axis}_index" for axis in axes]
+        index_names = [f"{axis}_PID_index" for axis in axes]
         indices = np.ravel_multi_index(
             df_new[index_names].transpose().to_numpy().astype(int),  # type: ignore
             eff_hists[prefix].axes.size,
         )
-        df_new[f"{prefix}_index"] = indices
+        df_new[f"{prefix}_PID_index"] = indices
         df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
     log.debug("Bin indices assigned")
     return df_new  # type: ignore
@@ -465,12 +467,14 @@ def add_efficiencies(
     df_new = df.copy()
     df_nan = df_new[df_new.isna().any(axis=1)]
     df_new.dropna(inplace=True)
-    df_new["eff"] = 1
+    df_new["PID_eff"] = 1
     for prefix in prefixes:
         efficiency_table = eff_hists[prefix].view().flatten()
         np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
-        df_new[f"{prefix}_eff"] = np.take(efficiency_table, df_new[f"{prefix}_index"])
-        df_new["eff"] = df_new["eff"] * df_new[f"{prefix}_eff"]
+        df_new[f"{prefix}_PID_eff"] = np.take(
+            efficiency_table, df_new[f"{prefix}_PID_index"]
+        )
+        df_new["PID_eff"] = df_new["PID_eff"] * df_new[f"{prefix}_PID_eff"]
 
     df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
@@ -499,3 +503,26 @@ def create_hist_filename(
     cut = re.sub(whitespace, "", pid_cut)
 
     return f"effhists_{year}_{magnet}_{particle}_{cut}_{'-'.join(bin_vars)}.pkl"
+
+
+def save_dataframe_as_root(
+    df: pd.DataFrame, name: str, filename: str, columns: List[str] = None
+):
+    """Save a DataFrame as a TTree in a ROOT file.
+
+    Args:
+        df: DataFrame to be saved.
+        name: Name of the new TTree.
+        filename: Name of the file to which to save the TTree.
+        columns: Optional. Names of the columns which are to be saved. If
+            'None', all the columns will be saved.
+    """
+    if columns is None:
+        columns = list(df.keys())
+    branches_w_types = {branch: df[branch].dtype for branch in columns}
+    with uproot3.recreate(filename) as f:
+        log.debug(f"Creating a TTree with the following branches: {branches_w_types}")
+        f[name] = uproot3.newtree(branches_w_types)
+        branch_dict = {branch: df[branch] for branch in branches_w_types}
+        f[name].extend(branch_dict)
+    log.info(f"Efficiency tree saved to {filename}")

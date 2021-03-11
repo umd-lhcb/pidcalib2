@@ -1,10 +1,12 @@
 import argparse
 import ast
+import pathlib
 from typing import Dict
 import time
 
 from logzero import logger as log
 
+from . import merge_trees
 from . import utils
 
 
@@ -55,6 +57,9 @@ def decode_arguments():
         ),
         required=True,
     )
+    parser.add_argument(
+        "-d", "--dry-run", help="do not update the reference file", action="store_true"
+    )
     args = parser.parse_args()
     return args
 
@@ -104,8 +109,27 @@ def ref_calib(config: Dict) -> float:
     # Calculate average of the per-event effs
     # Use only data with valid eff values (those events falling inside the
     # calibration hist)
-    avg_eff = df_ref["eff"].dropna().mean()
+    avg_eff = df_ref["PID_eff"].dropna().mean()
     log.info(f"Average per-event PID efficiency: {avg_eff:.2%}")
+
+    output_path = pathlib.Path(config["output_dir"])
+    ref_path = pathlib.Path(config["ref_file"])
+
+    eff_path = output_path / ref_path.name.replace(".root", "_PID_eff.root")
+
+    utils.save_dataframe_as_root(
+        df_ref[[key for key in df_ref.keys() if key not in ref_branches]],
+        "PID_eff_tree",
+        str(eff_path),
+    )
+
+    if not config["dry_run"]:
+        merge_trees.copy_tree_and_set_as_friend(
+            str(eff_path), "PID_eff_tree", config["ref_file"], config["ref_tree"]
+        )
+    else:
+        log.warning("This is a dry run, the reference file was not updated")
+
     return avg_eff  # type: ignore
 
 
