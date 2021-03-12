@@ -9,7 +9,7 @@ def test_ref_calib():
         "magnet": "up",
         "bin_vars": '{"P": "P", "ETA": "ETA", "nTracks": "nTracks"}',
         "output_dir": "tests/data",
-        "dry_run": False,
+        "dry_run": True,
         "ref_file": "tests/data/ref_test_data.root",
         "ref_tree": "DecayTree",
         "ref_pars": '{"Bach": ["K", "DLLK > 4"]}',
