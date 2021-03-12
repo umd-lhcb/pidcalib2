@@ -79,14 +79,15 @@ def pidcalib_sample_dir(year: int, magnet: str) -> str:
 
 
 def get_relevant_branch_names(
-    prefix: str, pid_cuts: List[str], bin_vars: List[str]
+    prefix: str, pid_cuts: List[str], bin_vars: List[str], cuts: List[str] = None
 ) -> Dict[str, str]:
-    """Return a list of branch names relevant to the PID cuts and binning vars.
+    """Return a list of branch names relevant to the cuts and binning vars.
 
     Args:
         prefix: A prefix for the branch names, i.e., "probe".
         pid_cuts: Simplified user-level cut list, e.g., ["DLLK < 4"].
         bin_vars: Variables used for the binning.
+        cuts: Arbitrary cut list, e.g., ["Dst_IPCHI2 < 10.0"].
     """
     branch_names = create_branch_names(prefix)
 
@@ -106,6 +107,13 @@ def get_relevant_branch_names(
     for branch in tuple(branch_names):
         if branch not in [*pid_cuts_vars, *bin_vars, "sw"]:
             del branch_names[branch]
+
+    # Add vars in the arbitrary cuts
+    if cuts:
+        for cut in cuts:
+            cut = re.sub(whitespace, "", cut)
+            cut_var, _, _ = re.split(r"(<|>|==|!=)", cut)
+            branch_names[cut_var] = cut_var
 
     return branch_names
 

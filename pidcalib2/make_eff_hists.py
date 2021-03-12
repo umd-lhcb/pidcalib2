@@ -30,15 +30,25 @@ def decode_arguments():
         choices=["K", "pi", "p", "mu", "e"],
     )
     parser.add_argument(
-        "-c",
+        "-i",
         "--pid-cut",
         help=(
-            "PID cut string, e.g., 'DLLK<4.0' (-c can be used multiple times for "
-            "multiple cuts)"
+            "PID cut string, e.g., 'DLLK < 4.0' (-i can be used multiple times for "
+            "multiple cuts). Supported operators are <, >, ==, and !="
         ),
         action="append",
         dest="pid_cuts",
         required=True,
+    )
+    parser.add_argument(
+        "-c",
+        "--cut",
+        help=(
+            "arbitrary cut string, e.g., 'Dst_IPCHI2 < 10.0' (-c can be used multiple "
+            "times for multiple cuts). Supported operators are <, >, ==, and !="
+        ),
+        action="append",
+        dest="cuts",
     )
     parser.add_argument(
         "-v",
@@ -92,7 +102,7 @@ def make_eff_hists(config: dict) -> None:
         re.sub(pattern, "", pid_cut) for pid_cut in config["pid_cuts"]
     ]
 
-    log.info("Running PIDCalib2 make_perf_hists with the following config:")
+    log.info("Running PIDCalib2 make_eff_hists with the following config:")
     utils.log_config(config)
 
     output_dir = pathlib.Path(config["output_dir"])
@@ -100,7 +110,7 @@ def make_eff_hists(config: dict) -> None:
 
     calibration_prefix = "probe"
     branch_names = utils.get_relevant_branch_names(
-        calibration_prefix, config["pid_cuts"], config["bin_vars"]
+        calibration_prefix, config["pid_cuts"], config["bin_vars"], config["cuts"]
     )
     log.info(f"Branches to be read: {branch_names}")
 
@@ -123,6 +133,17 @@ def make_eff_hists(config: dict) -> None:
         df_total = utils.calib_root_to_dataframe(eos_paths, tree_paths, branch_names)
         # df_total.to_pickle("local_dataframe.pkl")
         # df_total.to_csv("local_dataframe.csv")
+
+    if config["cuts"]:
+        cut_string = " & ".join(config["cuts"])
+        log.debug(f"Applying generic cuts: '{cut_string}'")
+        num_before = df_total.shape[0]
+        df_total.query(cut_string, inplace=True)
+        num_after = df_total.shape[0]
+        log.debug(
+            f"{num_after}/{num_before} ({num_after/num_before:.1%}) events "
+            "passed generic cuts"
+        )
 
     eff_hists = utils.create_eff_histograms(
         df_total, config["particle"], config["pid_cuts"], config["bin_vars"]

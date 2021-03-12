@@ -12,10 +12,10 @@ Example:
     $ python -m pidcalib2.merge_trees eff.root eff_tree ref.root DecayTree
 """
 
-from logzero import logger as log
 import sys
 
 import ROOT
+from logzero import logger as log
 
 
 def copy_tree_and_set_as_friend(
