@@ -16,6 +16,7 @@ def test_make_eff_hists():
         "bin_vars": ["P"],
         "output_dir": "tests/test_output",
         "local_dataframe": "tests/data/cal_test_data.csv",
+        "verbose": False,
     }
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle("tests/test_output/effhists_2018_up_pi_DLLK<4_P.pkl")
@@ -42,6 +43,7 @@ def test_make_eff_hists_with_cuts():
         "bin_vars": ["P"],
         "output_dir": "tests/test_output",
         "local_dataframe": "tests/data/cal_test_data.csv",
+        "verbose": False,
     }
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle("tests/test_output/effhists_2018_up_pi_DLLK<4_P.pkl")

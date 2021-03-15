@@ -1,8 +1,10 @@
 import argparse
+import logging
 import pathlib
+import pickle
 import re
 
-import pickle
+import logzero
 from logzero import logger as log
 
 from . import utils
@@ -51,7 +53,7 @@ def decode_arguments():
         dest="cuts",
     )
     parser.add_argument(
-        "-v",
+        "-b",
         "--bin-var",
         help="binning variable (-v can be used multiple times for multiple variables)",
         action="append",
@@ -77,6 +79,9 @@ def decode_arguments():
     parser.add_argument(
         "-n", "--max-files", type=int, help="(debug) a max number of files to read",
     )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="(debug) increase verbosity",
+    )
     args = parser.parse_args()
     return args
 
@@ -96,7 +101,12 @@ def make_eff_hists(config: dict) -> None:
     # logzero.setup_default_logger(formatter=formatter)
 
     # TODO Setup log file
-    # Remove whitespace from PID cuts to avoid DLLK < 4 != DLLK<4
+
+    if config["verbose"]:
+        logzero.loglevel(logging.DEBUG)
+    else:
+        logzero.loglevel(logging.INFO)
+
     pattern = re.compile(r"\s+")
     config["pid_cuts"] = [
         re.sub(pattern, "", pid_cut) for pid_cut in config["pid_cuts"]
@@ -130,6 +140,8 @@ def make_eff_hists(config: dict) -> None:
         tree_paths = utils.get_tree_paths(config["particle"], config["year"])
 
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
+        for path in eos_paths:
+            log.debug(f"  {path}")
         df_total = utils.calib_root_to_dataframe(eos_paths, tree_paths, branch_names)
         # df_total.to_pickle("local_dataframe.pkl")
         # df_total.to_csv("local_dataframe.csv")
