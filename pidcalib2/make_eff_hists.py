@@ -7,7 +7,7 @@ import re
 import logzero
 from logzero import logger as log
 
-from . import utils
+from . import pid_data, utils
 
 
 def decode_arguments():
@@ -119,14 +119,14 @@ def make_eff_hists(config: dict) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     calibration_prefix = "probe"
-    branch_names = utils.get_relevant_branch_names(
+    branch_names = pid_data.get_relevant_branch_names(
         calibration_prefix, config["pid_cuts"], config["bin_vars"], config["cuts"]
     )
     log.info(f"Branches to be read: {branch_names}")
 
     df_total = None
     if config["local_dataframe"]:
-        df_total = utils.dataframe_from_local_file(
+        df_total = pid_data.dataframe_from_local_file(
             config["local_dataframe"], list(branch_names)
         )
     else:
@@ -134,15 +134,15 @@ def make_eff_hists(config: dict) -> None:
             with open(config["file_list"]) as f_list:
                 eos_paths = f_list.read().splitlines()
         else:
-            eos_paths = utils.get_eos_paths(
+            eos_paths = pid_data.get_eos_paths(
                 config["year"], config["magnet"], config["max_files"]
             )
-        tree_paths = utils.get_tree_paths(config["particle"], config["year"])
+        tree_paths = pid_data.get_tree_paths(config["particle"], config["year"])
 
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
         for path in eos_paths:
             log.debug(f"  {path}")
-        df_total = utils.calib_root_to_dataframe(eos_paths, tree_paths, branch_names)
+        df_total = pid_data.calib_root_to_dataframe(eos_paths, tree_paths, branch_names)
         # df_total.to_pickle("local_dataframe.pkl")
         # df_total.to_csv("local_dataframe.csv")
 

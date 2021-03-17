@@ -1,13 +1,12 @@
 import argparse
 import ast
 import pathlib
-from typing import Dict
 import time
+from typing import Dict
 
 from logzero import logger as log
 
-from . import merge_trees
-from . import utils
+from . import merge_trees, pid_data, utils
 
 
 def decode_arguments():
@@ -85,10 +84,10 @@ def ref_calib(config: Dict) -> float:
         log.error("The --ref-pars string is not valid Python dict")
         raise
 
-    ref_branches = utils.get_reference_branch_names(ref_pars, bin_vars)
+    ref_branches = pid_data.get_reference_branch_names(ref_pars, bin_vars)
 
     log.info(f"Loading reference sample '{config['ref_file']}' ...")
-    df_ref = utils.root_to_dataframe(
+    df_ref = pid_data.root_to_dataframe(
         config["ref_file"], config["ref_tree"], ref_branches
     )
     log.debug(
@@ -96,7 +95,7 @@ def ref_calib(config: Dict) -> float:
     )
 
     # TODO: Rename output_dir to hist_dir (?)
-    eff_histos = utils.get_calib_hists(
+    eff_histos = pid_data.get_calib_hists(
         config["output_dir"], config["year"], config["magnet"], ref_pars, bin_vars
     )
 
@@ -117,7 +116,7 @@ def ref_calib(config: Dict) -> float:
 
     eff_path = output_path / ref_path.name.replace(".root", "_PID_eff.root")
 
-    utils.save_dataframe_as_root(
+    pid_data.save_dataframe_as_root(
         df_ref[[key for key in df_ref.keys() if key not in ref_branches]],
         "PID_eff_tree",
         str(eff_path),
