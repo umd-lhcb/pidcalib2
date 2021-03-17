@@ -2,35 +2,6 @@ import pytest
 from pidcalib2 import pid_data
 
 
-def test_pid_calib_sample_dir():
-    assert (
-        pid_data.pidcalib_sample_dir(2018, "up") == "Collision18/PIDCALIB.ROOT/00109276"
-    )
-
-    with pytest.raises(AssertionError):
-        pid_data.pidcalib_sample_dir(2018, "middle")
-
-    with pytest.raises(AssertionError):
-        pid_data.pidcalib_sample_dir(3018, "up")
-
-
-@pytest.mark.xrootd
-def test_get_eos_paths():
-    assert len(pid_data.get_eos_paths(2018, "up")) == 428
-    assert len(pid_data.get_eos_paths(2018, "down")) == 401
-    assert len(pid_data.get_eos_paths(2017, "up")) == 312
-    assert len(pid_data.get_eos_paths(2017, "down")) == 371
-    assert len(pid_data.get_eos_paths(2016, "up")) == 238
-    assert len(pid_data.get_eos_paths(2016, "down")) == 258
-    assert len(pid_data.get_eos_paths(2015, "up")) == 43
-    assert len(pid_data.get_eos_paths(2015, "down")) == 78
-    assert len(pid_data.get_eos_paths(2015, "down", 10)) == 10
-    assert (
-        pid_data.get_eos_paths(2018, "up")[0]
-        == "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision18/PIDCALIB.ROOT/00109276/0000/00109276_00000001_1.pidcalib.root"  # noqa: E501
-    )
-
-
 @pytest.mark.xrootd
 @pytest.mark.slow
 def test_calib_root_to_dataframe():
@@ -47,12 +18,12 @@ def test_calib_root_to_dataframe():
 
 
 def test_get_tree_paths():
-    assert pid_data.get_tree_paths("pi", 2014) == ["DecayTree"]
-    assert pid_data.get_tree_paths("pi", 2015) == [
+    assert pid_data.get_tree_paths("pi", "26") == ["DecayTree"]
+    assert pid_data.get_tree_paths("pi", "Turbo15") == [
         "DSt_PiPTuple/DecayTree",
         "DSt_PiMTuple/DecayTree",
     ]
-    assert pid_data.get_tree_paths("mu", 2015) == [
+    assert pid_data.get_tree_paths("mu", "Turbo15-MagUp-Mu") == [
         "Jpsi_MuPTuple/DecayTree",
         "Jpsi_MuMTuple/DecayTree",
     ]
@@ -127,8 +98,10 @@ def test_get_reference_branch_name():
 def test_get_calib_hists():
     ref_pars = {"Bach": ["K", "DLLK > 4"]}
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
-    eff_histos = pid_data.get_calib_hists("tests/data", 2018, "up", ref_pars, bin_vars)
+    eff_histos = pid_data.get_calib_hists(
+        "tests/data", "Turbo18", "up", ref_pars, bin_vars
+    )
     assert eff_histos["Bach"].sum() == pytest.approx(199.01361598888047)
 
     with pytest.raises(FileNotFoundError):
-        pid_data.get_calib_hists("tests/data", 18, "up", ref_pars, bin_vars)
+        pid_data.get_calib_hists("tests/data", "Turbo34", "up", ref_pars, bin_vars)

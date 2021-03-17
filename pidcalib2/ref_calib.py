@@ -13,12 +13,11 @@ def decode_arguments():
     """Decode CLI arguments."""
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument(
-        "-y",
-        "--year",
-        help="year of data-taking",
+        "-s",
+        "--sample",
+        help="calibration sample (Turbo18, Electron16, ...)",
         required=True,
-        type=int,
-        choices=[2018, 2017, 2016, 2015, 2014, 2013],
+        type=str,
     )
     parser.add_argument(
         "-m", "--magnet", help="magnet polarity", required=True, choices=["up", "down"],
@@ -96,7 +95,7 @@ def ref_calib(config: Dict) -> float:
 
     # TODO: Rename output_dir to hist_dir (?)
     eff_histos = pid_data.get_calib_hists(
-        config["output_dir"], config["year"], config["magnet"], ref_pars, bin_vars
+        config["output_dir"], config["sample"], config["magnet"], ref_pars, bin_vars
     )
 
     start = time.perf_counter()

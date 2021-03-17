@@ -14,12 +14,11 @@ def decode_arguments():
     """Decode CLI arguments."""
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument(
-        "-y",
-        "--year",
-        help="year of data-taking",
+        "-s",
+        "--sample",
+        help="calibration sample (Turbo18, Electron16, ...)",
         required=True,
-        type=int,
-        choices=[2018, 2017, 2016, 2015, 2014, 2013],
+        type=str,
     )
     parser.add_argument(
         "-m", "--magnet", help="magnet polarity", required=True, choices=["up", "down"],
@@ -75,6 +74,12 @@ def decode_arguments():
         "-f",
         "--file-list",
         help="(debug) read calibration file paths from a text file",
+    )
+    parser.add_argument(
+        "-d",
+        "--file-list-dir",
+        help="(debug) read calibration sample lists from a custom directory",
+        default="calib_samples",
     )
     parser.add_argument(
         "-n", "--max-files", type=int, help="(debug) a max number of files to read",
@@ -134,10 +139,14 @@ def make_eff_hists(config: dict) -> None:
             with open(config["file_list"]) as f_list:
                 eos_paths = f_list.read().splitlines()
         else:
-            eos_paths = pid_data.get_eos_paths(
-                config["year"], config["magnet"], config["max_files"]
+            eos_paths = pid_data.get_file_list(
+                config["sample"],
+                config["magnet"],
+                config["particle"],
+                config["file_list_dir"],
+                config["max_files"],
             )
-        tree_paths = pid_data.get_tree_paths(config["particle"], config["year"])
+        tree_paths = pid_data.get_tree_paths(config["particle"], config["sample"])
 
         log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
         for path in eos_paths:
@@ -165,7 +174,7 @@ def make_eff_hists(config: dict) -> None:
         if name.startswith("eff_"):
             cut = name.replace("eff_", "")
             hist_filename = utils.create_hist_filename(
-                config["year"],
+                config["sample"],
                 config["magnet"],
                 config["particle"],
                 cut,

@@ -9,7 +9,6 @@ import uproot
 import uproot3
 from logzero import logger as log
 from tqdm import tqdm
-from XRootD import client as xrdclient
 
 from . import utils
 
@@ -18,6 +17,27 @@ mothers = {"pi": ["DSt"], "K": ["DSt"], "mu": ["Jpsi"]}
 
 # Dict of charges for each particle type
 charges = {"pi": ["P", "M"], "K": ["P", "M"], "mu": ["P", "M"], "p": ["", "bar"]}
+
+run1_samples = [
+    "13b",
+    "15",
+    "17",
+    "20",
+    "20_MCTuneV2",
+    "20_MCTunev3",
+    "20r1",
+    "20r1_MCTuneV2",
+    "21",
+    "21_MCTuneV4",
+    "21r1",
+    "21r1_MCTuneV4",
+    "22",
+    "23",
+    "23Val",
+    "23_MCTuneV1",
+    "26",
+    "5TeV",
+]
 
 
 def create_branch_names(prefix: str) -> Dict[str, str]:
@@ -44,37 +64,8 @@ def create_branch_names(prefix: str) -> Dict[str, str]:
     return branch_names
 
 
-def pidcalib_sample_dir(year: int, magnet: str) -> str:
-    """Return path to EOS dir with relevant PIDCalib samples.
-
-    Args:
-        year: Data-taking year
-        magnet: Magnet polarity (up, down)
-    """
-    # TODO Make this a simple dict instead of function
-    dirs = {
-        2015: {
-            "up": "Collision15/PIDCALIB.ROOT/00064787",
-            "down": "Collision15/PIDCALIB.ROOT/00064785",
-        },
-        2016: {
-            "up": "Collision16/PIDCALIB.ROOT/00111823",
-            "down": "Collision16/PIDCALIB.ROOT/00111825",
-        },
-        2017: {
-            "up": "Collision17/PIDCALIB.ROOT/00106050",
-            "down": "Collision17/PIDCALIB.ROOT/00106052",
-        },
-        2018: {
-            "up": "Collision18/PIDCALIB.ROOT/00109276",
-            "down": "Collision18/PIDCALIB.ROOT/00109278",
-        },
-    }
-
-    assert magnet in ("up", "down")
-    assert year in dirs
-
-    return dirs[year][magnet]
+def is_run1(sample: str) -> bool:
+    return sample in run1_samples
 
 
 def get_relevant_branch_names(
@@ -155,21 +146,36 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     return f"{prefix}_{bin_var_branch}"
 
 
-def get_eos_paths(year: int, magnet: str, max_files: int = None) -> List[str]:
-    """Get EOS paths of calibration files for a given year and magnet."""
-    eos_url = "root://eoslhcb.cern.ch/"
-    calib_subpath = pidcalib_sample_dir(year, magnet)
-    calib_path = f"/eos/lhcb/grid/prod/lhcb/LHCb/{calib_subpath}/0000/"
+def get_file_list(
+    sample: str, magnet: str, particle: str, directory: str, max_files: int = None,
+) -> List[str]:
+    """Return a list of calibration files.
 
-    eos_fs = xrdclient.FileSystem(eos_url)
-    status, listing = eos_fs.dirlist(calib_path)  # type: ignore
-    if not status.ok:  # type: ignore
-        raise Exception(status)
+    Args:
+        sample: Data sample name (Turbo18, etc.)
+        magnet: Magnet polarity (up, down)
+        particle: Particle type (K, pi, etc.)
+        directory: Directory in which to look up the file list.
+        max_files: Optional. The maximum number of files to get. Defaults to
+            None (= all files).
+    """
+    magnet = "Mag" + magnet.capitalize()
+    if particle != "e":
+        particle = particle.capitalize()
 
-    paths = [f"{eos_url}{calib_path}{xrdpath.name}" for xrdpath in listing]
+    list_path = Path(directory, "-".join([sample, magnet, particle]))
+
+    file_list = []
+    if list_path.exists():
+        log.debug(f"Reading file list from '{list_path}'")
+        with open(list_path) as f_list:
+            file_list = f_list.read().splitlines()
+    else:
+        log.error(f"The list file '{list_path}' doesn't exist!")
+
     if max_files:
-        paths = paths[:max_files]
-    return paths
+        file_list = file_list[:max_files]
+    return file_list
 
 
 def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.DataFrame:
@@ -221,24 +227,24 @@ def calib_root_to_dataframe(
     return df_tot
 
 
-def get_tree_paths(particle: str, year: int) -> List[str]:
+def get_tree_paths(particle: str, sample: str) -> List[str]:
     """Return a list of internal ROOT paths to relevant trees in the files
 
     Args:
         particle: Particle type (K, pi, etc.)
-        year: Year of data taking used to distinguish Run1/Run2 datasets
+        sample: Data sample name (Turbo18, etc.)
     """
     tree_paths = []
-    if year > 2014:
+    if is_run1(sample):
+        # Run 1 files have a simple structure with a single tree
+        tree_paths.append("DecayTree")
+    else:
         # Run 2 ROOT file structure with multiple trees
         for mother in mothers[particle]:
             for charge in charges[particle]:
                 tree_paths.append(
                     f"{mother}_{particle.capitalize()}{charge}Tuple/DecayTree"
                 )
-    else:
-        # Run 1 files have a simple structure with a single tree
-        tree_paths.append("DecayTree")
 
     return tree_paths
 
@@ -275,7 +281,7 @@ def dataframe_from_local_file(path: str, branch_names: List[str]) -> pd.DataFram
 
 def get_calib_hists(
     hist_dir: str,
-    year: int,
+    sample: str,
     magnet: str,
     ref_pars: Dict[str, List[str]],
     bin_vars: Dict[str, str],
@@ -306,7 +312,9 @@ def get_calib_hists(
             bin_str += f"_{bin_var}"
         calib_name = Path(
             hist_dir,
-            utils.create_hist_filename(year, magnet, particle, pid_cut, list(bin_vars)),
+            utils.create_hist_filename(
+                sample, magnet, particle, pid_cut, list(bin_vars)
+            ),
         )
 
         log.debug(f"Loading efficiency histogram from '{calib_name}'")
