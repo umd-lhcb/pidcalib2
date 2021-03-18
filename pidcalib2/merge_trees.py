@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Copy tree from a file and set it as friend of a tree in another file.
 
 PIDCalib2.ref_calib creates a file with a tree where the efficiency for each
@@ -12,6 +11,7 @@ Example:
     $ python -m pidcalib2.merge_trees eff.root eff_tree ref.root DecayTree
 """
 
+from pathlib import Path
 import sys
 
 import ROOT
@@ -36,8 +36,12 @@ def copy_tree_and_set_as_friend(
     source_tree = source_file.Get(source_tree_name)
     log.info(f"Reading {source_tree_name} from {source_file_name}")
     if not source_tree:
-        print(f"ERROR: '{source_tree_name}' not found in '{source_file_name}'.")
+        log.error(f"'{source_tree_name}' not found in '{source_file_name}'.")
         sys.exit(1)
+
+    if not Path(dest_file_name).exists():
+        log.error(f"'{dest_file_name}' not found.")
+        sys.exit(3)
 
     dest_file = ROOT.TFile(dest_file_name, "update")  # type: ignore
     dest_file.cd()
@@ -45,7 +49,7 @@ def copy_tree_and_set_as_friend(
     log.info(f"Reading {dest_tree_name} from {dest_file_name}")
     dest_tree = dest_file.Get(dest_tree_name)
     if not dest_tree:
-        print(f"ERROR: '{dest_tree_name}' not found in '{dest_file_name}'.")
+        log.error(f"'{dest_tree_name}' not found in '{dest_file_name}'.")
         sys.exit(2)
 
     dest_tree.AddFriend(source_tree)
@@ -58,17 +62,5 @@ def copy_tree_and_set_as_friend(
     dest_file.Close()
 
 
-def main():
-    """The main function."""
-    efficiency_file = sys.argv[1]
-    efficiency_tree = sys.argv[2]
-    reference_file = sys.argv[3]
-    reference_tree = sys.argv[4]
-
-    copy_tree_and_set_as_friend(
-        efficiency_file, efficiency_tree, reference_file, reference_tree
-    )
-
-
 if __name__ == "__main__":
-    main()
+    copy_tree_and_set_as_friend(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])

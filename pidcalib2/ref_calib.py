@@ -1,6 +1,7 @@
 import argparse
 import ast
 import pathlib
+import sys
 import time
 from typing import Dict
 
@@ -9,7 +10,7 @@ from logzero import logger as log
 from . import merge_trees, pid_data, utils
 
 
-def decode_arguments():
+def decode_arguments(args):
     """Decode CLI arguments."""
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument(
@@ -58,8 +59,8 @@ def decode_arguments():
     parser.add_argument(
         "-d", "--dry-run", help="do not update the reference file", action="store_true"
     )
-    args = parser.parse_args()
-    return args
+    parsed_args = parser.parse_args(args)
+    return parsed_args
 
 
 def ref_calib(config: Dict) -> float:
@@ -73,12 +74,16 @@ def ref_calib(config: Dict) -> float:
 
     try:
         bin_vars = ast.literal_eval(config["bin_vars"])
+        if not isinstance(bin_vars, dict):
+            raise SyntaxError
     except SyntaxError:
         log.error("The --bin-vars string is not a valid Python dict")
         raise
 
     try:
         ref_pars = ast.literal_eval(config["ref_pars"])
+        if not isinstance(ref_pars, dict):
+            raise SyntaxError
     except SyntaxError:
         log.error("The --ref-pars string is not valid Python dict")
         raise
@@ -99,8 +104,8 @@ def ref_calib(config: Dict) -> float:
     )
 
     start = time.perf_counter()
-    df_ref = utils.add_bin_indices(df_ref, ref_pars, bin_vars, eff_histos)
-    df_ref = utils.add_efficiencies(df_ref, ref_pars, eff_histos)
+    df_ref = utils.add_bin_indices(df_ref, list(ref_pars), bin_vars, eff_histos)
+    df_ref = utils.add_efficiencies(df_ref, list(ref_pars), eff_histos)
     end = time.perf_counter()
     log.debug(f"Efficiency calculation took {end-start:.2f}s")
 
@@ -132,5 +137,5 @@ def ref_calib(config: Dict) -> float:
 
 
 if __name__ == "__main__":
-    config = vars(decode_arguments())
+    config = vars(decode_arguments(sys.argv[1:]))
     ref_calib(config)

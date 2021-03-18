@@ -70,6 +70,10 @@ def test_dataframe_from_local_file():
     assert df.shape[0] == 99
     assert df["sw"][0] == pytest.approx(1.1081801082842266)
 
+    df_pkl = pid_data.dataframe_from_local_file("tests/data/cal_test_data.pkl", ["sw"])
+    assert df_pkl.shape[0] == 99
+    assert df_pkl["sw"][0] == pytest.approx(1.1081801082842266)
+
     with pytest.raises(KeyError):
         pid_data.dataframe_from_local_file(
             "tests/data/cal_test_data.csv", ["this key doesn't exist"]
@@ -105,3 +109,13 @@ def test_get_calib_hists():
 
     with pytest.raises(FileNotFoundError):
         pid_data.get_calib_hists("tests/data", "Turbo34", "up", ref_pars, bin_vars)
+
+
+def test_get_file_list():
+    assert len(pid_data.get_file_list("Turbo18", "up", "pi", "calib_samples")) == 428
+    assert len(pid_data.get_file_list("Turbo18", "up", "pi", "calib_samples", 3)) == 3
+    assert len(pid_data.get_file_list("Electron18", "down", "e", "calib_samples")) == 1
+    assert len(pid_data.get_file_list("20", "down", "K", "calib_samples")) == 72
+
+    with pytest.raises(FileNotFoundError):
+        pid_data.get_file_list("Turbo34", "up", "pi", "calib_samples")

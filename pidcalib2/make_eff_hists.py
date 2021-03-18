@@ -3,6 +3,7 @@ import logging
 import pathlib
 import pickle
 import re
+import sys
 
 import logzero
 from logzero import logger as log
@@ -10,7 +11,7 @@ from logzero import logger as log
 from . import pid_data, utils
 
 
-def decode_arguments():
+def decode_arguments(args):
     """Decode CLI arguments."""
     parser = argparse.ArgumentParser(allow_abbrev=False)
     parser.add_argument(
@@ -87,8 +88,8 @@ def decode_arguments():
     parser.add_argument(
         "-v", "--verbose", action="store_true", help="(debug) increase verbosity",
     )
-    args = parser.parse_args()
-    return args
+    parsed_args = parser.parse_args(args)
+    return parsed_args
 
 
 def make_eff_hists(config: dict) -> None:
@@ -190,5 +191,5 @@ def make_eff_hists(config: dict) -> None:
 
 
 if __name__ == "__main__":
-    config = vars(decode_arguments())
+    config = vars(decode_arguments(sys.argv[1:]))
     make_eff_hists(config)

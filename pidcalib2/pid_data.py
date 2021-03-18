@@ -166,12 +166,9 @@ def get_file_list(
     list_path = Path(directory, "-".join([sample, magnet, particle]))
 
     file_list = []
-    if list_path.exists():
-        log.debug(f"Reading file list from '{list_path}'")
-        with open(list_path) as f_list:
-            file_list = f_list.read().splitlines()
-    else:
-        log.error(f"The list file '{list_path}' doesn't exist!")
+    log.debug(f"Reading file list from '{list_path}'")
+    with open(list_path) as f_list:
+        file_list = f_list.read().splitlines()
 
     if max_files:
         file_list = file_list[:max_files]

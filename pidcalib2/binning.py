@@ -10,12 +10,9 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
     """Return a binning for the momentum.
 
     Args:
-        particle (str): Particle type ["pi", "K", "p"]
-        low (float, optional): [description]. Defaults to 3000.
-        high (float, optional): [description]. Defaults to 100000.
-
-    Returns:
-        List[float]: [description]
+        particle (str): Particle type ["pi", "K", ...]
+        low: Optional. Lowest momentum [MeV]. Defaults to 3000.
+        high: Optional. Highest momentum [MeV]. Defaults to 100000.
     """
     if particle not in valid_particles:
         log.error(f"'{particle}' is not a valid particle for P binning")
@@ -27,9 +24,9 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
         bins.append(9300)  # R1 kaon threshold
         bins.append(15600)  # R2 kaon threshold
         # Uniform bin boundaries
-        uniform_bins = np.linspace(19000, high, 16).tolist()
+        uniform_bins = np.linspace(19000, high, 16).tolist()  # type:ignore
         bins.extend(uniform_bins)
-    elif particle == "Mu":
+    elif particle == "mu":
         bins = [
             low,
             6000,
@@ -50,7 +47,7 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
 
 
 def eta_binning(particle, low: float = 1.5, high: float = 5.0) -> List[float]:
-    bins = np.linspace(low, high, 5).tolist()
+    bins = np.linspace(low, high, 5).tolist()  # type:ignore
     return bins
 
 
@@ -65,7 +62,7 @@ def nspdhits_binning(particle, low: float = 0, high: float = 1000) -> List[float
 
 
 def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]:
-    bins = np.linspace(low, high, 4).tolist()
+    bins = np.linspace(low, high, 4).tolist()  # type:ignore
     return bins
 
 

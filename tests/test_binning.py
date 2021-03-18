@@ -7,7 +7,7 @@ def test_p_binning():
     with pytest.raises(KeyError):
         binning.p_binning("graviton")
 
-    assert binning.p_binning("pi") == [
+    reference_K_pi_p_binning = [
         3000,
         9300,
         15600,
@@ -28,3 +28,29 @@ def test_p_binning():
         94600.0,
         100000.0,
     ]
+    assert binning.p_binning("K") == reference_K_pi_p_binning
+    assert binning.p_binning("pi") == reference_K_pi_p_binning
+    assert binning.p_binning("p") == reference_K_pi_p_binning
+
+    assert binning.p_binning("mu") == [
+        3000,
+        6000,
+        8000,
+        10000,
+        12000,
+        14500,
+        17500,
+        21500,
+        27000,
+        32000,
+        40000,
+        60000,
+        70000,
+        100000.0,
+    ]
+
+    with pytest.raises(KeyError):
+        binning.p_binning("Pi")
+
+    with pytest.raises(KeyError):
+        binning.p_binning("nu")
