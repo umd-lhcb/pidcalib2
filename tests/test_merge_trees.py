@@ -6,6 +6,7 @@ import pytest
 from pidcalib2 import merge_trees
 
 
+@pytest.mark.pyroot
 def test_copy_tree():
     shutil.copy("tests/data/ref_test_data.root", "tests/data/ref_test_data_copy.root")
 
@@ -25,6 +26,7 @@ def test_copy_tree():
     os.remove("tests/data/ref_test_data_copy.root")
 
 
+@pytest.mark.pyroot
 def test_copy_tree_bad_filenames():
     with pytest.raises(SystemExit):
         merge_trees.copy_tree_and_set_as_friend(
@@ -43,6 +45,7 @@ def test_copy_tree_bad_filenames():
         )
 
 
+@pytest.mark.pyroot
 def test_copy_tree_bad_treenames():
     shutil.copy("tests/data/ref_test_data.root", "tests/data/ref_test_data_copy.root")
 
