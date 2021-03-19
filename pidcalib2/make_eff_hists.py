@@ -1,3 +1,25 @@
+"""Module to make LHCb PID efficiency histograms.
+
+This module creates histograms that can be used to estimate the PID
+efficiency of a user's sample.
+
+Examples:
+    Create a single efficiency histogram for a single PID cut::
+
+        $ python -m pidcalib2.make_eff_hists --sample=Turbo18 --magnet=up \
+            --particle=Pi --pid-cut="DLLK > 4" --bin-var=P --bin-var=ETA \
+            --bin-var=nSPDHits --output-dir=pidcalib_output
+
+    Create multiple histograms in one run (most of the time is spent reading
+    in data, so specifying multiple cuts is much faster than running
+    make_eff_hists sequentially)::
+
+        $ python -m pidcalib2.make_eff_hists --sample=Turbo16 --magnet=up \
+            --particle=Pi --pid-cut="DLLK > 0" --pid-cut="DLLK > 4" \
+            --pid-cut="DLLK > 6" --bin-var=P --bin-var=ETA \
+            --bin-var=nSPDHits --output-dir=pidcalib_output
+"""
+
 import argparse
 import logging
 import pathlib
@@ -101,13 +123,11 @@ def make_eff_hists(config: dict) -> None:
     Particle type and binning variables are used to select an appropriate
     predefined binning. The efficiency histograms are saved to a requested
     output directory.
+
+    Args:
+        config: A configuration dictionary. See decode_arguments(args) for
+            details.
     """
-    # log_format = '%(color)s[%(levelname)1.1s %(module)s:%(lineno)d]%(end_color)s %(message)s'  # noqa
-    # formatter = logzero.LogFormatter(fmt=log_format)
-    # logzero.setup_default_logger(formatter=formatter)
-
-    # TODO Setup log file
-
     if config["verbose"]:
         logzero.loglevel(logging.DEBUG)
     else:

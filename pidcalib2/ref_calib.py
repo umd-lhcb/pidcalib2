@@ -1,3 +1,46 @@
+"""Module that calculates the LHCb PID efficiency of a reference sample.
+
+This module uses the histograms created by make_eff_hists to assign
+efficiency to events in a reference sample supplied by the user. Adding of
+efficiency to the user-supplied file requires PyROOT and is optional.
+
+The module works in two steps:
+
+1. Calculate the efficiency and save it as a TTree in a separate file.
+2. Copy the efficiency TTree to the reference file and make it a friend of
+   the user's TTree.
+
+The second step is an efficient way of "adding" the efficiency branches to
+the user's TTree. The step can be skipped by specifying --dry-run on the
+command line, in which case the efficiency TTree will be saved to a separate
+ROOT file but no attempt to add it to the reference file will be made.
+
+Examples:
+    Evaluate efficiency of a single PID cut and add it to the reference file::
+
+        $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
+            --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
+            --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}',
+            --ref-pars='{"Bach": ["K", "DLLK > 4"]}'
+
+
+    Evaluate efficiency of a single PID cut and save it to
+    user_ntuple_PID_eff.root without adding it to user_ntuple.root::
+
+        $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
+            --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
+            --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}',
+            --ref-pars='{"Bach": ["K", "DLLK > 4"]}' --dry-run
+
+    Evaluate efficiency of multiple PID cuts and add them to the reference
+    file::
+
+        $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
+            --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
+            --bin-vars='{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}',
+            --ref-pars='{"Bach": ["K", "DLLK > 4"], "SPi": ["Pi", "DLLK < 0"]}'
+"""
+
 import argparse
 import ast
 import pathlib
@@ -64,10 +107,23 @@ def decode_arguments(args):
 
 
 def ref_calib(config: Dict) -> float:
-    """TODO: Write docstring
+    """Assign efficiency to tracks and events in a user-supplied dataset.
+
+    Each track that falls within the phasespace covered by the efficiency
+    histogram is assigned efficiency of the bin it falls into. The overall
+    event efficiency is a product of all the track efficiencies. The
+    resulting efficiency columns/branches are saved to a TTree in a file
+    <reference_filename>_PID_eff.root. The TTree is then copied to the
+    reference (user) file and made a friend TTree of the original TTree
+    specified by the user. This allows the user to treat their original TTree
+    as if it itself had the efficiency branches.
 
     Args:
-        config ([type]): [description]
+        config: A configuration dictionary. See decode_arguments(args) for
+            details.
+
+    Returns:
+        Average efficiency of all the events.
     """
     log.info("Running PIDCalib2 ref_calib with the following config:")
     utils.log_config(config)
@@ -98,7 +154,6 @@ def ref_calib(config: Dict) -> float:
         f"Reference sample '{config['ref_file']}' with {len(df_ref.index)} events loaded"  # noqa
     )
 
-    # TODO: Rename output_dir to hist_dir (?)
     eff_histos = pid_data.get_calib_hists(
         config["output_dir"], config["sample"], config["magnet"], ref_pars, bin_vars
     )

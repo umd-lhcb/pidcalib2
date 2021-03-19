@@ -1,6 +1,5 @@
 import sys
 
 if __name__ == "__main__":
-    # TODO Write the usage message.
-    print("Usage: bla bla")
+    print("You must call one of the work modules, e.g., pidcalib2.make_eff_hists.")
     sys.exit(1)
