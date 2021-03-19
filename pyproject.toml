@@ -14,4 +14,5 @@ filterwarnings = [
 markers = [
     "xrootd: tests requiring xrootd EOS authentication (deselect with '-m \"not xrootd\"')",
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "pyroot: tests requiring PyROOT (deselect with '-m \"not pyroot\"')",
 ]
