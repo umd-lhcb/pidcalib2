@@ -1,8 +1,9 @@
 import os
 import shutil
 
-import ROOT
 import pytest
+import ROOT
+
 from pidcalib2 import merge_trees
 
 

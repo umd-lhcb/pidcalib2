@@ -147,7 +147,11 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
 
 
 def get_file_list(
-    sample: str, magnet: str, particle: str, directory: str, max_files: int = None,
+    sample: str,
+    magnet: str,
+    particle: str,
+    directory: str,
+    max_files: int = None,
 ) -> List[str]:
     """Return a list of calibration files.
 

@@ -2,6 +2,7 @@ import os
 import pathlib
 
 import pytest
+
 from pidcalib2 import ref_calib
 
 
@@ -56,7 +57,8 @@ def test_decode_arguments():
                 "--ref-file=ref_file.root",
                 "--ref-pars={'Ref': ['pi', 'DLLK<5']}",
             ]
-        ).magnet == "up"
+        ).magnet
+        == "up"
     )
 
     with pytest.raises(SystemExit):

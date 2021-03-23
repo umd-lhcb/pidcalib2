@@ -11,8 +11,8 @@ Example:
     $ python -m pidcalib2.merge_trees eff.root eff_tree ref.root DecayTree
 """
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import ROOT
 from logzero import logger as log

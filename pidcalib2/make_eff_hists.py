@@ -44,7 +44,11 @@ def decode_arguments(args):
         type=str,
     )
     parser.add_argument(
-        "-m", "--magnet", help="magnet polarity", required=True, choices=["up", "down"],
+        "-m",
+        "--magnet",
+        help="magnet polarity",
+        required=True,
+        choices=["up", "down"],
     )
     parser.add_argument(
         "-p",
@@ -105,10 +109,16 @@ def decode_arguments(args):
         default="calib_samples",
     )
     parser.add_argument(
-        "-n", "--max-files", type=int, help="(debug) a max number of files to read",
+        "-n",
+        "--max-files",
+        type=int,
+        help="(debug) a max number of files to read",
     )
     parser.add_argument(
-        "-v", "--verbose", action="store_true", help="(debug) increase verbosity",
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="(debug) increase verbosity",
     )
     parsed_args = parser.parse_args(args)
     return parsed_args

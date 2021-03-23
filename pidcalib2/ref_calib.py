@@ -64,7 +64,11 @@ def decode_arguments(args):
         type=str,
     )
     parser.add_argument(
-        "-m", "--magnet", help="magnet polarity", required=True, choices=["up", "down"],
+        "-m",
+        "--magnet",
+        help="magnet polarity",
+        required=True,
+        choices=["up", "down"],
     )
     parser.add_argument(
         "-v",
@@ -83,10 +87,16 @@ def decode_arguments(args):
         help="directory where to save output files",
     )
     parser.add_argument(
-        "-f", "--ref-file", help="reference sample file", required=True,
+        "-f",
+        "--ref-file",
+        help="reference sample file",
+        required=True,
     )
     parser.add_argument(
-        "-t", "--ref-tree", help="reference sample tree name", default="DecayTree",
+        "-t",
+        "--ref-tree",
+        help="reference sample tree name",
+        default="DecayTree",
     )
     parser.add_argument(
         "-p",
