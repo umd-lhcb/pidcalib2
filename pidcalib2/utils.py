@@ -25,7 +25,7 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
 
     Args:
         df: DataFrame from which to histogram events
-        particle: Particle type (K, pi, etc.)
+        particle: Particle type (K, Pi, etc.)
         bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"]
     """
     axis_list = []
@@ -55,7 +55,7 @@ def create_eff_histograms(
 
     Args:
         df_total: DataFrame with all events
-        particle: Particle type (K, pi, etc.)
+        particle: Particle type (K, Pi, etc.)
         pid_cuts: Simple user-level cut list, e.g., ["DLLK<4"].
         bin_vars: Variables used for binning.
 
@@ -207,7 +207,7 @@ def create_hist_filename(
     Args:
         sample: Data sample name (Turbo18, etc.)
         magnet: Magnet polarity (up, down)
-        particle: Particle type (K, pi, etc.)
+        particle: Particle type (K, Pi, etc.)
         pid_cut: Simplified user-level cut, e.g., "DLLK < 4".
         bin_vars: Variables used for binning.
     """

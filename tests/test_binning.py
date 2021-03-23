@@ -40,10 +40,10 @@ def test_p_binning():
         100000.0,
     ]
     assert binning.p_binning("K") == reference_K_pi_p_binning
-    assert binning.p_binning("pi") == reference_K_pi_p_binning
-    assert binning.p_binning("p") == reference_K_pi_p_binning
+    assert binning.p_binning("Pi") == reference_K_pi_p_binning
+    assert binning.p_binning("P") == reference_K_pi_p_binning
 
-    assert binning.p_binning("mu") == [
+    assert binning.p_binning("Mu") == [
         3000,
         6000,
         8000,
@@ -61,7 +61,7 @@ def test_p_binning():
     ]
 
     with pytest.raises(KeyError):
-        binning.p_binning("Pi")
+        binning.p_binning("pi")
 
     with pytest.raises(KeyError):
-        binning.p_binning("nu")
+        binning.p_binning("Nu")

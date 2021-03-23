@@ -66,7 +66,6 @@ def decode_arguments(args):
         "--particle",
         help="particle type",
         required=True,
-        choices=["K", "pi", "p", "mu", "e"],
     )
     parser.add_argument(
         "-i",

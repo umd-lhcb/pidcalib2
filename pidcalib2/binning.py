@@ -14,14 +14,14 @@ from typing import List
 import numpy as np
 from logzero import logger as log
 
-valid_particles = ["pi", "K", "p", "mu"]
+valid_particles = ["Pi", "K", "P", "Mu"]
 
 
 def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[float]:
     """Return a binning for the momentum.
 
     Args:
-        particle (str): Particle type ["pi", "K", ...]
+        particle: Particle type ["Pi", "K", ...]
         low: Optional. Lowest momentum [MeV]. Defaults to 3000.
         high: Optional. Highest momentum [MeV]. Defaults to 100000.
     """
@@ -30,14 +30,14 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
         raise KeyError
 
     bins = []
-    if particle in ["pi", "K", "p"]:
+    if particle in ["Pi", "K", "P"]:
         bins.append(low)
         bins.append(9300)  # R1 kaon threshold
         bins.append(15600)  # R2 kaon threshold
         # Uniform bin boundaries
         uniform_bins = np.linspace(19000, high, 16).tolist()  # type:ignore
         bins.extend(uniform_bins)
-    elif particle == "mu":
+    elif particle == "Mu":
         bins = [
             low,
             6000,
@@ -80,14 +80,14 @@ def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]
 # Dict of binnings for each track type and variable
 binnings = {}
 
-binnings["pi"] = {
-    "P": p_binning("pi"),
-    "ETA": eta_binning("pi"),
-    "nTracks": ntracks_binning("pi"),
-    "nTracks_Brunel": ntracks_binning("pi"),
-    "nSPDhits": nspdhits_binning("pi"),
-    "nSPDhits_Brunel": nspdhits_binning("pi"),
-    "TRCHI2NDOF": trchi2_binning("pi"),
+binnings["Pi"] = {
+    "P": p_binning("Pi"),
+    "ETA": eta_binning("Pi"),
+    "nTracks": ntracks_binning("Pi"),
+    "nTracks_Brunel": ntracks_binning("Pi"),
+    "nSPDhits": nspdhits_binning("Pi"),
+    "nSPDhits_Brunel": nspdhits_binning("Pi"),
+    "TRCHI2NDOF": trchi2_binning("Pi"),
 }
 
 binnings["K"] = {

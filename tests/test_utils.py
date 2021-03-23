@@ -19,7 +19,7 @@ from pidcalib2 import utils
 
 def test_make_hist():
     df = pd.read_csv("tests/data/cal_test_data.csv", index_col=0)
-    hist = utils.make_hist(df, "pi", ["P"])
+    hist = utils.make_hist(df, "Pi", ["P"])
     assert hist.size == 20
     assert hist.sum() == pytest.approx(71.55106080517815)
     assert hist[3] == pytest.approx(13.581349537355582)
@@ -27,7 +27,7 @@ def test_make_hist():
 
 def test_create_eff_histograms():
     df = pd.read_csv("tests/data/cal_test_data.csv", index_col=0)
-    hists = utils.create_eff_histograms(df, "pi", ["DLLK>4"], ["P"])
+    hists = utils.create_eff_histograms(df, "Pi", ["DLLK>4"], ["P"])
     assert hists["eff_DLLK>4"].sum() / hists["eff_DLLK>4"].size == pytest.approx(
         0.18751578358705173 / 20
     )

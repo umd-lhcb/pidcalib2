@@ -22,7 +22,7 @@ def test_make_eff_hists():
     config = {
         "sample": "Turbo18",
         "magnet": "up",
-        "particle": "pi",
+        "particle": "Pi",
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "cuts": None,
         "bin_vars": ["P"],
@@ -31,7 +31,7 @@ def test_make_eff_hists():
         "verbose": False,
     }
     make_eff_hists.make_eff_hists(config)
-    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
@@ -51,7 +51,7 @@ def test_make_eff_hists_with_cuts():
     config = {
         "sample": "Turbo18",
         "magnet": "up",
-        "particle": "pi",
+        "particle": "Pi",
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "cuts": ["Dst_IPCHI2 < 100", "probe_TRACK_GHOSTPROB < 0.05"],
         "bin_vars": ["P"],
@@ -60,7 +60,7 @@ def test_make_eff_hists_with_cuts():
         "verbose": True,
     }
     make_eff_hists.make_eff_hists(config)
-    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
@@ -79,7 +79,7 @@ def test_make_eff_hists_with_cuts():
     config["cuts"] = ["Dst_IPCHI2 < 9", "probe_TRACK_GHOSTPROB < 0.01"]
     with pytest.warns(RuntimeWarning):
         make_eff_hists.make_eff_hists(config)
-    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
 
     # With stricter cuts, some bins in the efficiency histogram become empty
     assert math.isnan(eff_histo.sum(flow=False))
@@ -97,7 +97,7 @@ def test_make_eff_hists_local_file_list():
     config = {
         "sample": "Turbo18",
         "magnet": "up",
-        "particle": "pi",
+        "particle": "Pi",
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "cuts": None,
         "bin_vars": ["P"],
@@ -107,7 +107,7 @@ def test_make_eff_hists_local_file_list():
         "verbose": False,
     }
     make_eff_hists.make_eff_hists(config)
-    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
@@ -124,7 +124,7 @@ def test_make_eff_hists_file_list():
     config = {
         "sample": "Turbo18",
         "magnet": "up",
-        "particle": "pi",
+        "particle": "Pi",
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "cuts": None,
         "bin_vars": ["P"],
@@ -136,7 +136,7 @@ def test_make_eff_hists_file_list():
         "verbose": False,
     }
     make_eff_hists.make_eff_hists(config)
-    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+    eff_histo = pd.read_pickle("tests/test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
@@ -160,17 +160,6 @@ def test_decode_arguments():
         ).verbose
         is False
     )
-
-    with pytest.raises(SystemExit):
-        make_eff_hists.decode_arguments(
-            [
-                "--sample=Turbo18",
-                "-m=up",
-                "--particle=nu",
-                "--pid-cut='DLLK>5'",
-                "--bin-var=P",
-            ]
-        )
 
     with pytest.raises(SystemExit):
         make_eff_hists.decode_arguments(

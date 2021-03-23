@@ -24,10 +24,10 @@ from tqdm import tqdm
 from . import utils
 
 # Dict of mothers for each particle type
-mothers = {"pi": ["DSt"], "K": ["DSt"], "mu": ["Jpsi"]}
+mothers = {"Pi": ["DSt"], "K": ["DSt"], "Mu": ["Jpsi"]}
 
 # Dict of charges for each particle type
-charges = {"pi": ["P", "M"], "K": ["P", "M"], "mu": ["P", "M"], "p": ["", "bar"]}
+charges = {"Pi": ["P", "M"], "K": ["P", "M"], "Mu": ["P", "M"], "P": ["", "bar"]}
 
 run1_samples = [
     "13b",
