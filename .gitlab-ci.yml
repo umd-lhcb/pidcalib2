@@ -12,29 +12,58 @@
 image: gitlab-registry.cern.ch/ci-tools/ci-worker:cc7
 
 stages:
-    - lint
-    - test
+  - lint
+  - test
+  - build
+  - deploy
 
 before_script:
-    - echo $LBDATARO_KEYTAB | base64 -d > .keytab && kinit lbdataro@CERN.CH -k -t .keytab && rm .keytab
-    - klist
-    - source /cvmfs/lhcb.cern.ch/lib/LbEnv
-    - lb-conda-dev virtual-env default/2021-01-26 .venv
-    - .venv/run pip install -r requirements.txt
+  - echo $LBDATARO_KEYTAB | base64 -d > .keytab && kinit lbdataro@CERN.CH -k -t .keytab && rm .keytab
+  - klist
+  - source /cvmfs/lhcb.cern.ch/lib/LbEnv
+  - lb-conda-dev virtual-env default/2021-01-26 .venv
+  - .venv/run pip install -r requirements_lb-conda.txt
 
 flake8:
-    stage: lint
-    script:
-        - .venv/run flake8 pidcalib2
-    allow_failure: true
+  stage: lint
+  script:
+    - .venv/run flake8 src/pidcalib2
+  allow_failure: true
 
 mypy:
-    stage: lint
-    script:
-        - .venv/run mypy pidcalib2
-    allow_failure: true
+  stage: lint
+  script:
+    - .venv/run mypy src/pidcalib2
+  allow_failure: true
 
 run_tests:
-    stage: test
-    script:
-        - .venv/run pytest -v
+  stage: test
+  script:
+    - .venv/run pytest -v
+
+package:
+  stage: build
+  image: gitlab-registry.cern.ch/lhcb-docker/python-deployment:python-3.7
+  script:
+    - python -m build
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 week
+  before_script:
+    - pip install build
+  after_script: []
+
+
+deploy-packages:
+  stage: deploy
+  image: gitlab-registry.cern.ch/lhcb-docker/python-deployment:python-3.7
+  only:
+    - tags && master
+  dependencies:
+    - package
+  script:
+    - if [ -z "$TWINE_PASSWORD" ] ; then echo "Set TWINE_PASSWORD in CI variables" ; exit 1 ; fi
+    - twine upload -u __token__ dist/*
+  before_script: []
+  after_script: []
