@@ -59,7 +59,7 @@ deploy-packages:
   stage: deploy
   image: gitlab-registry.cern.ch/lhcb-docker/python-deployment:python-3.7
   only:
-    - tags && master
+    - tags
   dependencies:
     - package
   script:
