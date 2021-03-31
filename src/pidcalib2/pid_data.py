@@ -179,7 +179,7 @@ def get_file_list(
     magnet = "Mag" + magnet.capitalize()
     if samples_file is None:
         current_dir = os.path.dirname(os.path.abspath(__file__))
-        samples_file = str(Path(current_dir, "data/sample.json"))
+        samples_file = str(Path(current_dir, "data/samples.json"))
 
     sample_name = "-".join([sample, magnet, particle])
 
