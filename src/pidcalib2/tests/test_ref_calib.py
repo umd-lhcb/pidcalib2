@@ -24,6 +24,7 @@ def test_ref_calib():
         "sample": "Turbo18",
         "magnet": "up",
         "bin_vars": '{"P": "P", "ETA": "ETA", "nTracks": "nTracks"}',
+        "histo_dir": str(Path(THIS_DIR, "test_data")),
         "output_dir": str(Path(THIS_DIR, "test_data")),
         "dry_run": True,
         "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),

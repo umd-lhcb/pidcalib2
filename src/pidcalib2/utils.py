@@ -181,7 +181,7 @@ def add_efficiencies(
     df_new.dropna(inplace=True)
     df_new["PID_eff"] = 1
     for prefix in prefixes:
-        efficiency_table = eff_hists[prefix].view().flatten()
+        efficiency_table = eff_hists[prefix].view().flatten()  # type: ignore
         np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
         df_new[f"{prefix}_PID_eff"] = np.take(
             efficiency_table, df_new[f"{prefix}_PID_index"]

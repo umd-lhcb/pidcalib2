@@ -71,7 +71,9 @@ except ImportError:
 
 def decode_arguments(args):
     """Decode CLI arguments."""
-    parser = argparse.ArgumentParser(allow_abbrev=False)
+    parser = argparse.ArgumentParser(
+        allow_abbrev=False, formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
         "-s",
         "--sample",
@@ -91,10 +93,16 @@ def decode_arguments(args):
         "--bin-vars",
         help=(
             "dictionary of binning variables (keys) and their associated names in "
-            "reference sample (values) e.g. \"{'P': 'P', 'ETA' : 'Eta'}\""
+            "reference sample (values)"
         ),
         default="{'P' : 'P', 'ETA' : 'ETA', 'nTracks' : 'nTracks'}",
         dest="bin_vars",
+    )
+    parser.add_argument(
+        "-i",
+        "--histo-dir",
+        default="pidcalib_output",
+        help="directory where efficiency histograms are located",
     )
     parser.add_argument(
         "-o",
@@ -182,7 +190,7 @@ def ref_calib(config: Dict) -> float:
     )
 
     eff_histos = pid_data.get_calib_hists(
-        config["output_dir"], config["sample"], config["magnet"], ref_pars, bin_vars
+        config["histo_dir"], config["sample"], config["magnet"], ref_pars, bin_vars
     )
 
     start = time.perf_counter()

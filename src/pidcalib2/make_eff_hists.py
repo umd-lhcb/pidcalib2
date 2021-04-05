@@ -51,7 +51,9 @@ except ImportError:
 
 def decode_arguments(args):
     """Decode CLI arguments."""
-    parser = argparse.ArgumentParser(allow_abbrev=False)
+    parser = argparse.ArgumentParser(
+        allow_abbrev=False, formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument(
         "-s",
         "--sample",
