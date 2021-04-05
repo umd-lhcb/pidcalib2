@@ -44,7 +44,7 @@ from logzero import logger as log
 from . import pid_data, utils
 
 try:
-    from .version import version
+    from .version import version  # type: ignore
 except ImportError:
     version = "N/A"
 

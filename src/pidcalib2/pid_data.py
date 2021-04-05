@@ -360,6 +360,8 @@ def save_dataframe_as_root(
 ):
     """Save a DataFrame as a TTree in a ROOT file.
 
+    NaN entries are changed to -999 because ROOT TTrees don't support NaNs.
+
     Args:
         df: DataFrame to be saved.
         name: Name of the new TTree.
@@ -367,12 +369,13 @@ def save_dataframe_as_root(
         columns: Optional. Names of the columns which are to be saved. If
             'None', all the columns will be saved.
     """
+    df_wo_nan = df.fillna(-999)
     if columns is None:
-        columns = list(df.keys())
-    branches_w_types = {branch: df[branch].dtype for branch in columns}
+        columns = list(df_wo_nan.keys())
+    branches_w_types = {branch: df_wo_nan[branch].dtype for branch in columns}
     with uproot3.recreate(filename) as f:
         log.debug(f"Creating a TTree with the following branches: {branches_w_types}")
         f[name] = uproot3.newtree(branches_w_types)
-        branch_dict = {branch: df[branch] for branch in branches_w_types}
+        branch_dict = {branch: df_wo_nan[branch] for branch in branches_w_types}
         f[name].extend(branch_dict)
     log.info(f"Efficiency tree saved to {filename}")
