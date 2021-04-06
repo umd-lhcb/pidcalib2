@@ -54,11 +54,13 @@ Examples:
 
 import argparse
 import ast
+import logging
 import pathlib
 import sys
 import time
 from typing import Dict
 
+import logzero
 from logzero import logger as log
 
 from . import merge_trees, pid_data, utils
@@ -89,7 +91,7 @@ def decode_arguments(args):
         choices=["up", "down"],
     )
     parser.add_argument(
-        "-v",
+        "-b",
         "--bin-vars",
         help=(
             "dictionary of binning variables (keys) and their associated names in "
@@ -136,6 +138,12 @@ def decode_arguments(args):
     parser.add_argument(
         "-d", "--dry-run", help="do not update the reference file", action="store_true"
     )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="(debug) increase verbosity",
+    )
     parser.add_argument("-V", "--version", action="version", version=version)
     parsed_args = parser.parse_args(args)
     return parsed_args
@@ -160,6 +168,11 @@ def ref_calib(config: Dict) -> float:
     Returns:
         Average efficiency of all the events.
     """
+    if config["verbose"]:
+        logzero.loglevel(logging.DEBUG)
+    else:
+        logzero.loglevel(logging.INFO)
+
     log.info("Running PIDCalib2 ref_calib with the following config:")
     utils.log_config(config)
 
