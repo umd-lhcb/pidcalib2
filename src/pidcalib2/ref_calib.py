@@ -219,8 +219,9 @@ def ref_calib(config: Dict) -> float:
     log.info(f"Average per-event PID efficiency: {avg_eff:.2%}")
 
     output_path = pathlib.Path(config["output_dir"])
-    ref_path = pathlib.Path(config["ref_file"])
+    output_path.mkdir(parents=True, exist_ok=True)
 
+    ref_path = pathlib.Path(config["ref_file"])
     eff_path = output_path / ref_path.name.replace(".root", "_PID_eff.root")
 
     pid_data.save_dataframe_as_root(
