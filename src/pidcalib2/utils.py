@@ -54,8 +54,8 @@ def create_eff_histograms(
     """Create efficiency histograms for all supplied PID cuts.
 
     Args:
-        df_total: DataFrame with all events
-        particle: Particle type (K, Pi, etc.)
+        df_total: DataFrame with all events.
+        particle: Particle type (K, Pi, etc.).
         pid_cuts: Simple user-level cut list, e.g., ["DLLK<4"].
         bin_vars: Variables used for binning.
 
@@ -205,9 +205,9 @@ def create_hist_filename(
     """Return effhists filename corresponding to parameters.
 
     Args:
-        sample: Data sample name (Turbo18, etc.)
-        magnet: Magnet polarity (up, down)
-        particle: Particle type (K, Pi, etc.)
+        sample: Data sample name (Turbo18, etc.).
+        magnet: Magnet polarity (up, down).
+        particle: Particle type (K, Pi, etc.).
         pid_cut: Simplified user-level cut, e.g., "DLLK < 4".
         bin_vars: Variables used for binning.
     """

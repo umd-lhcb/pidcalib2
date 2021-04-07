@@ -30,6 +30,7 @@ def test_ref_calib():
         "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),
         "ref_tree": "DecayTree",
         "ref_pars": '{"Bach": ["K", "DLLK > 4"]}',
+        "verbose": False,
     }
     assert ref_calib.ref_calib(config) == pytest.approx(0.8951140908087826)
     assert Path(THIS_DIR, "test_data/ref_test_data_PID_eff.root").exists()
@@ -45,6 +46,7 @@ def test_ref_calib():
             "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),
             "ref_tree": "DecayTree",
             "ref_pars": '{"Bach": ["K", "DLLK > 4"]}',
+            "verbose": False,
         }
         ref_calib.ref_calib(config)
 
@@ -58,6 +60,7 @@ def test_ref_calib():
             "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),
             "ref_tree": "DecayTree",
             "ref_pars": '{"Bach"}',
+            "verbose": False,
         }
         ref_calib.ref_calib(config)
 
