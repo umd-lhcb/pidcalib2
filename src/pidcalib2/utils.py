@@ -47,9 +47,9 @@ def make_hist(
     # Create boost-histogram with the desired axes, and fill with sWeight applied
     hist = bh.Histogram(*axis_list)
     if square_weights:
-        hist.fill(*vals_list, weight=np.square(df["sw"]))  # type: ignore
+        hist.fill(*vals_list, weight=np.square(df["sWeight"]))  # type: ignore
     else:
-        hist.fill(*vals_list, weight=df["sw"])
+        hist.fill(*vals_list, weight=df["sWeight"])
 
     return hist
 

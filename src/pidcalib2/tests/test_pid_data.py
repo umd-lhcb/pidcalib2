@@ -48,27 +48,27 @@ def test_get_tree_paths():
 
 def test_get_relevant_branch_names():
     assert pid_data.get_relevant_branch_names("probe", ["DLLK < 4"], ["P"]) == {
-        "sw": "probe_sWeight",
+        "sWeight": "probe_sWeight",
         "P": "probe_P",
         "DLLK": "probe_PIDK",
     }
 
     assert pid_data.get_relevant_branch_names("probe", ["DLLp > 4"], ["P", "ETA"]) == {
-        "sw": "probe_sWeight",
+        "sWeight": "probe_sWeight",
         "P": "probe_P",
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
     }
 
     assert pid_data.get_relevant_branch_names("probe", ["DLLp == 4"], ["P", "ETA"]) == {
-        "sw": "probe_sWeight",
+        "sWeight": "probe_sWeight",
         "P": "probe_P",
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
     }
 
     assert pid_data.get_relevant_branch_names("probe", ["DLLp != 4"], ["P", "ETA"]) == {
-        "sw": "probe_sWeight",
+        "sWeight": "probe_sWeight",
         "P": "probe_P",
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
@@ -84,10 +84,10 @@ def test_get_relevant_branch_names():
 
 def test_dataframe_from_local_file():
     df = pid_data.dataframe_from_local_file(
-        str(Path(THIS_DIR, "test_data/cal_test_data.csv")), ["sw"]
+        str(Path(THIS_DIR, "test_data/cal_test_data.csv")), ["sWeight"]
     )
     assert df.shape[0] == 99
-    assert df["sw"][0] == pytest.approx(1.1081801082842266)
+    assert df["sWeight"][0] == pytest.approx(1.1081801082842266)
 
     df_pkl = pid_data.dataframe_from_local_file(
         str(Path(THIS_DIR, "test_data/cal_test_data.pkl")), ["sw"]
@@ -103,7 +103,7 @@ def test_dataframe_from_local_file():
 
     with pytest.raises(Exception):
         pid_data.dataframe_from_local_file(
-            str(Path(THIS_DIR, "test_data/file.root")), ["sw"]
+            str(Path(THIS_DIR, "test_data/file.root")), ["sWeight"]
         )
 
 

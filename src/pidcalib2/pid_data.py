@@ -71,7 +71,7 @@ def create_branch_names(prefix: str) -> Dict[str, str]:
         "nTracks_Brunel": "nTracks_Brunel",
         "nSPDhits": "nSPDhits",
         "nSPDhits_Brunel": "nSPDhits_Brunel",
-        "sw": f"{prefix}_sWeight",
+        "sWeight": f"{prefix}_sWeight",
         "TRCHI2NDOF": f"{prefix}_TRCHI2NDOF",
     }
     return branch_names
@@ -96,7 +96,7 @@ def get_relevant_branch_names(
 
     # Remove sWeight if not a calib sample
     if prefix != "probe":
-        del branch_names["sw"]
+        del branch_names["sWeight"]
 
     # Create a list of vars in the PID cuts
     pid_cuts_vars = []
@@ -108,7 +108,7 @@ def get_relevant_branch_names(
 
     # Remove all vars that are not used for binning or PID cuts
     for branch in tuple(branch_names):
-        if branch not in [*pid_cuts_vars, *bin_vars, "sw"]:
+        if branch not in [*pid_cuts_vars, *bin_vars, "sWeight"]:
             del branch_names[branch]
 
     # Add vars in the arbitrary cuts
