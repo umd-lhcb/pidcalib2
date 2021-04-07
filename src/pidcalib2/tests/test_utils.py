@@ -48,7 +48,7 @@ def test_get_per_event_effs():
         hists["Bach"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
-    assert df_ref.PID_eff.mean() == pytest.approx(0.8951140908087826)
+    assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8951140908087826)
 
 
 def test_add_bin_indices():
@@ -61,6 +61,6 @@ def test_add_bin_indices():
     ) as f:
         hists["Bach"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
-    assert df_ref["Bach_P_PID_index"].sum() == 623
-    assert df_ref["Bach_ETA_PID_index"].sum() == 120
-    assert df_ref["Bach_PID_index"].sum() == 10438
+    assert df_ref["Bach_P_PIDCalibBin"].sum() == 623
+    assert df_ref["Bach_ETA_PIDCalibBin"].sum() == 120
+    assert df_ref["Bach_PIDCalibBin"].sum() == 10438

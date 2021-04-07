@@ -33,8 +33,8 @@ def test_ref_calib():
         "verbose": False,
     }
     assert ref_calib.ref_calib(config) == pytest.approx(0.8951140908087826)
-    assert Path(THIS_DIR, "test_data/ref_test_data_PID_eff.root").exists()
-    os.remove(Path(THIS_DIR, "test_data/ref_test_data_PID_eff.root"))
+    assert Path(THIS_DIR, "test_data/ref_test_data_PIDCalibResults.root").exists()
+    os.remove(Path(THIS_DIR, "test_data/ref_test_data_PIDCalibResults.root"))
 
     with pytest.raises(SyntaxError):
         config = {

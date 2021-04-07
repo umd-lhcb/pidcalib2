@@ -151,7 +151,7 @@ def add_bin_indices(
             for axis in eff_hists[prefix].axes:
                 if axis.metadata["name"] == bin_var:
                     bins = axis.edges
-            df_new[f"{ref_branch_name}_PID_index"] = pd.cut(
+            df_new[f"{ref_branch_name}_PIDCalibBin"] = pd.cut(
                 df_new[ref_branch_name],
                 bins,
                 labels=False,
@@ -162,12 +162,12 @@ def add_bin_indices(
 
         df_nan = df_new[df_new.isna().any(axis=1)]  # type: ignore
         df_new.dropna(inplace=True)
-        index_names = [f"{axis}_PID_index" for axis in axes]
+        index_names = [f"{axis}_PIDCalibBin" for axis in axes]
         indices = np.ravel_multi_index(
             df_new[index_names].transpose().to_numpy().astype(int),  # type: ignore
             eff_hists[prefix].axes.size,
         )
-        df_new[f"{prefix}_PID_index"] = indices
+        df_new[f"{prefix}_PIDCalibBin"] = indices
         df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
     log.debug("Bin indices assigned")
     return df_new  # type: ignore
@@ -189,14 +189,14 @@ def add_efficiencies(
     df_new = df.copy()
     df_nan = df_new[df_new.isna().any(axis=1)]
     df_new.dropna(inplace=True)
-    df_new["PID_eff"] = 1
+    df_new["PIDCalibEff"] = 1
     for prefix in prefixes:
         efficiency_table = eff_hists[prefix].view().flatten()  # type: ignore
         np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
-        df_new[f"{prefix}_PID_eff"] = np.take(
-            efficiency_table, df_new[f"{prefix}_PID_index"]
+        df_new[f"{prefix}_PIDCalibEff"] = np.take(
+            efficiency_table, df_new[f"{prefix}_PIDCalibBin"]
         )
-        df_new["PID_eff"] = df_new["PID_eff"] * df_new[f"{prefix}_PID_eff"]
+        df_new["PIDCalibEff"] = df_new["PIDCalibEff"] * df_new[f"{prefix}_PIDCalibEff"]
 
     df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
