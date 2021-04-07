@@ -233,6 +233,8 @@ def make_eff_hists(config: dict) -> None:
                 pickle.dump(eff_hists[f"eff_{cut}"], f)
                 pickle.dump(eff_hists[f"passing_{cut}"], f)
                 pickle.dump(eff_hists["total"], f)
+                pickle.dump(eff_hists[f"passing_sumw2_{cut}"], f)
+                pickle.dump(eff_hists["total_sumw2"], f)
 
             log.info(f"Efficiency histograms saved to '{eff_hist_path}'")
 

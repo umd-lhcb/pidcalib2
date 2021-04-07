@@ -20,13 +20,16 @@ from logzero import logger as log
 from . import binning, pid_data
 
 
-def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histogram:
+def make_hist(
+    df: pd.DataFrame, particle: str, bin_vars: List[str], square_weights: bool = False
+) -> bh.Histogram:
     """Create a histogram of sWeighted events with appropriate binning
 
     Args:
-        df: DataFrame from which to histogram events
-        particle: Particle type (K, Pi, etc.)
-        bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"]
+        df: DataFrame from which to histogram events.
+        particle: Particle type (K, Pi, etc.).
+        bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"].
+        square_weights: Use square of sWeights instead of sWeights as the weights.
     """
     axis_list = []
     vals_list = []
@@ -43,7 +46,10 @@ def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histog
 
     # Create boost-histogram with the desired axes, and fill with sWeight applied
     hist = bh.Histogram(*axis_list)
-    hist.fill(*vals_list, weight=df["sw"])
+    if square_weights:
+        hist.fill(*vals_list, weight=np.square(df["sw"]))  # type: ignore
+    else:
+        hist.fill(*vals_list, weight=df["sw"])
 
     return hist
 
@@ -66,6 +72,7 @@ def create_eff_histograms(
 
     hists = {}
     hists["total"] = make_hist(df_total, particle, bin_vars)
+    hists["total_sumw2"] = make_hist(df_total, particle, bin_vars, True)
 
     zero_bins = np.count_nonzero(hists["total"].view(flow=False) == 0)
     if zero_bins:
@@ -82,6 +89,9 @@ def create_eff_histograms(
             f"{n_passing}/{n_total} ({percent_passing:.2f}%) events passed the cut"
         )
         hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
+        hists[f"passing_sumw2_{pid_cut}"] = make_hist(
+            df_passing, particle, bin_vars, True
+        )
         log.debug("Created 'passing' histogram")
 
         hists[f"eff_{pid_cut}"] = hists[f"passing_{pid_cut}"].copy()
