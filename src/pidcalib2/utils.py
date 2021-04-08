@@ -282,10 +282,10 @@ def binomial_uncertainty(
 
 def create_error_histogram(eff_hists: Dict[str, bh.Histogram]) -> bh.Histogram:
     uncertainty = binomial_uncertainty(
-        eff_hists["passing"].view(),  # type: ignore
-        eff_hists["total"].view(),  # type: ignore
-        eff_hists["passing_sumw2"].view(),  # type: ignore
-        eff_hists["total_sumw2"].view(),  # type: ignore
+        eff_hists["passing"].view(flow=False),  # type: ignore
+        eff_hists["total"].view(flow=False),  # type: ignore
+        eff_hists["passing_sumw2"].view(flow=False),  # type: ignore
+        eff_hists["total_sumw2"].view(flow=False),  # type: ignore
     )
 
     err_histo = eff_hists["passing"].copy()

@@ -52,7 +52,8 @@ def test_get_per_event_effs():
         hists["Bach"]["passing_sumw2"] = pickle.load(f)
         hists["Bach"]["total_sumw2"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
-    df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
+    with pytest.warns(RuntimeWarning):
+        df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
     assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8745793984247746)
 
 

@@ -32,7 +32,9 @@ def test_ref_calib():
         "ref_pars": '{"Bach": ["K", "DLLK > 4"]}',
         "verbose": False,
     }
-    assert ref_calib.ref_calib(config) == pytest.approx(0.8745793984247746)
+
+    with pytest.warns(RuntimeWarning):
+        assert ref_calib.ref_calib(config) == pytest.approx(0.8745793984247746)
     assert Path(THIS_DIR, "test_data/ref_test_data_PIDCalibResults.root").exists()
     os.remove(Path(THIS_DIR, "test_data/ref_test_data_PIDCalibResults.root"))
 
