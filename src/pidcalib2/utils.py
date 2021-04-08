@@ -10,7 +10,7 @@
 ###############################################################################
 
 import re
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import boost_histogram as bh
 import numpy as np
@@ -188,16 +188,36 @@ def add_efficiencies(
         eff_hists: Efficiency histograms for each prefix/particle.
     """
     df_new = df.copy()
+
+    # We separate the dataframe into two parts: one where all the events have
+    # PID indices (events inside the PID binning) and those that don't.
+    # Efficiency is added only for events inside the PID binning.
     df_nan = df_new[df_new.isna().any(axis=1)]
     df_new.dropna(inplace=True)
+
     df_new["PIDCalibEff"] = 1
+    df_new["PIDCalibErr2"] = 0
+
     for prefix in prefixes:
         efficiency_table = eff_hists[prefix]["eff"].view().flatten()  # type: ignore
+        error_table = (
+            create_error_histogram(eff_hists[prefix]).view().flatten()  # type: ignore
+        )
         np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
+
+        # Assign efficiencies by taking the efficiency value from the relevant bin
         df_new[f"{prefix}_PIDCalibEff"] = np.take(
             efficiency_table, df_new[f"{prefix}_PIDCalibBin"]
         )
+        # Assign errors by taking the error value from the relevant bin
+        df_new[f"{prefix}_PIDCalibErr"] = np.take(
+            error_table, df_new[f"{prefix}_PIDCalibBin"]
+        )
         df_new["PIDCalibEff"] = df_new["PIDCalibEff"] * df_new[f"{prefix}_PIDCalibEff"]
+        df_new["PIDCalibErr2"] += df_new[f"{prefix}_PIDCalibErr"] ** 2
+
+    df_new["PIDCalibErr"] = np.sqrt(df_new["PIDCalibErr2"])  # type: ignore
+    df_new.drop(columns=["PIDCalibErr2"], inplace=True)
 
     df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
@@ -226,3 +246,48 @@ def create_hist_filename(
     cut = re.sub(whitespace, "", pid_cut)
 
     return f"effhists_{sample}_{magnet}_{particle}_{cut}_{'-'.join(bin_vars)}.pkl"
+
+
+def binomial_uncertainty(
+    num_pass: Union[float, np.ndarray],
+    num_total: Union[float, np.ndarray],
+    err_pass_sq: Union[float, np.ndarray],
+    err_tot_sq: Union[float, np.ndarray],
+) -> float:
+    """Return the uncertainty of binomial experiments.
+
+    The parameters can be either floats or numpy arrays.
+
+    The uncertainty is calculated the way ROOT does it in TH1::Divide() when
+    binomial errors are specified. This approach has known problems when
+    num_pass == num_total or 0. We use this approach to ensure compatibility
+    with the original PIDCalib, and because these edge-cases are unlikely to
+    occur.
+
+    Args:
+        num_pass: Number of passing events.
+        num_total: Total number of events.
+        err_pass_sq: Squared uncertainty on the number of passing events (sum
+            of squares of the event weights).
+        err_tot_sq: Squared uncertainty on the number of total events (sum of
+            squares of the event weights).
+    """
+    prob = num_pass / num_total
+    prob_sq = prob ** 2  # type: ignore
+    num_total_sq = num_total ** 2  # type: ignore
+    return np.sqrt(  # type: ignore
+        abs(((1 - 2 * prob) * err_pass_sq + err_tot_sq * prob_sq) / num_total_sq)
+    )
+
+
+def create_error_histogram(eff_hists: Dict[str, bh.Histogram]) -> bh.Histogram:
+    uncertainty = binomial_uncertainty(
+        eff_hists["passing"].view(),  # type: ignore
+        eff_hists["total"].view(),  # type: ignore
+        eff_hists["passing_sumw2"].view(),  # type: ignore
+        eff_hists["total_sumw2"].view(),  # type: ignore
+    )
+
+    err_histo = eff_hists["passing"].copy()
+    err_histo[...] = uncertainty
+    return err_histo
