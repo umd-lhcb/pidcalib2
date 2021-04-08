@@ -117,7 +117,7 @@ def add_bin_indices(
     df: pd.DataFrame,
     prefixes: List[str],
     bin_vars: Dict[str, str],
-    eff_hists: Dict[str, bh.Histogram],
+    eff_hists: Dict[str, Dict[str, bh.Histogram]],
 ) -> pd.DataFrame:
     """Return a DataFrame with added indices of bins for each event.
 
@@ -137,18 +137,19 @@ def add_bin_indices(
     """
     df_new = df.copy()
     for prefix in prefixes:
+        eff_histo = eff_hists[prefix]["eff"]
         axes = [
             pid_data.get_reference_branch_name(
                 prefix, axis.metadata["name"], bin_vars[axis.metadata["name"]]
             )
-            for axis in eff_hists[prefix].axes
+            for axis in eff_histo.axes
         ]
         for bin_var, branch_name in bin_vars.items():
             ref_branch_name = pid_data.get_reference_branch_name(
                 prefix, bin_var, branch_name
             )
             bins = []
-            for axis in eff_hists[prefix].axes:
+            for axis in eff_histo.axes:
                 if axis.metadata["name"] == bin_var:
                     bins = axis.edges
             df_new[f"{ref_branch_name}_PIDCalibBin"] = pd.cut(
@@ -165,7 +166,7 @@ def add_bin_indices(
         index_names = [f"{axis}_PIDCalibBin" for axis in axes]
         indices = np.ravel_multi_index(
             df_new[index_names].transpose().to_numpy().astype(int),  # type: ignore
-            eff_hists[prefix].axes.size,
+            eff_histo.axes.size,
         )
         df_new[f"{prefix}_PIDCalibBin"] = indices
         df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
@@ -174,7 +175,7 @@ def add_bin_indices(
 
 
 def add_efficiencies(
-    df: pd.DataFrame, prefixes: List[str], eff_hists: Dict[str, bh.Histogram]
+    df: pd.DataFrame, prefixes: List[str], eff_hists: Dict[str, Dict[str, bh.Histogram]]
 ) -> pd.DataFrame:
     """Return a DataFrame with added efficiencies for each event.
 
@@ -191,7 +192,7 @@ def add_efficiencies(
     df_new.dropna(inplace=True)
     df_new["PIDCalibEff"] = 1
     for prefix in prefixes:
-        efficiency_table = eff_hists[prefix].view().flatten()  # type: ignore
+        efficiency_table = eff_hists[prefix]["eff"].view().flatten()  # type: ignore
         np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
         df_new[f"{prefix}_PIDCalibEff"] = np.take(
             efficiency_table, df_new[f"{prefix}_PIDCalibBin"]

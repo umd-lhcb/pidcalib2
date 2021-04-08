@@ -9,6 +9,7 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+import math
 import os
 from pathlib import Path
 
@@ -129,7 +130,14 @@ def test_get_calib_hists():
     eff_histos = pid_data.get_calib_hists(
         str(Path(THIS_DIR, "test_data")), "Turbo18", "up", ref_pars, bin_vars
     )
-    assert eff_histos["Bach"].sum() == pytest.approx(199.01361598888047)
+    assert math.isnan(eff_histos["Bach"]["eff"].sum())  # type: ignore
+    assert eff_histos["Bach"]["eff"][4, 2, 1] == pytest.approx(0.9672206239134171)
+    assert eff_histos["Bach"]["passing"].sum() == pytest.approx(103762743.76872134)
+    assert eff_histos["Bach"]["total"].sum() == pytest.approx(114809531.81162772)
+    assert eff_histos["Bach"]["passing_sumw2"].sum() == pytest.approx(
+        130492602.73047148
+    )
+    assert eff_histos["Bach"]["total_sumw2"].sum() == pytest.approx(149177697.03949496)
 
     with pytest.raises(FileNotFoundError):
         pid_data.get_calib_hists(

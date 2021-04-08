@@ -316,12 +316,12 @@ def get_calib_hists(
     magnet: str,
     ref_pars: Dict[str, List[str]],
     bin_vars: Dict[str, str],
-) -> Dict[str, bh.Histogram]:
+) -> Dict[str, Dict[str, bh.Histogram]]:
     """Get calibration efficiency histograms from all necessary files.
 
     Args:
         hist_dir: Directory where to look for the required files.
-        year: Data-taking year.
+        sample: Data sample name (Turbo18, etc.).
         magnet: Magnet polarity (up, down).
         ref_pars: Reference particle prefixes with a particle type and PID cut.
         bin_vars: Binning variables ({standard name: reference sample branch name}).
@@ -348,10 +348,15 @@ def get_calib_hists(
             ),
         )
 
-        log.debug(f"Loading efficiency histogram from '{calib_name}'")
+        log.debug(f"Loading efficiency histograms from '{calib_name}'")
 
+        hists[ref_par] = {}
         with open(calib_name, "rb") as f:
-            hists[ref_par] = pickle.load(f)
+            hists[ref_par]["eff"] = pickle.load(f)
+            hists[ref_par]["passing"] = pickle.load(f)
+            hists[ref_par]["total"] = pickle.load(f)
+            hists[ref_par]["passing_sumw2"] = pickle.load(f)
+            hists[ref_par]["total_sumw2"] = pickle.load(f)
     return hists
 
 

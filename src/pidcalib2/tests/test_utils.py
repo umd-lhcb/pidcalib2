@@ -42,13 +42,18 @@ def test_get_per_event_effs():
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
+    hists["Bach"] = {}
     with open(
         Path(THIS_DIR, "test_data/effhists_Turbo18_up_K_DLLK>4_P-ETA-nTracks.pkl"), "rb"
     ) as f:
-        hists["Bach"] = pickle.load(f)
+        hists["Bach"]["eff"] = pickle.load(f)
+        hists["Bach"]["passing"] = pickle.load(f)
+        hists["Bach"]["total"] = pickle.load(f)
+        hists["Bach"]["passing_sumw2"] = pickle.load(f)
+        hists["Bach"]["total_sumw2"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
-    assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8951140908087826)
+    assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8745793984247746)
 
 
 def test_add_bin_indices():
@@ -56,10 +61,15 @@ def test_add_bin_indices():
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
+    hists["Bach"] = {}
     with open(
         Path(THIS_DIR, "test_data/effhists_Turbo18_up_K_DLLK>4_P-ETA-nTracks.pkl"), "rb"
     ) as f:
-        hists["Bach"] = pickle.load(f)
+        hists["Bach"]["eff"] = pickle.load(f)
+        hists["Bach"]["passing"] = pickle.load(f)
+        hists["Bach"]["total"] = pickle.load(f)
+        hists["Bach"]["passing_sumw2"] = pickle.load(f)
+        hists["Bach"]["total_sumw2"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     assert df_ref["Bach_P_PIDCalibBin"].sum() == 623
     assert df_ref["Bach_ETA_PIDCalibBin"].sum() == 120
