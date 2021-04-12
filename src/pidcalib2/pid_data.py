@@ -330,7 +330,7 @@ def get_calib_hists(
         Dictionary with an efficiency histogram for each reference particle.
         The reference particle prefixes are the dictionary keys.
     """
-    hists = {}
+    hists: Dict[str, Dict[str, bh.Histogram]] = {}
     for ref_par in ref_pars:
         particle = ref_pars[ref_par][0]
 
