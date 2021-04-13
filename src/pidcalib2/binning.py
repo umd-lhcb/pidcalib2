@@ -82,7 +82,9 @@ binnings = {}
 
 binnings["Pi"] = {
     "P": p_binning("Pi"),
+    "Brunel_P": p_binning("Pi"),
     "ETA": eta_binning("Pi"),
+    "Brunel_ETA": eta_binning("Pi"),
     "nTracks": ntracks_binning("Pi"),
     "nTracks_Brunel": ntracks_binning("Pi"),
     "nSPDhits": nspdhits_binning("Pi"),
@@ -92,7 +94,9 @@ binnings["Pi"] = {
 
 binnings["K"] = {
     "P": p_binning("K"),
+    "Brunel_P": p_binning("K"),
     "ETA": eta_binning("K"),
+    "Brunel_ETA": eta_binning("K"),
     "nTracks": ntracks_binning("K"),
     "nTracks_Brunel": ntracks_binning("K"),
     "nSPDhits": nspdhits_binning("K"),
