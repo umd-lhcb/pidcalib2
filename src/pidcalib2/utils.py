@@ -36,6 +36,12 @@ def make_hist(
 
     # Loop over bin dimensions and define the axes
     for bin_var in bin_vars:
+        if (
+            particle not in binning.binnings
+            or bin_var not in binning.binnings[particle]
+        ):
+            log.error(f"No binning defined for particle {particle} variable {bin_var}")
+
         axis_list.append(
             bh.axis.Variable(
                 binning.binnings[particle][bin_var], metadata={"name": bin_var}
@@ -78,6 +84,9 @@ def create_eff_histograms(
     if zero_bins:
         log.warning(f"There are {zero_bins} empty bins in the total histogram!")
         log.warning(hists["total"].view(flow=False))
+        hist_total_nan = hists["total"].view()
+        hist_total_nan[hist_total_nan == 0] = np.nan
+        hists["total"][...] = hist_total_nan
 
     n_total = len(df_total.index)
     for i, pid_cut in enumerate(pid_cuts):

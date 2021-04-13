@@ -32,9 +32,8 @@ def test_make_hist():
 def test_create_eff_histograms():
     df = pd.read_csv(Path(THIS_DIR, "test_data/cal_test_data.csv"), index_col=0)
     hists = utils.create_eff_histograms(df, "Pi", ["DLLK>4"], ["P"])
-    assert hists["eff_DLLK>4"].sum() / hists["eff_DLLK>4"].size == pytest.approx(
-        0.18751578358705173 / 20
-    )
+    assert hists["eff_DLLK>4"].sum() == pytest.approx(0.18751578358705173)
+    assert hists["eff_DLLK>4"].size == 20
 
 
 def test_get_per_event_effs():

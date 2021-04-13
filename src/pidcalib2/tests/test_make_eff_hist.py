@@ -88,8 +88,7 @@ def test_make_eff_hists_with_cuts():
 
     # Test that stricter cuts have an effect
     config["cuts"] = ["Dst_IPCHI2 < 9", "probe_TRACK_GHOSTPROB < 0.01"]
-    with pytest.warns(RuntimeWarning):
-        make_eff_hists.make_eff_hists(config)
+    make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
         Path(THIS_DIR, "test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
     )
