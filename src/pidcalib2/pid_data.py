@@ -63,6 +63,9 @@ def create_branch_names(prefix: str) -> Dict[str, str]:
     branch_names = {
         "DLLK": f"{prefix}_PIDK",
         "DLLp": f"{prefix}_PIDp",
+        "DLLmu": f"{prefix}_PIDmu",
+        "DLLe": f"{prefix}_PIDe",
+        "DLLd": f"{prefix}_PIDd",
         "ProbNNpi": f"{prefix}_MC15TuneV1_ProbNNpi",
         "ProbNNk": f"{prefix}_MC15TuneV1_ProbNNk",
         "P": f"{prefix}_P",

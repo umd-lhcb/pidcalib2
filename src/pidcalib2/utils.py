@@ -84,6 +84,8 @@ def create_eff_histograms(
     if zero_bins:
         log.warning(f"There are {zero_bins} empty bins in the total histogram!")
         log.warning(hists["total"].view(flow=False))
+
+        # Replace zeros with NaNs which suppresses duplicate Numpy warnings
         hist_total_nan = hists["total"].view()
         hist_total_nan[hist_total_nan == 0] = np.nan
         hists["total"][...] = hist_total_nan
