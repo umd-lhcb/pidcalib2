@@ -106,7 +106,9 @@ binnings["K"] = {
 
 binnings["Mu"] = {
     "P": p_binning("Mu"),
+    "Brunel_P": p_binning("Mu"),
     "ETA": eta_binning("Mu"),
+    "Brunel_ETA": eta_binning("Mu"),
     "nTracks": ntracks_binning("Mu"),
     "nTracks_Brunel": ntracks_binning("Mu"),
     "nSPDhits": nspdhits_binning("Mu"),
