@@ -115,3 +115,15 @@ binnings["Mu"] = {
     "nSPDhits_Brunel": nspdhits_binning("Mu"),
     "TRCHI2NDOF": trchi2_binning("Mu"),
 }
+
+binnings["P"] = {
+    "P": p_binning("P"),
+    "Brunel_P": p_binning("P"),
+    "ETA": eta_binning("P"),
+    "Brunel_ETA": eta_binning("P"),
+    "nTracks": ntracks_binning("P"),
+    "nTracks_Brunel": ntracks_binning("P"),
+    "nSPDhits": nspdhits_binning("P"),
+    "nSPDhits_Brunel": nspdhits_binning("P"),
+    "TRCHI2NDOF": trchi2_binning("P"),
+}
