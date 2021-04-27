@@ -256,7 +256,7 @@ def create_hist_filename(
     whitespace = re.compile(r"\s+")
     cut = re.sub(whitespace, "", pid_cut)
 
-    return f"effhists_{sample}_{magnet}_{particle}_{cut}_{'-'.join(bin_vars)}.pkl"
+    return f"effhists-{sample}-{magnet}-{particle}-{cut}-{'.'.join(bin_vars)}.pkl"
 
 
 def binomial_uncertainty(

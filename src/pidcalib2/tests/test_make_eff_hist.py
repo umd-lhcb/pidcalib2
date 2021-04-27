@@ -38,7 +38,7 @@ def test_make_eff_hists():
     eff_histo = pd.read_pickle(
         Path(
             THIS_DIR,
-            "test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl",
+            "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl",
         )
     )
 
@@ -49,7 +49,7 @@ def test_make_eff_hists():
     assert eff_histo[1] == 0.8978157343833105
 
     eff_histo_reference = pd.read_pickle(
-        Path(THIS_DIR, "test_data/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+        Path(THIS_DIR, "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl")
     )
     assert eff_histo == eff_histo_reference
 
@@ -70,7 +70,7 @@ def test_make_eff_hists_with_cuts():
     }
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
+        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -80,7 +80,7 @@ def test_make_eff_hists_with_cuts():
     assert eff_histo[1] == 0.8978157343833105
 
     eff_histo_reference = pd.read_pickle(
-        Path(THIS_DIR, "test_data/effhists_Turbo18_up_pi_DLLK<4_P.pkl")
+        Path(THIS_DIR, "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl")
     )
     assert eff_histo == eff_histo_reference
 
@@ -90,7 +90,7 @@ def test_make_eff_hists_with_cuts():
     config["cuts"] = ["Dst_IPCHI2 < 9", "probe_TRACK_GHOSTPROB < 0.01"]
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
+        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
     )
 
     # With stricter cuts, some bins in the efficiency histogram become empty
@@ -120,7 +120,7 @@ def test_make_eff_hists_local_file_list():
     }
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
+        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -151,7 +151,7 @@ def test_make_eff_hists_file_list():
     }
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists_Turbo18_up_Pi_DLLK<4_P.pkl")
+        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
     )
 
     # These asserts might come in handy when some detail in the boost_histogram

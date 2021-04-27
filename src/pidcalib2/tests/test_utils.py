@@ -43,7 +43,7 @@ def test_get_per_event_effs():
     hists = {}
     hists["Bach"] = {}
     with open(
-        Path(THIS_DIR, "test_data/effhists_Turbo18_up_K_DLLK>4_P-ETA-nTracks.pkl"), "rb"
+        Path(THIS_DIR, "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl"), "rb"
     ) as f:
         hists["Bach"]["eff"] = pickle.load(f)
         hists["Bach"]["passing"] = pickle.load(f)
@@ -63,7 +63,7 @@ def test_add_bin_indices():
     hists = {}
     hists["Bach"] = {}
     with open(
-        Path(THIS_DIR, "test_data/effhists_Turbo18_up_K_DLLK>4_P-ETA-nTracks.pkl"), "rb"
+        Path(THIS_DIR, "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl"), "rb"
     ) as f:
         hists["Bach"]["eff"] = pickle.load(f)
         hists["Bach"]["passing"] = pickle.load(f)
