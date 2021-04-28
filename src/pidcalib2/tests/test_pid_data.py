@@ -38,8 +38,8 @@ def test_calib_root_to_dataframe():
 def test_get_tree_paths():
     assert pid_data.get_tree_paths("Pi", "26") == ["DecayTree"]
     assert pid_data.get_tree_paths("Pi", "Turbo15") == [
-        "DSt_PiPTuple/DecayTree",
         "DSt_PiMTuple/DecayTree",
+        "DSt_PiPTuple/DecayTree",
     ]
     assert pid_data.get_tree_paths("Mu", "Turbo15-MagUp-Mu") == [
         "Jpsi_MuPTuple/DecayTree",
