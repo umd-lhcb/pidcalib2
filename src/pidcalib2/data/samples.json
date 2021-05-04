@@ -6804,29 +6804,11 @@
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21r1_6.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21r1_7.root"
     ],
-    "Electron16-MagDown-P_TotLc": {
-        "link": "Electron16-MagDown"
-    },
-    "Turbo15-MagUp-K_Phi": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron18-MagUp-P_DD": {
-        "link": "Electron18-MagUp"
-    },
     "Turbo17-MagDown-K_Omega": {
         "link": "Turbo17-MagDown"
     },
-    "Turbo18-MagDown-P_Sigmacpp": {
-        "link": "Turbo18-MagDown"
-    },
-    "Electron16-MagDown-Mu": {
-        "link": "Electron16-MagDown"
-    },
     "ApTurbo16-MagDown-Mu": {
         "link": "ApTurbo16-MagDown"
-    },
-    "Turbo15-MagDown-K_DD": {
-        "link": "Turbo15-MagDown"
     },
     "Turbo17-MagUp-P_IncLc": {
         "link": "Turbo17-MagUp"
@@ -6834,86 +6816,17 @@
     "pATurbo16-MagDown-Mu": {
         "link": "pATurbo16-MagDown"
     },
-    "Electron15-MagDown-P_MuonUnBiased": {
-        "link": "Electron15-MagDown"
-    },
-    "Turbo18-MagDown-K_Phi": {
-        "link": "Turbo18-MagDown"
-    },
-    "Turbo18-MagDown-Pi_DSt3Pi": {
-        "link": "Turbo18-MagDown"
-    },
-    "Electron17-MagDown-P_DD": {
-        "link": "Electron17-MagDown"
-    },
-    "Turbo17-MagDown-e_MuonUnBiased": {
-        "link": "Turbo17-MagDown"
-    },
-    "Turbo17-MagUp-P_Sigmac0": {
-        "link": "Turbo17-MagUp"
-    },
-    "Electron17-MagUp-K_DsPhi": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo16-MagDown-e_B_Jpsi": {
-        "link": "Turbo16-MagDown"
-    },
-    "Electron18-MagUp-Mu_nopt": {
-        "link": "Electron18-MagUp"
-    },
     "Turbo16-MagUp-K_DsPhi": {
         "link": "Turbo16-MagUp"
-    },
-    "Electron16-MagUp-e": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron15-MagDown-K_DSt3Pi": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron16-MagUp-Mu_B_Jpsi": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron18-MagDown-P_TotLc": {
-        "link": "Electron18-MagDown"
     },
     "Turbo18-MagDown-P_IncLc": {
         "link": "Turbo18-MagDown"
     },
-    "Electron15-MagDown-Pi_MuonUnBiased": {
-        "link": "Electron15-MagDown"
-    },
     "Turbo17-MagDown-K": {
         "link": "Turbo17-MagDown"
     },
-    "Turbo18-MagDown-e_B_Jpsi": {
-        "link": "Turbo18-MagDown"
-    },
-    "Turbo17-MagUp-Pi_DSt3Pi": {
-        "link": "Turbo17-MagUp"
-    },
-    "Electron17-MagDown-Mu_nopt": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron15-MagUp-P_MuonUnBiased": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo17-MagDown-P_IncLc": {
         "link": "Turbo17-MagDown"
-    },
-    "Electron15-MagUp-K_DSt3Pi": {
-        "link": "Electron15-MagUp"
-    },
-    "Turbo15-MagDown-e_B_Jpsi": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron17-MagUp-P_TotLc": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo16-MagDown-K_DD": {
-        "link": "Turbo16-MagDown"
-    },
-    "Turbo16-MagUp-e": {
-        "link": "Turbo16-MagUp"
     },
     "Turbo18-MagUp-K_MuonUnBiased": {
         "link": "Turbo18-MagUp"
@@ -6921,44 +6834,14 @@
     "ApTurbo16-MagDown-Pi": {
         "link": "ApTurbo16-MagDown"
     },
-    "Turbo16-MagDown-P_Sigmacpp": {
-        "link": "Turbo16-MagDown"
-    },
     "ApTurbo16-MagDown-K": {
         "link": "ApTurbo16-MagDown"
-    },
-    "Electron15-MagDown-Pi_DD": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron16-MagUp-Pi_DD": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron16-MagDown-Mu_nopt": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron16-MagDown-Pi_DSt3Pi": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron18-MagDown-K_Omega": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron16-MagDown-Pi_MuonUnBiased": {
-        "link": "Electron16-MagDown"
-    },
-    "Turbo17-MagDown-K_Phi": {
-        "link": "Turbo17-MagDown"
-    },
-    "Electron16-MagDown-P_IncLc": {
-        "link": "Electron16-MagDown"
     },
     "Turbo18-MagDown-Pi_MuonUnBiased": {
         "link": "Turbo18-MagDown"
     },
     "Turbo16-MagDown-P_LcfB": {
         "link": "Turbo16-MagDown"
-    },
-    "Electron18-MagUp-P_MuonUnBiased": {
-        "link": "Electron18-MagUp"
     },
     "Turbo17-MagUp-Mu": {
         "link": "Turbo17-MagUp"
@@ -6969,50 +6852,14 @@
     "Turbo15-MagUp-P_TotLc": {
         "link": "Turbo15-MagUp"
     },
-    "Electron17-MagUp-K_Omega": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron18-MagDown-P_IncLc": {
-        "link": "Electron18-MagDown"
-    },
     "Turbo15-MagUp-Pi_MuonUnBiased": {
         "link": "Turbo15-MagUp"
-    },
-    "Turbo18-MagUp-P_B_Jpsi": {
-        "link": "Turbo18-MagUp"
-    },
-    "Turbo15-MagUp-P_IncLc": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron17-MagDown-Pi_DSt3Pi": {
-        "link": "Electron17-MagDown"
     },
     "Turbo17-MagUp-Pi_DD": {
         "link": "Turbo17-MagUp"
     },
-    "Electron16-MagUp-K": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron17-MagUp-Pi_DD": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo16-MagUp-K_DSt3Pi": {
-        "link": "Turbo16-MagUp"
-    },
     "Turbo18-MagDown-K_DD": {
         "link": "Turbo18-MagDown"
-    },
-    "Electron16-MagDown-P_LcfB": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron16-MagDown-P_B_Jpsi": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron17-MagDown-P_LcfB": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron17-MagUp-P_LcfB": {
-        "link": "Electron17-MagUp"
     },
     "pATurbo16-MagDown-Pi": {
         "link": "pATurbo16-MagDown"
@@ -7020,20 +6867,8 @@
     "Turbo17-MagDown-Pi_MuonUnBiased": {
         "link": "Turbo17-MagDown"
     },
-    "Electron16-MagDown-Pi_KS": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron17-MagDown-K_Omega": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron16-MagUp-P_LcfB": {
-        "link": "Electron16-MagUp"
-    },
     "Turbo17-MagUp-Mu_B_Jpsi": {
         "link": "Turbo17-MagUp"
-    },
-    "Turbo16-MagDown-K_DSt3Pi": {
-        "link": "Turbo16-MagDown"
     },
     "Turbo17-MagUp-Pi_MuonUnBiased": {
         "link": "Turbo17-MagUp"
@@ -7041,68 +6876,14 @@
     "Turbo17-MagDown-Pi_KS": {
         "link": "Turbo17-MagDown"
     },
-    "Electron16-MagUp-K_Omega": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron18-MagUp-P_LcfB": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron18-MagDown-Pi": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron17-MagUp-P_DD": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron18-MagUp-Pi": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron16-MagUp-K_MuonUnBiased": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron15-MagDown-K_DsPhi": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron17-MagDown-K_MuonUnBiased": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron15-MagDown-P_Sigmac0": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron16-MagDown-K_DD": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron16-MagDown-Mu_B_Jpsi": {
-        "link": "Electron16-MagDown"
-    },
     "Turbo15-MagUp-K": {
         "link": "Turbo15-MagUp"
-    },
-    "Electron18-MagDown-P_Sigmac0": {
-        "link": "Electron18-MagDown"
     },
     "Turbo17-MagDown-P_DD": {
         "link": "Turbo17-MagDown"
     },
     "Turbo17-MagUp-P_LcfB": {
         "link": "Turbo17-MagUp"
-    },
-    "Electron17-MagUp-P_IncLc": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo18-MagDown-P_Sigmac0": {
-        "link": "Turbo18-MagDown"
-    },
-    "Electron16-MagUp-P_MuonUnBiased": {
-        "link": "Electron16-MagUp"
-    },
-    "Turbo17-MagDown-e_B_Jpsi": {
-        "link": "Turbo17-MagDown"
-    },
-    "Electron16-MagUp-K_Phi": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron15-MagDown-Pi_KS": {
-        "link": "Electron15-MagDown"
     },
     "Turbo18-MagDown-K_Omega": {
         "link": "Turbo18-MagDown"
@@ -7122,50 +6903,17 @@
     "Turbo17-MagDown-P_LcfB": {
         "link": "Turbo17-MagDown"
     },
-    "Electron15-MagUp-Pi_DD": {
-        "link": "Electron15-MagUp"
-    },
     "Electron15-MagDown-e_B_Jpsi": {
         "link": "Electron15-MagDown"
     },
-    "Electron16-MagDown-K_DsPhi": {
-        "link": "Electron16-MagDown"
-    },
     "Turbo17-MagUp-Pi": {
         "link": "Turbo17-MagUp"
-    },
-    "Turbo18-MagUp-e_B_Jpsi": {
-        "link": "Turbo18-MagUp"
-    },
-    "Electron16-MagDown-Pi": {
-        "link": "Electron16-MagDown"
-    },
-    "Turbo16-MagUp-K_Phi": {
-        "link": "Turbo16-MagUp"
     },
     "Turbo16-MagDown-P_IncLc": {
         "link": "Turbo16-MagDown"
     },
     "Turbo18-MagDown-Pi": {
         "link": "Turbo18-MagDown"
-    },
-    "Electron18-MagUp-P_B_Jpsi": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron16-MagDown-K_Omega": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron16-MagDown-e": {
-        "link": "Electron16-MagDown"
-    },
-    "Turbo15-MagDown-P_DD": {
-        "link": "Turbo15-MagDown"
-    },
-    "Turbo18-MagUp-e_MuonUnBiased": {
-        "link": "Turbo18-MagUp"
-    },
-    "Electron16-MagDown-P_DD": {
-        "link": "Electron16-MagDown"
     },
     "Electron18-MagDown-e_B_Jpsi": {
         "link": "Electron18-MagDown"
@@ -7179,29 +6927,8 @@
     "Turbo16-MagDown-Pi_MuonUnBiased": {
         "link": "Turbo16-MagDown"
     },
-    "Electron17-MagUp-P": {
-        "link": "Electron17-MagUp"
-    },
     "Turbo15-MagUp-Mu": {
         "link": "Turbo15-MagUp"
-    },
-    "Electron16-MagUp-Pi_MuonUnBiased": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron17-MagDown-K_Phi": {
-        "link": "Electron17-MagDown"
-    },
-    "Turbo18-MagUp-e": {
-        "link": "Turbo18-MagUp"
-    },
-    "Turbo16-MagUp-e_B_Jpsi": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron16-MagDown-P_Sigmac0": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron16-MagUp-P_DD": {
-        "link": "Electron16-MagUp"
     },
     "Turbo15-MagUp-Mu_nopt": {
         "link": "Turbo15-MagUp"
@@ -7209,44 +6936,14 @@
     "Turbo18-MagDown-Mu": {
         "link": "Turbo18-MagDown"
     },
-    "Turbo17-MagDown-P_Sigmacpp": {
-        "link": "Turbo17-MagDown"
-    },
-    "Turbo15-MagDown-Pi_DSt3Pi": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron15-MagDown-K_Phi": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron15-MagUp-Mu_B_Jpsi": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo15-MagUp-K_MuonUnBiased": {
-        "link": "Turbo15-MagUp"
-    },
-    "Turbo15-MagUp-K_DD": {
         "link": "Turbo15-MagUp"
     },
     "Turbo15-MagDown-K_DsPhi": {
         "link": "Turbo15-MagDown"
     },
-    "Electron16-MagUp-P_Sigmacpp": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron18-MagUp-e_MuonUnBiased": {
-        "link": "Electron18-MagUp"
-    },
-    "Turbo16-MagDown-e_MuonUnBiased": {
-        "link": "Turbo16-MagDown"
-    },
     "Turbo15-MagDown-P_MuonUnBiased": {
         "link": "Turbo15-MagDown"
-    },
-    "Electron15-MagDown-P_TotLc": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron15-MagUp-e_MuonUnBiased": {
-        "link": "Electron15-MagUp"
     },
     "Turbo17-MagDown-Pi_DD": {
         "link": "Turbo17-MagDown"
@@ -7254,38 +6951,8 @@
     "pATurbo16-MagDown-K": {
         "link": "pATurbo16-MagDown"
     },
-    "Turbo17-MagUp-P_Sigmacpp": {
-        "link": "Turbo17-MagUp"
-    },
-    "Electron17-MagDown-P_IncLc": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron17-MagDown-K_DD": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron17-MagUp-Pi_DSt3Pi": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo15-MagDown-P_Sigmacpp": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron16-MagUp-P_B_Jpsi": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron16-MagDown-P_Sigmacpp": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron17-MagDown-Mu_B_Jpsi": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron18-MagDown-e_MuonUnBiased": {
-        "link": "Electron18-MagDown"
-    },
     "Turbo16-MagDown-Mu_B_Jpsi": {
         "link": "Turbo16-MagDown"
-    },
-    "Electron18-MagUp-Pi_MuonUnBiased": {
-        "link": "Electron18-MagUp"
     },
     "Electron15-MagUp-e_B_Jpsi": {
         "link": "Electron15-MagUp"
@@ -7299,14 +6966,8 @@
     "Turbo15-MagUp-P": {
         "link": "Turbo15-MagUp"
     },
-    "Electron15-MagDown-K": {
-        "link": "Electron15-MagDown"
-    },
     "Turbo16-MagUp-Pi_KS": {
         "link": "Turbo16-MagUp"
-    },
-    "Electron16-MagUp-Mu": {
-        "link": "Electron16-MagUp"
     },
     "Turbo17-MagDown-K_MuonUnBiased": {
         "link": "Turbo17-MagDown"
@@ -7314,26 +6975,8 @@
     "Turbo15-MagUp-Mu_B_Jpsi": {
         "link": "Turbo15-MagUp"
     },
-    "Electron17-MagDown-Pi_DD": {
-        "link": "Electron17-MagDown"
-    },
     "Turbo15-MagUp-Pi_KS": {
         "link": "Turbo15-MagUp"
-    },
-    "Electron16-MagUp-P_IncLc": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron18-MagDown-Mu_B_Jpsi": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo15-MagDown-e": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron15-MagDown-Mu_B_Jpsi": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron18-MagDown-K_DSt3Pi": {
-        "link": "Electron18-MagDown"
     },
     "Turbo18-MagUp-Mu_B_Jpsi": {
         "link": "Turbo18-MagUp"
@@ -7341,38 +6984,14 @@
     "Turbo16-MagUp-P_MuonUnBiased": {
         "link": "Turbo16-MagUp"
     },
-    "Turbo15-MagDown-P_Sigmac0": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron18-MagDown-K_DsPhi": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo16-MagDown-Pi_DD": {
-        "link": "Turbo16-MagDown"
-    },
-    "Turbo18-MagUp-K_Phi": {
-        "link": "Turbo18-MagUp"
-    },
     "Turbo18-MagUp-Pi_MuonUnBiased": {
         "link": "Turbo18-MagUp"
     },
     "Turbo17-MagUp-K": {
         "link": "Turbo17-MagUp"
     },
-    "Turbo16-MagDown-e": {
-        "link": "Turbo16-MagDown"
-    },
-    "Electron15-MagUp-Pi_DSt3Pi": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo16-MagUp-Pi": {
         "link": "Turbo16-MagUp"
-    },
-    "Electron15-MagDown-P_B_Jpsi": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron17-MagDown-Pi": {
-        "link": "Electron17-MagDown"
     },
     "Turbo17-MagUp-Pi_KS": {
         "link": "Turbo17-MagUp"
@@ -7383,23 +7002,8 @@
     "Turbo16-MagUp-K_MuonUnBiased": {
         "link": "Turbo16-MagUp"
     },
-    "Turbo16-MagDown-Pi_DSt3Pi": {
-        "link": "Turbo16-MagDown"
-    },
-    "Electron15-MagUp-P_B_Jpsi": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron16-MagUp-Pi_DSt3Pi": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron15-MagDown-Mu_nopt": {
-        "link": "Electron15-MagDown"
-    },
     "Turbo17-MagDown-Mu_B_Jpsi": {
         "link": "Turbo17-MagDown"
-    },
-    "Electron15-MagUp-P_Sigmac0": {
-        "link": "Electron15-MagUp"
     },
     "Turbo15-MagDown-K": {
         "link": "Turbo15-MagDown"
@@ -7410,65 +7014,14 @@
     "Turbo17-MagUp-P_DD": {
         "link": "Turbo17-MagUp"
     },
-    "Electron15-MagDown-e_MuonUnBiased": {
-        "link": "Electron15-MagDown"
-    },
-    "Turbo15-MagUp-e": {
-        "link": "Turbo15-MagUp"
-    },
     "Turbo17-MagUp-K_MuonUnBiased": {
         "link": "Turbo17-MagUp"
-    },
-    "Electron18-MagDown-Pi_DD": {
-        "link": "Electron18-MagDown"
     },
     "Turbo18-MagUp-K_DsPhi": {
         "link": "Turbo18-MagUp"
     },
-    "Electron15-MagUp-K": {
-        "link": "Electron15-MagUp"
-    },
-    "Turbo16-MagUp-K_Omega": {
-        "link": "Turbo16-MagUp"
-    },
     "Turbo16-MagDown-K_DsPhi": {
         "link": "Turbo16-MagDown"
-    },
-    "Electron15-MagDown-Pi": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron17-MagDown-e_MuonUnBiased": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron16-MagUp-Pi_KS": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron15-MagUp-Pi": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron16-MagDown-P_MuonUnBiased": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron15-MagDown-K_Omega": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron18-MagUp-P": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron16-MagDown-K": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron18-MagUp-P_Sigmacpp": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron17-MagDown-Pi_KS": {
-        "link": "Electron17-MagDown"
-    },
-    "Turbo18-MagUp-P_Sigmac0": {
-        "link": "Turbo18-MagUp"
-    },
-    "Electron18-MagUp-Mu": {
-        "link": "Electron18-MagUp"
     },
     "Turbo18-MagDown-Pi_DD": {
         "link": "Turbo18-MagDown"
@@ -7476,50 +7029,11 @@
     "Turbo18-MagDown-Mu_B_Jpsi": {
         "link": "Turbo18-MagDown"
     },
-    "Electron17-MagUp-K_DSt3Pi": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron18-MagUp-Pi_KS": {
-        "link": "Electron18-MagUp"
-    },
     "Turbo17-MagDown-Mu": {
         "link": "Turbo17-MagDown"
     },
-    "Electron18-MagDown-K_MuonUnBiased": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo17-MagUp-e_B_Jpsi": {
-        "link": "Turbo17-MagUp"
-    },
-    "Electron17-MagDown-P_Sigmacpp": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron17-MagUp-K_DD": {
-        "link": "Electron17-MagUp"
-    },
     "Turbo15-MagDown-P": {
         "link": "Turbo15-MagDown"
-    },
-    "Electron17-MagUp-Mu_nopt": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron17-MagUp-P_B_Jpsi": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron17-MagDown-K": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron16-MagDown-K_MuonUnBiased": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron17-MagUp-Pi_KS": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron17-MagUp-Pi_MuonUnBiased": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo16-MagUp-Pi_DD": {
-        "link": "Turbo16-MagUp"
     },
     "Turbo17-MagDown-K_DsPhi": {
         "link": "Turbo17-MagDown"
@@ -7527,167 +7041,47 @@
     "Turbo18-MagUp-K_DD": {
         "link": "Turbo18-MagUp"
     },
-    "Electron17-MagDown-P_MuonUnBiased": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron15-MagDown-Mu": {
-        "link": "Electron15-MagDown"
-    },
     "Electron16-MagUp-e_B_Jpsi": {
         "link": "Electron16-MagUp"
     },
     "Turbo16-MagUp-P_TotLc": {
         "link": "Turbo16-MagUp"
     },
-    "Turbo15-MagDown-Pi_DD": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron18-MagDown-P": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo16-MagUp-K_DD": {
-        "link": "Turbo16-MagUp"
-    },
-    "Turbo15-MagDown-K_Phi": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron15-MagDown-K_DD": {
-        "link": "Electron15-MagDown"
-    },
     "Turbo15-MagDown-Pi": {
         "link": "Turbo15-MagDown"
-    },
-    "Electron16-MagDown-P": {
-        "link": "Electron16-MagDown"
     },
     "Turbo15-MagDown-K_MuonUnBiased": {
         "link": "Turbo15-MagDown"
     },
-    "Electron18-MagDown-K": {
-        "link": "Electron18-MagDown"
-    },
     "Turbo16-MagDown-P_TotLc": {
         "link": "Turbo16-MagDown"
-    },
-    "Electron15-MagUp-Pi_MuonUnBiased": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron17-MagUp-K_MuonUnBiased": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo16-MagUp-e_MuonUnBiased": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron18-MagUp-P_TotLc": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron18-MagUp-K_DSt3Pi": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron17-MagUp-e": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo15-MagUp-P_Sigmacpp": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron18-MagUp-K_MuonUnBiased": {
-        "link": "Electron18-MagUp"
     },
     "Turbo15-MagDown-Mu_B_Jpsi": {
         "link": "Turbo15-MagDown"
     },
-    "Electron15-MagUp-P_IncLc": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo18-MagUp-Pi": {
         "link": "Turbo18-MagUp"
-    },
-    "Electron18-MagDown-K_Phi": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron15-MagDown-P_IncLc": {
-        "link": "Electron15-MagDown"
-    },
-    "Turbo17-MagUp-K_Phi": {
-        "link": "Turbo17-MagUp"
     },
     "pATurbo16-MagDown-P": {
         "link": "pATurbo16-MagDown"
     },
-    "Turbo18-MagDown-K_DSt3Pi": {
-        "link": "Turbo18-MagDown"
-    },
-    "Electron16-MagUp-K_DD": {
-        "link": "Electron16-MagUp"
-    },
-    "Turbo18-MagDown-e": {
-        "link": "Turbo18-MagDown"
-    },
-    "Turbo15-MagUp-Pi_DSt3Pi": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron18-MagDown-Mu": {
-        "link": "Electron18-MagDown"
-    },
     "Turbo16-MagDown-K": {
         "link": "Turbo16-MagDown"
-    },
-    "Turbo15-MagUp-Pi_DD": {
-        "link": "Turbo15-MagUp"
     },
     "Turbo17-MagUp-P_TotLc": {
         "link": "Turbo17-MagUp"
     },
-    "Electron18-MagDown-P_B_Jpsi": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron18-MagDown-Pi_KS": {
-        "link": "Electron18-MagDown"
-    },
     "Turbo18-MagDown-P_DD": {
         "link": "Turbo18-MagDown"
     },
-    "Electron15-MagUp-P_Sigmacpp": {
-        "link": "Electron15-MagUp"
-    },
-    "Turbo16-MagUp-P_Sigmacpp": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron18-MagUp-Pi_DSt3Pi": {
-        "link": "Electron18-MagUp"
-    },
-    "Turbo17-MagDown-P_Sigmac0": {
-        "link": "Turbo17-MagDown"
-    },
     "Turbo18-MagUp-K": {
-        "link": "Turbo18-MagUp"
-    },
-    "Turbo18-MagDown-e_MuonUnBiased": {
-        "link": "Turbo18-MagDown"
-    },
-    "Turbo18-MagUp-Pi_DSt3Pi": {
         "link": "Turbo18-MagUp"
     },
     "Turbo18-MagUp-Pi_KS": {
         "link": "Turbo18-MagUp"
     },
-    "Turbo15-MagUp-P_Sigmac0": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron15-MagDown-P": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron16-MagUp-Mu_nopt": {
-        "link": "Electron16-MagUp"
-    },
     "Turbo18-MagUp-P_TotLc": {
         "link": "Turbo18-MagUp"
-    },
-    "Turbo15-MagDown-P_IncLc": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron18-MagUp-Mu_B_Jpsi": {
-        "link": "Electron18-MagUp"
     },
     "Turbo16-MagUp-P": {
         "link": "Turbo16-MagUp"
@@ -7695,65 +7089,20 @@
     "Turbo17-MagDown-P_MuonUnBiased": {
         "link": "Turbo17-MagDown"
     },
-    "Turbo15-MagUp-e_MuonUnBiased": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron18-MagDown-Pi_DSt3Pi": {
-        "link": "Electron18-MagDown"
-    },
     "Turbo15-MagDown-P_TotLc": {
         "link": "Turbo15-MagDown"
     },
     "Turbo17-MagDown-K_DD": {
         "link": "Turbo17-MagDown"
     },
-    "Electron15-MagUp-e": {
-        "link": "Electron15-MagUp"
-    },
-    "Turbo15-MagUp-P_B_Jpsi": {
-        "link": "Turbo15-MagUp"
-    },
     "Turbo17-MagDown-P": {
         "link": "Turbo17-MagDown"
-    },
-    "Electron18-MagDown-Pi_MuonUnBiased": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo15-MagDown-P_B_Jpsi": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron17-MagUp-Mu": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo17-MagUp-K_DSt3Pi": {
-        "link": "Turbo17-MagUp"
     },
     "Turbo18-MagDown-K": {
         "link": "Turbo18-MagDown"
     },
-    "Turbo17-MagUp-e": {
-        "link": "Turbo17-MagUp"
-    },
     "Turbo16-MagUp-P_LcfB": {
         "link": "Turbo16-MagUp"
-    },
-    "Electron17-MagUp-P_Sigmac0": {
-        "link": "Electron17-MagUp"
-    },
-    "Turbo16-MagUp-P_DD": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron18-MagUp-K": {
-        "link": "Electron18-MagUp"
-    },
-    "Turbo17-MagDown-e": {
-        "link": "Turbo17-MagDown"
-    },
-    "Electron15-MagUp-Mu_nopt": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron16-MagUp-P_TotLc": {
-        "link": "Electron16-MagUp"
     },
     "Turbo18-MagDown-P": {
         "link": "Turbo18-MagDown"
@@ -7767,113 +7116,29 @@
     "Turbo18-MagUp-Pi_DD": {
         "link": "Turbo18-MagUp"
     },
-    "Electron16-MagUp-P_Sigmac0": {
-        "link": "Electron16-MagUp"
-    },
-    "Turbo15-MagUp-K_Omega": {
-        "link": "Turbo15-MagUp"
-    },
-    "Turbo16-MagDown-P_DD": {
-        "link": "Turbo16-MagDown"
-    },
-    "Electron18-MagUp-K_Omega": {
-        "link": "Electron18-MagUp"
-    },
     "Turbo15-MagDown-Mu_nopt": {
         "link": "Turbo15-MagDown"
-    },
-    "Electron17-MagUp-e_MuonUnBiased": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron18-MagUp-Pi_DD": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron16-MagDown-Pi_DD": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron17-MagDown-K_DSt3Pi": {
-        "link": "Electron17-MagDown"
-    },
-    "Turbo18-MagUp-P_Sigmacpp": {
-        "link": "Turbo18-MagUp"
     },
     "Turbo18-MagDown-K_MuonUnBiased": {
         "link": "Turbo18-MagDown"
     },
-    "Electron15-MagDown-e": {
-        "link": "Electron15-MagDown"
-    },
-    "Turbo15-MagUp-K_DSt3Pi": {
-        "link": "Turbo15-MagUp"
-    },
     "Turbo18-MagUp-P": {
         "link": "Turbo18-MagUp"
-    },
-    "Electron15-MagUp-K_Phi": {
-        "link": "Electron15-MagUp"
     },
     "Turbo16-MagUp-Mu": {
         "link": "Turbo16-MagUp"
     },
-    "Turbo15-MagUp-P_DD": {
-        "link": "Turbo15-MagUp"
-    },
-    "Turbo17-MagDown-Pi_DSt3Pi": {
-        "link": "Turbo17-MagDown"
-    },
-    "Electron18-MagDown-P_Sigmacpp": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo16-MagUp-Pi_DSt3Pi": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron15-MagUp-P_TotLc": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron17-MagDown-Pi_MuonUnBiased": {
-        "link": "Electron17-MagDown"
-    },
     "Turbo16-MagDown-P": {
         "link": "Turbo16-MagDown"
-    },
-    "Electron17-MagDown-P_Sigmac0": {
-        "link": "Electron17-MagDown"
     },
     "Turbo16-MagDown-P_MuonUnBiased": {
         "link": "Turbo16-MagDown"
     },
-    "Turbo15-MagUp-e_B_Jpsi": {
-        "link": "Turbo15-MagUp"
-    },
-    "Electron18-MagDown-e": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron17-MagUp-K": {
-        "link": "Electron17-MagUp"
-    },
     "Turbo17-MagUp-P": {
         "link": "Turbo17-MagUp"
     },
-    "Electron15-MagUp-P": {
-        "link": "Electron15-MagUp"
-    },
-    "Turbo15-MagDown-e_MuonUnBiased": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron16-MagDown-K_Phi": {
-        "link": "Electron16-MagDown"
-    },
     "Turbo16-MagUp-K": {
         "link": "Turbo16-MagUp"
-    },
-    "Electron15-MagUp-Mu": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron16-MagUp-K_DsPhi": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron15-MagDown-Pi_DSt3Pi": {
-        "link": "Electron15-MagDown"
     },
     "Turbo15-MagUp-P_MuonUnBiased": {
         "link": "Turbo15-MagUp"
@@ -7881,41 +7146,11 @@
     "Turbo17-MagUp-K_Omega": {
         "link": "Turbo17-MagUp"
     },
-    "Electron16-MagUp-P": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron18-MagDown-P_LcfB": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo16-MagUp-P_B_Jpsi": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron15-MagUp-K_Omega": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo15-MagUp-K_DsPhi": {
         "link": "Turbo15-MagUp"
     },
-    "Turbo18-MagUp-K_DSt3Pi": {
-        "link": "Turbo18-MagUp"
-    },
-    "Electron15-MagDown-P_LcfB": {
-        "link": "Electron15-MagDown"
-    },
-    "Electron16-MagUp-Pi": {
-        "link": "Electron16-MagUp"
-    },
     "Turbo16-MagDown-Pi": {
         "link": "Turbo16-MagDown"
-    },
-    "Electron17-MagUp-P_MuonUnBiased": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron18-MagDown-Mu_nopt": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron15-MagUp-P_DD": {
-        "link": "Electron15-MagUp"
     },
     "Turbo18-MagUp-P_IncLc": {
         "link": "Turbo18-MagUp"
@@ -7926,29 +7161,8 @@
     "Turbo16-MagDown-Mu": {
         "link": "Turbo16-MagDown"
     },
-    "Turbo17-MagDown-P_B_Jpsi": {
-        "link": "Turbo17-MagDown"
-    },
-    "Electron17-MagDown-K_DsPhi": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron18-MagDown-P_MuonUnBiased": {
-        "link": "Electron18-MagDown"
-    },
-    "Electron17-MagUp-Mu_B_Jpsi": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron17-MagUp-Pi": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron15-MagUp-K_MuonUnBiased": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo17-MagUp-K_DD": {
         "link": "Turbo17-MagUp"
-    },
-    "Electron18-MagUp-K_Phi": {
-        "link": "Electron18-MagUp"
     },
     "Turbo18-MagDown-P_TotLc": {
         "link": "Turbo18-MagDown"
@@ -7956,65 +7170,11 @@
     "Turbo18-MagDown-K_DsPhi": {
         "link": "Turbo18-MagDown"
     },
-    "Electron15-MagDown-P_DD": {
-        "link": "Electron15-MagDown"
-    },
-    "Turbo15-MagDown-K_DSt3Pi": {
-        "link": "Turbo15-MagDown"
-    },
-    "Electron17-MagDown-P": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron15-MagUp-P_LcfB": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron17-MagDown-P_TotLc": {
-        "link": "Electron17-MagDown"
-    },
-    "Turbo16-MagDown-P_B_Jpsi": {
-        "link": "Turbo16-MagDown"
-    },
     "Turbo18-MagDown-Pi_KS": {
         "link": "Turbo18-MagDown"
     },
-    "Electron18-MagDown-P_DD": {
-        "link": "Electron18-MagDown"
-    },
-    "Turbo16-MagDown-K_Phi": {
-        "link": "Turbo16-MagDown"
-    },
-    "Electron16-MagUp-e_MuonUnBiased": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron17-MagDown-P_B_Jpsi": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron16-MagDown-K_DSt3Pi": {
-        "link": "Electron16-MagDown"
-    },
-    "Electron17-MagDown-e": {
-        "link": "Electron17-MagDown"
-    },
-    "Electron18-MagUp-P_Sigmac0": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron17-MagUp-P_Sigmacpp": {
-        "link": "Electron17-MagUp"
-    },
     "Turbo17-MagUp-K_DsPhi": {
         "link": "Turbo17-MagUp"
-    },
-    "Electron18-MagUp-K_DsPhi": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron15-MagUp-K_DsPhi": {
-        "link": "Electron15-MagUp"
-    },
-    "Electron16-MagUp-K_DSt3Pi": {
-        "link": "Electron16-MagUp"
-    },
-    "Electron18-MagDown-K_DD": {
-        "link": "Electron18-MagDown"
     },
     "Turbo18-MagUp-P_MuonUnBiased": {
         "link": "Turbo18-MagUp"
@@ -8025,38 +7185,14 @@
     "Turbo15-MagUp-P_LcfB": {
         "link": "Turbo15-MagUp"
     },
-    "Electron16-MagDown-e_MuonUnBiased": {
-        "link": "Electron16-MagDown"
-    },
-    "Turbo17-MagUp-e_MuonUnBiased": {
-        "link": "Turbo17-MagUp"
-    },
-    "Turbo15-MagDown-K_Omega": {
-        "link": "Turbo15-MagDown"
-    },
     "Electron17-MagDown-e_B_Jpsi": {
         "link": "Electron17-MagDown"
-    },
-    "Electron15-MagDown-K_MuonUnBiased": {
-        "link": "Electron15-MagDown"
     },
     "Turbo18-MagUp-P_LcfB": {
         "link": "Turbo18-MagUp"
     },
-    "Turbo18-MagDown-P_B_Jpsi": {
-        "link": "Turbo18-MagDown"
-    },
-    "Electron18-MagUp-K_DD": {
-        "link": "Electron18-MagUp"
-    },
-    "Electron18-MagUp-P_IncLc": {
-        "link": "Electron18-MagUp"
-    },
     "Turbo16-MagUp-Mu_B_Jpsi": {
         "link": "Turbo16-MagUp"
-    },
-    "Electron15-MagDown-P_Sigmacpp": {
-        "link": "Electron15-MagDown"
     },
     "Turbo15-MagDown-Pi_KS": {
         "link": "Turbo15-MagDown"
@@ -8064,46 +7200,16 @@
     "Turbo15-MagDown-Pi_MuonUnBiased": {
         "link": "Turbo15-MagDown"
     },
-    "Turbo17-MagDown-K_DSt3Pi": {
-        "link": "Turbo17-MagDown"
-    },
     "Turbo17-MagUp-P_MuonUnBiased": {
         "link": "Turbo17-MagUp"
-    },
-    "Electron17-MagUp-K_Phi": {
-        "link": "Electron17-MagUp"
-    },
-    "Electron17-MagDown-Mu": {
-        "link": "Electron17-MagDown"
-    },
-    "Turbo16-MagUp-P_Sigmac0": {
-        "link": "Turbo16-MagUp"
-    },
-    "Electron18-MagUp-e": {
-        "link": "Electron18-MagUp"
     },
     "Turbo15-MagDown-Mu": {
         "link": "Turbo15-MagDown"
     },
-    "Turbo16-MagDown-K_Omega": {
-        "link": "Turbo16-MagDown"
-    },
     "Turbo16-MagDown-Pi_KS": {
         "link": "Turbo16-MagDown"
     },
-    "Electron15-MagUp-K_DD": {
-        "link": "Electron15-MagUp"
-    },
     "Turbo18-MagUp-Mu": {
         "link": "Turbo18-MagUp"
-    },
-    "Electron15-MagUp-Pi_KS": {
-        "link": "Electron15-MagUp"
-    },
-    "Turbo17-MagUp-P_B_Jpsi": {
-        "link": "Turbo17-MagUp"
-    },
-    "Turbo16-MagDown-P_Sigmac0": {
-        "link": "Turbo16-MagDown"
     }
 }
