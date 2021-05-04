@@ -9,6 +9,12 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+"""Convert pickled boost_histogram histogram to a TH*D & save it in a ROOT file.
+
+Only 1D, 2D, and 3D histograms are supported by ROOT. Attempting to convert
+higher-dimensional histograms will result in an exception.
+"""
+
 import itertools
 import pathlib
 import pickle
@@ -18,7 +24,18 @@ import boost_histogram as bh
 import ROOT
 
 
-def convert_to_root_histo(bh_histo):
+def convert_to_root_histo(bh_histo: bh.Histogram):
+    """Convert boost_histogram histogram to a ROOT histogram.
+
+    Only 1D, 2D, and 3D histograms are supported by ROOT. Attempting to convert
+    higher-dimensional histograms will result in an exception.
+
+    Args:
+        bh_histo: The histogram to convert.
+
+    Returns:
+        The converted ROOT histogram. Type depends on dimensionality.
+    """
     histo = None
     if len(bh_histo.axes) == 1:
         histo = ROOT.TH1D("eff_histo", "Efficiency Histogram", 3, 0, 1)  # type: ignore
