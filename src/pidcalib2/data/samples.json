@@ -1,68 +1,4 @@
 {
-    "23_MCTuneV1-MagDown-K": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_9.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_10.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_11.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_12.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_13.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_14.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_15.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_16.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_17.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_18.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_19.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_20.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_21.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_22.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_23.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_24.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_25.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_26.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_27.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_28.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_29.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_30.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_31.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_32.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_33.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_34.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_35.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_36.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_37.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_38.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_39.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_40.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_41.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_42.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_43.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_44.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_45.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_46.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_47.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_48.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_49.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_50.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_51.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_52.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_53.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_54.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_55.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_56.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_57.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_58.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_59.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_60.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_K_MagDown_Strip23_61.root"
-    ],
     "26-MagUp-Pi": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco16_DATA/MagUp/DSt_Pi_MagUp_Strip26_0.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco16_DATA/MagUp/DSt_Pi_MagUp_Strip26_1.root",
@@ -2105,18 +2041,6 @@
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/IncLc_P_MagDown_Strip21_1.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/IncLc_P_MagDown_Strip21_2.root"
     ],
-    "23_MCTuneV1-MagDown-Mu": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Jpsi_Mu_MagDown_Strip23_9.root"
-    ],
     "21r1_MCTuneV4-MagUp-P": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14V4_DATA/MagUp/Lam0_P_MagUp_Strip21r1_0.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14V4_DATA/MagUp/Lam0_P_MagUp_Strip21r1_1.root",
@@ -3074,46 +2998,6 @@
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision17/PIDCALIB.ROOT/00108864/0000/00108864_00000036_1.pidcalib.root",
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision17/PIDCALIB.ROOT/00108864/0000/00108864_00000038_1.pidcalib.root"
     ],
-    "5TeV-MagUp-K": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_9.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_10.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_11.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_12.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_13.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_14.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_15.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_16.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_17.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_18.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_19.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_20.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_21.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_22.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_23.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_24.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_25.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_26.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_27.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_28.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_29.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_30.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_31.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_32.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_33.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_34.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_35.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_36.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_K_MagUp_Strip5TeV_37.root"
-    ],
     "21r1_MCTuneV4-MagDown-e": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14V4_DATA/MagDown/Jpsi_e_MagDown_Strip21r1_0.root"
     ],
@@ -3609,27 +3493,6 @@
     "21-MagUp-e": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_e_MagUp_Strip21_0.root"
     ],
-    "5TeV-MagUp-P": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_9.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_10.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_11.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_12.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_13.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_14.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_15.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_16.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_17.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip5TeV_18.root"
-    ],
     "Turbo16-MagUp-Mu_nopt": [
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision16/PIDCALIB.ROOT/00111665/0000/00111665_00000001_1.pidcalib.root",
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision16/PIDCALIB.ROOT/00111665/0000/00111665_00000002_1.pidcalib.root",
@@ -4100,70 +3963,6 @@
     "21r1_MCTuneV4-MagUp-P_TotLc": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14V4_DATA/MagUp/TotLc_P_MagUp_Strip21r1_0.root"
     ],
-    "23_MCTuneV1-MagDown-Pi": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_9.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_10.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_11.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_12.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_13.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_14.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_15.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_16.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_17.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_18.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_19.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_20.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_21.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_22.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_23.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_24.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_25.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_26.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_27.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_28.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_29.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_30.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_31.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_32.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_33.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_34.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_35.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_36.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_37.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_38.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_39.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_40.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_41.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_42.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_43.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_44.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_45.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_46.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_47.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_48.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_49.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_50.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_51.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_52.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_53.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_54.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_55.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_56.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_57.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_58.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_59.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_60.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/DSt_Pi_MagDown_Strip23_61.root"
-    ],
     "pATurbo16-MagDown": [
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Protonion16/PIDCALIB.ROOT/00072816/0000/00072816_00000001_1.pidcalib.root",
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Protonion16/PIDCALIB.ROOT/00072816/0000/00072816_00000002_1.pidcalib.root",
@@ -4440,46 +4239,6 @@
     ],
     "22-MagUp-P": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Lam0_P_MagUp_Strip22_0.root"
-    ],
-    "5TeV-MagUp-Pi": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_9.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_10.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_11.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_12.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_13.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_14.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_15.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_16.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_17.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_18.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_19.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_20.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_21.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_22.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_23.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_24.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_25.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_26.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_27.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_28.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_29.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_30.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_31.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_32.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_33.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_34.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_35.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_36.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/DSt_Pi_MagUp_Strip5TeV_37.root"
     ],
     "21-MagDown-K": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/DSt_K_MagDown_Strip21_0.root",
@@ -5153,16 +4912,6 @@
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/IncLc_P_MagDown_Strip20_0.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/IncLc_P_MagDown_Strip20_1.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/IncLc_P_MagDown_Strip20_2.root"
-    ],
-    "5TeV-MagUp-Mu": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15a_DATA/MagUp/Jpsi_Mu_MagUp_Strip5TeV_7.root"
     ],
     "Turbo16-MagDown-Mu_nopt": [
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision16/PIDCALIB.ROOT/00111667/0000/00111667_00000001_1.pidcalib.root",
@@ -6443,39 +6192,6 @@
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision16/PIDCALIB.ROOT/00111825/0000/00111825_00000257_1.pidcalib.root",
         "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision16/PIDCALIB.ROOT/00111825/0000/00111825_00000258_1.pidcalib.root"
     ],
-    "23_MCTuneV1-MagDown-P": [
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_0.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_1.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_2.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_3.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_4.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_5.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_6.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_7.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_8.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_9.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_10.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_11.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_12.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_13.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_14.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_15.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_16.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_17.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_18.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_19.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_20.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_21.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_22.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_23.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_24.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_25.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_26.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_27.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_28.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_29.root",
-        "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco15aV1_DATA/MagDown/Lam0_P_MagDown_Strip23_30.root"
-    ],
     "26-MagUp-Mu": [
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco16_DATA/MagUp/Jpsi_Mu_MagUp_Strip26_0.root",
         "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco16_DATA/MagUp/Jpsi_Mu_MagUp_Strip26_1.root",
@@ -6551,9 +6267,6 @@
     "Turbo16-MagUp-P_IncLc": {
         "link": "Turbo16-MagUp"
     },
-    "Turbo15-MagUp-P_TotLc": {
-        "link": "Turbo15-MagUp"
-    },
     "Turbo17-MagUp-Pi_DD": {
         "link": "Turbo17-MagUp"
     },
@@ -6580,9 +6293,6 @@
     },
     "Turbo18-MagDown-K_Omega": {
         "link": "Turbo18-MagDown"
-    },
-    "Turbo17-MagDown-P_TotLc": {
-        "link": "Turbo17-MagDown"
     },
     "Electron16-MagDown-e_B_Jpsi": {
         "link": "Electron16-MagDown"
@@ -6707,14 +6417,8 @@
     "Electron16-MagUp-e_B_Jpsi": {
         "link": "Electron16-MagUp"
     },
-    "Turbo16-MagUp-P_TotLc": {
-        "link": "Turbo16-MagUp"
-    },
     "Turbo15-MagDown-Pi": {
         "link": "Turbo15-MagDown"
-    },
-    "Turbo16-MagDown-P_TotLc": {
-        "link": "Turbo16-MagDown"
     },
     "Turbo15-MagDown-Mu_B_Jpsi": {
         "link": "Turbo15-MagDown"
@@ -6728,9 +6432,6 @@
     "Turbo16-MagDown-K": {
         "link": "Turbo16-MagDown"
     },
-    "Turbo17-MagUp-P_TotLc": {
-        "link": "Turbo17-MagUp"
-    },
     "Turbo18-MagDown-P_DD": {
         "link": "Turbo18-MagDown"
     },
@@ -6740,14 +6441,8 @@
     "Turbo18-MagUp-Pi_KS": {
         "link": "Turbo18-MagUp"
     },
-    "Turbo18-MagUp-P_TotLc": {
-        "link": "Turbo18-MagUp"
-    },
     "Turbo16-MagUp-P": {
         "link": "Turbo16-MagUp"
-    },
-    "Turbo15-MagDown-P_TotLc": {
-        "link": "Turbo15-MagDown"
     },
     "Turbo17-MagDown-K_DD": {
         "link": "Turbo17-MagDown"
@@ -6808,9 +6503,6 @@
     },
     "Turbo17-MagUp-K_DD": {
         "link": "Turbo17-MagUp"
-    },
-    "Turbo18-MagDown-P_TotLc": {
-        "link": "Turbo18-MagDown"
     },
     "Turbo18-MagDown-K_DsPhi": {
         "link": "Turbo18-MagDown"
