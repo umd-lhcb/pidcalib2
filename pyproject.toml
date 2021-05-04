@@ -14,7 +14,7 @@ minversion = "6.0"
 addopts = [
     "-ra",
     "-q",
-    "--cov=pidcalib2"
+    "--cov=src/pidcalib2"
 ]
 testpaths = [
     "src/pidcalib2/tests",
