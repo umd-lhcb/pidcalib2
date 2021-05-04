@@ -14,7 +14,7 @@ from typing import List
 import numpy as np
 from logzero import logger as log
 
-valid_particles = ["Pi", "K", "P", "Mu"]
+valid_particles = ["Pi", "K", "P", "Mu", "e"]
 
 
 def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[float]:
@@ -30,7 +30,7 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
         raise KeyError
 
     bins = []
-    if particle in ["Pi", "K", "P"]:
+    if particle in ["Pi", "K", "P", "e"]:
         bins.append(low)
         bins.append(9300)  # R1 kaon threshold
         bins.append(15600)  # R2 kaon threshold
@@ -126,4 +126,16 @@ binnings["P"] = {
     "nSPDhits": nspdhits_binning("P"),
     "nSPDhits_Brunel": nspdhits_binning("P"),
     "TRCHI2NDOF": trchi2_binning("P"),
+}
+
+binnings["e"] = {
+    "P": p_binning("e"),
+    "Brunel_P": p_binning("e"),
+    "ETA": eta_binning("e"),
+    "Brunel_ETA": eta_binning("e"),
+    "nTracks": ntracks_binning("e"),
+    "nTracks_Brunel": ntracks_binning("e"),
+    "nSPDhits": nspdhits_binning("e"),
+    "nSPDhits_Brunel": nspdhits_binning("e"),
+    "TRCHI2NDOF": trchi2_binning("e"),
 }

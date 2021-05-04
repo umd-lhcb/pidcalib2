@@ -64,7 +64,7 @@ tuple_names = {
     "Mu_nopt": ["Jpsinopt_MuPTuple", "Jpsinopt_MuMTuple"],
 }
 
-run1_samples = [
+simple_samples = [
     "13b",
     "15",
     "17",
@@ -83,6 +83,10 @@ run1_samples = [
     "23_MCTuneV1",
     "26",
     "5TeV",
+    "Electron15",
+    "Electron16",
+    "Electron17",
+    "Electron18",
 ]
 
 
@@ -115,8 +119,18 @@ def create_branch_names(prefix: str) -> Dict[str, str]:
     return branch_names
 
 
-def is_run1(sample: str) -> bool:
-    return sample in run1_samples
+def is_simple(sample: str) -> bool:
+    """Return whether a sample has a simple directory structure.
+
+    All Run 1 samples and Run 2 Electron samples have a single DecayTree inside.
+    Standard Run 2 samples have multiple directories, each of which has a
+    DecayTree inside. This function checks if the sample is in the list of
+    simple samples.
+
+    Args:
+        sample: Sample name, e.g., Turbo15.
+    """
+    return sample in simple_samples
 
 
 def get_relevant_branch_names(
@@ -304,8 +318,9 @@ def get_tree_paths(particle: str, sample: str) -> List[str]:
         sample: Data sample name (Turbo18, etc.)
     """
     tree_paths = []
-    if is_run1(sample):
-        # Run 1 files have a simple structure with a single tree
+    if is_simple(sample):
+        # Run 1 (and Run 2 Electron) files have a simple structure with a single
+        # tree
         tree_paths.append("DecayTree")
     else:
         # Run 2 ROOT file structure with multiple trees
