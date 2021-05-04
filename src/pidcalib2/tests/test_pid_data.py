@@ -175,7 +175,7 @@ def test_get_file_list():
             pid_data.get_file_list(
                 "Electron18",
                 "down",
-                "e",
+                "e_B_Jpsi",
                 str(Path(THIS_DIR, "../data/samples.json")),
             )
         )
