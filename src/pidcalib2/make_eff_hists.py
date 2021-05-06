@@ -172,23 +172,21 @@ def make_eff_hists(config: dict) -> None:
     output_dir = pathlib.Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    calibration_prefix = "probe"
-    branch_names = pid_data.get_relevant_branch_names(
-        calibration_prefix, config["pid_cuts"], config["bin_vars"], config["cuts"]
-    )
-    log.info(f"Branches to be read: {branch_names}")
-
     df_total = None
     if config["local_dataframe"]:
+        branch_names = pid_data.get_relevant_branch_names(
+            "probe", config["pid_cuts"], config["bin_vars"], config["cuts"]
+        )
         df_total = pid_data.dataframe_from_local_file(
             config["local_dataframe"], list(branch_names)
         )
     else:
+        calib_sample = {}
         if config["file_list"]:
             with open(config["file_list"]) as f_list:
-                eos_paths = f_list.read().splitlines()
+                calib_sample["files"] = f_list.read().splitlines()
         else:
-            eos_paths = pid_data.get_file_list(
+            calib_sample = pid_data.get_calibration_sample(
                 config["sample"],
                 config["magnet"],
                 config["particle"],
@@ -197,23 +195,37 @@ def make_eff_hists(config: dict) -> None:
             )
         tree_paths = pid_data.get_tree_paths(config["particle"], config["sample"])
 
-        log.info(f"{len(eos_paths)} calibration files from EOS will be processed")
-        for path in eos_paths:
+        # If there are hard-coded cuts, the variables must be included in the
+        # branches to read.
+        cuts = config["cuts"]
+        if "cuts" in calib_sample:
+            if cuts is None:
+                cuts = []
+            cuts += calib_sample["cuts"]
+
+        branch_names = pid_data.get_relevant_branch_names(
+            "probe", config["pid_cuts"], config["bin_vars"], cuts
+        )
+        log.info(f"Branches to be read: {branch_names}")
+        log.info(
+            f"{len(calib_sample['files'])} calibration files from EOS will be processed"
+        )
+        for path in calib_sample["files"]:
             log.debug(f"  {path}")
-        df_total = pid_data.calib_root_to_dataframe(eos_paths, tree_paths, branch_names)
+
+        df_total = pid_data.calib_root_to_dataframe(
+            calib_sample["files"], tree_paths, branch_names
+        )
+        if "cuts" in calib_sample:
+            log.debug(f"Applying hard-coded cuts: {calib_sample['cuts']}'")
+            num_before, num_after = utils.apply_cuts(df_total, calib_sample["cuts"])
+
         # df_total.to_pickle("local_dataframe.pkl")
         # df_total.to_csv("local_dataframe.csv")
 
     if config["cuts"]:
-        cut_string = " & ".join(config["cuts"])
-        log.debug(f"Applying generic cuts: '{cut_string}'")
-        num_before = df_total.shape[0]
-        df_total.query(cut_string, inplace=True)
-        num_after = df_total.shape[0]
-        log.debug(
-            f"{num_after}/{num_before} ({num_after/num_before:.1%}) events "
-            "passed generic cuts"
-        )
+        log.debug(f"Applying user cuts: '{config['cuts']}'")
+        num_before, num_after = utils.apply_cuts(df_total, config["cuts"])
 
     eff_hists = utils.create_eff_histograms(
         df_total, config["particle"], config["pid_cuts"], config["bin_vars"]

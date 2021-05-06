@@ -10,7 +10,7 @@
 ###############################################################################
 
 import re
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
 
 import boost_histogram as bh
 import numpy as np
@@ -306,3 +306,15 @@ def create_error_histogram(eff_hists: Dict[str, bh.Histogram]) -> bh.Histogram:
     err_histo = eff_hists["passing"].copy()
     err_histo[...] = uncertainty
     return err_histo
+
+
+def apply_cuts(df: pd.DataFrame, cuts: List[str]) -> Tuple[int, int]:
+    cut_string = " and ".join(cuts)
+    num_before = df.shape[0]
+    df.query(cut_string, inplace=True)
+    num_after = df.shape[0]
+    log.debug(
+        f"{num_after}/{num_before} ({num_after/num_before:.1%}) events "
+        "passed cuts"
+    )
+    return num_before, num_after

@@ -4598,7 +4598,11 @@
         "link": "Turbo16-MagDown"
     },
     "Turbo16-MagDown-P_IncLc": {
-        "link": "Turbo16-MagDown"
+        "link": "Turbo16-MagDown",
+        "cuts": [
+            "Lc_M > 2240",
+            "Lc_M < 2330"
+        ]
     },
     "Turbo16-MagDown-P_LcfB": {
         "link": "Turbo16-MagDown"
@@ -4895,7 +4899,11 @@
         "link": "Turbo16-MagUp"
     },
     "Turbo16-MagUp-P_IncLc": {
-        "link": "Turbo16-MagUp"
+        "link": "Turbo16-MagUp",
+        "cuts": [
+            "Lc_M > 2240",
+            "Lc_M < 2330"
+        ]
     },
     "Turbo16-MagUp-P_LcfB": {
         "link": "Turbo16-MagUp"
@@ -5347,7 +5355,11 @@
         "link": "Turbo17-MagDown"
     },
     "Turbo17-MagDown-P_IncLc": {
-        "link": "Turbo17-MagDown"
+        "link": "Turbo17-MagDown",
+        "cuts": [
+            "Lc_M > 2240",
+            "Lc_M < 2330"
+        ]
     },
     "Turbo17-MagDown-P_LcfB": {
         "link": "Turbo17-MagDown"
@@ -5738,7 +5750,11 @@
         "link": "Turbo17-MagUp"
     },
     "Turbo17-MagUp-P_IncLc": {
-        "link": "Turbo17-MagUp"
+        "link": "Turbo17-MagUp",
+        "cuts": [
+            "Lc_M > 2240",
+            "Lc_M < 2330"
+        ]
     },
     "Turbo17-MagUp-P_LcfB": {
         "link": "Turbo17-MagUp"
@@ -6238,7 +6254,11 @@
         "link": "Turbo18-MagDown"
     },
     "Turbo18-MagDown-P_IncLc": {
-        "link": "Turbo18-MagDown"
+        "link": "Turbo18-MagDown",
+        "cuts": [
+            "Lc_M > 2240",
+            "Lc_M < 2330"
+        ]
     },
     "Turbo18-MagDown-P_LcfB": {
         "link": "Turbo18-MagDown"
@@ -6774,7 +6794,11 @@
         "link": "Turbo18-MagUp"
     },
     "Turbo18-MagUp-P_IncLc": {
-        "link": "Turbo18-MagUp"
+        "link": "Turbo18-MagUp",
+        "cuts": [
+            "Lc_M > 2240",
+            "Lc_M < 2330"
+        ]
     },
     "Turbo18-MagUp-P_LcfB": {
         "link": "Turbo18-MagUp"

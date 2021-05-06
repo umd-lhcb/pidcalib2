@@ -56,7 +56,7 @@ def test_make_eff_hists():
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
 
-def test_make_eff_hists_with_cuts():
+def test_make_eff_hists_with_user_cuts():
     config = {
         "sample": "Turbo18",
         "magnet": "up",
@@ -99,6 +99,37 @@ def test_make_eff_hists_with_cuts():
     assert eff_histo[1] == 0.806456926487749
 
     assert eff_histo != eff_histo_reference
+
+    shutil.rmtree(Path(THIS_DIR, "test_output"))
+
+
+@pytest.mark.xrootd
+@pytest.mark.slow
+def test_make_eff_hists_with_hardcoded_cuts():
+    config = {
+        "sample": "Turbo16",
+        "magnet": "down",
+        "particle": "P_IncLc",
+        "pid_cuts": ["DLLp > 4"],
+        "bin_vars": ["P"],
+        "cuts": None,
+        "local_dataframe": None,
+        "output_dir": str(Path(THIS_DIR, "test_output")),
+        "file_list": None,
+        "samples_file": None,
+        "max_files": 1,
+        "verbose": True,
+    }
+    make_eff_hists.make_eff_hists(config)
+    eff_histo = pd.read_pickle(
+        Path(THIS_DIR, "test_output/effhists-Turbo16-down-P_IncLc-DLLp>4-P.pkl")
+    )
+
+    # These asserts might come in handy when some detail in the boost_histogram
+    # implementation changes, thus failing the reference histogram comparison.
+    assert eff_histo.sum(flow=False) == pytest.approx(17.3387622437092)
+    assert eff_histo.sum(flow=True) == pytest.approx(327.11566621446093)
+    assert eff_histo[1] == 0.9686555826741122
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 

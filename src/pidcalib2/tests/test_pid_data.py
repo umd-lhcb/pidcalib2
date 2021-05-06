@@ -149,48 +149,48 @@ def test_get_calib_hists():
         )
 
 
-def test_get_file_list():
+def test_get_calibration_sample():
     assert (
         len(
-            pid_data.get_file_list(
+            pid_data.get_calibration_sample(
                 "Turbo18", "up", "Pi", str(Path(THIS_DIR, "../data/samples.json"))
-            )
+            )["files"]
         )
         == 428
     )
     assert (
         len(
-            pid_data.get_file_list(
+            pid_data.get_calibration_sample(
                 "Turbo18",
                 "up",
                 "Pi",
                 str(Path(THIS_DIR, "../data/samples.json")),
                 3,
-            )
+            )["files"]
         )
         == 3
     )
     assert (
         len(
-            pid_data.get_file_list(
+            pid_data.get_calibration_sample(
                 "Electron18",
                 "down",
                 "e_B_Jpsi",
                 str(Path(THIS_DIR, "../data/samples.json")),
-            )
+            )["files"]
         )
         == 1
     )
     assert (
         len(
-            pid_data.get_file_list(
+            pid_data.get_calibration_sample(
                 "20", "down", "K", str(Path(THIS_DIR, "../data/samples.json"))
-            )
+            )["files"]
         )
         == 72
     )
 
     with pytest.raises(KeyError):
-        pid_data.get_file_list(
+        pid_data.get_calibration_sample(
             "Turbo34", "up", "Pi", str(Path(THIS_DIR, "../data/samples.json"))
         )

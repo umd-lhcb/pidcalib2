@@ -14,7 +14,7 @@ import os
 import pickle
 import re
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import boost_histogram as bh
 import pandas as pd
@@ -211,13 +211,13 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     return f"{prefix}_{bin_var_branch}"
 
 
-def get_file_list(
+def get_calibration_sample(
     sample: str,
     magnet: str,
     particle: str,
     samples_file: str,
     max_files: int = None,
-) -> List[str]:
+) -> Dict[str, Any]:
     """Return a list of calibration files.
 
     Args:
@@ -245,20 +245,19 @@ def get_file_list(
         log.error(f"Sample '{sample_name}' not found in {samples_file}")
         raise
 
-    file_list = []
+    calibration_sample = sample_dict.copy()
     if "link" in sample_dict:
+        del calibration_sample["link"]
         link = sample_dict["link"]
         try:
-            file_list = samples_dict[link]["files"]
+            calibration_sample["files"] = samples_dict[link]["files"]
         except KeyError:
             log.error(f"Linked sample '{link}' not found in {samples_file}")
             raise
-    else:
-        file_list = samples_dict[sample_name]["files"]
 
     if max_files:
-        file_list = file_list[:max_files]
-    return file_list
+        calibration_sample["files"] = calibration_sample["files"][:max_files]
+    return calibration_sample
 
 
 def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.DataFrame:
