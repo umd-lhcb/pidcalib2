@@ -237,24 +237,24 @@ def get_file_list(
 
     log.debug(f"Reading file lists from '{samples_file}'")
     with open(samples_file) as f:
-        samples = json.load(f)
+        samples_dict = json.load(f)
 
     try:
-        sample = samples[sample_name]
+        sample_dict = samples_dict[sample_name]
     except KeyError:
         log.error(f"Sample '{sample_name}' not found in {samples_file}")
         raise
 
     file_list = []
-    if isinstance(sample, dict):
-        link = sample["link"]
+    if "link" in sample_dict:
+        link = sample_dict["link"]
         try:
-            file_list = samples[link]
+            file_list = samples_dict[link]["files"]
         except KeyError:
             log.error(f"Linked sample '{link}' not found in {samples_file}")
             raise
     else:
-        file_list = samples[sample_name]
+        file_list = samples_dict[sample_name]["files"]
 
     if max_files:
         file_list = file_list[:max_files]
