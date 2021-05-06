@@ -173,6 +173,7 @@ def ref_calib(config: Dict) -> float:
     else:
         logzero.loglevel(logging.INFO)
 
+    config["version"] = version
     log.info("Running PIDCalib2 ref_calib with the following config:")
     utils.log_config(config)
 

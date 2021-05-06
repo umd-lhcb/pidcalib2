@@ -165,6 +165,7 @@ def make_eff_hists(config: dict) -> None:
         re.sub(pattern, "", pid_cut) for pid_cut in config["pid_cuts"]
     ]
 
+    config["version"] = version
     log.info("Running PIDCalib2 make_eff_hists with the following config:")
     utils.log_config(config)
 
