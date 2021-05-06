@@ -38,13 +38,11 @@ def convert_to_root_histo(bh_histo: bh.Histogram):
     """
     histo = None
     if len(bh_histo.axes) == 1:
-        histo = ROOT.TH1D("eff_histo", "Efficiency Histogram", 3, 0, 1)  # type: ignore
+        histo = ROOT.TH1D("eff_histo", "Efficiency Histogram", 3, 0, 1)
         histo.SetBins(bh_histo.axes[0].size, bh_histo.axes[0].edges)
         histo.GetXaxis().SetTitle(bh_histo.axes[0].metadata["name"])
     elif len(bh_histo.axes) == 2:
-        histo = ROOT.TH2D(  # type: ignore
-            "eff_histo", "Efficiency Histogram", 3, 0, 1, 3, 0, 1
-        )
+        histo = ROOT.TH2D("eff_histo", "Efficiency Histogram", 3, 0, 1, 3, 0, 1)
         histo.SetBins(
             bh_histo.axes[0].size,
             bh_histo.axes[0].edges,
@@ -54,7 +52,7 @@ def convert_to_root_histo(bh_histo: bh.Histogram):
         histo.GetXaxis().SetTitle(bh_histo.axes[0].metadata["name"])
         histo.GetYaxis().SetTitle(bh_histo.axes[1].metadata["name"])
     elif len(bh_histo.axes) == 3:
-        histo = ROOT.TH3D(  # type: ignore
+        histo = ROOT.TH3D(
             "eff_histo", "Efficiency Histogram", 3, 0, 1, 3, 0, 1, 3, 0, 1
         )
         histo.SetBins(
@@ -73,7 +71,7 @@ def convert_to_root_histo(bh_histo: bh.Histogram):
 
     indices_ranges = [list(range(n)) for n in bh_histo.axes.size]
     for indices_tuple in itertools.product(*indices_ranges):
-        root_indices = [index + 1 for index in indices_tuple]  # type: ignore
+        root_indices = [index + 1 for index in indices_tuple]
         histo.SetBinContent(histo.GetBin(*root_indices), bh_histo[indices_tuple])
 
     return histo
@@ -86,7 +84,7 @@ def main():
         if isinstance(bh_histo, bh.Histogram):
             histo = convert_to_root_histo(bh_histo)
             root_path = pkl_path.with_suffix(".root")
-            root_file = ROOT.TFile(str(root_path), "RECREATE")  # type: ignore
+            root_file = ROOT.TFile(str(root_path), "RECREATE")
             histo.Write()
             root_file.Close()
 

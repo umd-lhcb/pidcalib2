@@ -43,7 +43,7 @@ def copy_tree_and_set_as_friend(
         dest_file_name: File to which to copy the tree.
         dest_tree_name: Name of the tree on which to call AddFriend.
     """
-    source_file = ROOT.TFile(source_file_name, "read")  # type: ignore
+    source_file = ROOT.TFile(source_file_name, "read")
     source_tree = source_file.Get(source_tree_name)
     log.info(f"Reading {source_tree_name} from {source_file_name}")
     if not source_tree:
@@ -54,7 +54,7 @@ def copy_tree_and_set_as_friend(
         log.error(f"'{dest_file_name}' not found.")
         sys.exit(3)
 
-    dest_file = ROOT.TFile(dest_file_name, "update")  # type: ignore
+    dest_file = ROOT.TFile(dest_file_name, "update")
     dest_file.cd()
 
     log.info(f"Reading {dest_tree_name} from {dest_file_name}")
@@ -68,7 +68,7 @@ def copy_tree_and_set_as_friend(
     log.info(f"Copying {source_tree_name} to {dest_file_name}")
     source_tree.CloneTree().Write()
     # Avoid ROOT adding a new tree with an incremented cycle number
-    dest_tree.Write("", ROOT.TObject.kOverwrite)  # type: ignore
+    dest_tree.Write("", ROOT.TObject.kOverwrite)
 
     dest_file.Close()
 

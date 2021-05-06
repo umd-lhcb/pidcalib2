@@ -218,14 +218,14 @@ def make_eff_hists(config: dict) -> None:
         )
         if "cuts" in calib_sample:
             log.debug(f"Applying hard-coded cuts: {calib_sample['cuts']}'")
-            num_before, num_after = utils.apply_cuts(df_total, calib_sample["cuts"])
+            utils.apply_cuts(df_total, calib_sample["cuts"])
 
         # df_total.to_pickle("local_dataframe.pkl")
         # df_total.to_csv("local_dataframe.csv")
 
     if config["cuts"]:
         log.debug(f"Applying user cuts: '{config['cuts']}'")
-        num_before, num_after = utils.apply_cuts(df_total, config["cuts"])
+        utils.apply_cuts(df_total, config["cuts"])
 
     eff_hists = utils.create_eff_histograms(
         df_total, config["particle"], config["pid_cuts"], config["bin_vars"]
