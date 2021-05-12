@@ -9,6 +9,7 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+import copy
 import math
 import os
 import shutil
@@ -17,7 +18,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from pidcalib2 import make_eff_hists
+from pidcalib2 import binning, make_eff_hists
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,6 +32,7 @@ def test_make_eff_hists():
         "cuts": None,
         "bin_vars": ["P"],
         "output_dir": str(Path(THIS_DIR, "test_output")),
+        "binning_file": None,
         "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
         "verbose": False,
     }
@@ -65,6 +67,7 @@ def test_make_eff_hists_with_user_cuts():
         "cuts": ["Dst_IPCHI2 < 100", "probe_TRACK_GHOSTPROB < 0.05"],
         "bin_vars": ["P"],
         "output_dir": str(Path(THIS_DIR, "test_output")),
+        "binning_file": None,
         "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
         "verbose": True,
     }
@@ -113,6 +116,7 @@ def test_make_eff_hists_with_hardcoded_cuts():
         "pid_cuts": ["DLLp > 4"],
         "bin_vars": ["P"],
         "cuts": None,
+        "binning_file": None,
         "local_dataframe": None,
         "output_dir": str(Path(THIS_DIR, "test_output")),
         "file_list": None,
@@ -127,8 +131,8 @@ def test_make_eff_hists_with_hardcoded_cuts():
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
-    assert eff_histo.sum(flow=False) == pytest.approx(17.3387622437092)
-    assert eff_histo.sum(flow=True) == pytest.approx(327.11566621446093)
+    assert eff_histo.sum(flow=False) == eff_histo.sum(flow=True)
+    assert eff_histo.sum(flow=True) == pytest.approx(17.3387622437092)
     assert eff_histo[1] == 0.9686555826741122
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
@@ -144,6 +148,7 @@ def test_make_eff_hists_local_file_list():
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "cuts": None,
         "bin_vars": ["P"],
+        "binning_file": None,
         "local_dataframe": None,
         "output_dir": str(Path(THIS_DIR, "test_output")),
         "file_list": str(Path(THIS_DIR, "test_data/test_file_list")),
@@ -157,7 +162,6 @@ def test_make_eff_hists_local_file_list():
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
     assert eff_histo.sum(flow=False) == pytest.approx(17.378390835392615)
-    assert eff_histo.sum(flow=True) == pytest.approx(833.8480366879824)
     assert eff_histo[1] == 0.9797018332573063
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
@@ -173,6 +177,7 @@ def test_make_eff_hists_file_list():
         "pid_cuts": ["DLLK < 4", "DLLK<3"],
         "cuts": None,
         "bin_vars": ["P"],
+        "binning_file": None,
         "local_dataframe": None,
         "output_dir": str(Path(THIS_DIR, "test_output")),
         "file_list": None,
@@ -188,7 +193,6 @@ def test_make_eff_hists_file_list():
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
     assert eff_histo.sum(flow=False) == pytest.approx(17.378390835392615)
-    assert eff_histo.sum(flow=True) == pytest.approx(833.8480366879824)
     assert eff_histo[1] == 0.9797018332573063
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
@@ -217,3 +221,37 @@ def test_decode_arguments():
         make_eff_hists.decode_arguments(
             ["--sample=Turbo18", "-m=up", "--particle=K", "--bin-var=P"]
         )
+
+
+def test_make_eff_hists_with_custom_binning():
+    # Save the original binnings so we can restore them later
+    orig_binnings = copy.deepcopy(binning.binnings)
+
+    config = {
+        "sample": "Turbo18",
+        "magnet": "up",
+        "particle": "Pi",
+        "pid_cuts": ["DLLK < 4", "DLLK<3"],
+        "cuts": None,
+        "bin_vars": ["P"],
+        "output_dir": str(Path(THIS_DIR, "test_output")),
+        "binning_file": str(Path(THIS_DIR, "test_data/custom_binning.json")),
+        "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+        "verbose": True,
+    }
+
+    make_eff_hists.make_eff_hists(config)
+    eff_histo = pd.read_pickle(
+        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
+    )
+
+    # These asserts might come in handy when some detail in the boost_histogram
+    # implementation changes, thus failing the reference histogram comparison.
+    assert eff_histo.sum(flow=False) == pytest.approx(1.8099485065453211)
+    assert eff_histo.sum(flow=True) == pytest.approx(41.404466293590865)
+    assert eff_histo[1] == 0.9625150986552666
+
+    shutil.rmtree(Path(THIS_DIR, "test_output"))
+
+    # Restore original binnings for other tests
+    binning.binnings = orig_binnings

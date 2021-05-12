@@ -41,7 +41,7 @@ import sys
 import logzero
 from logzero import logger as log
 
-from . import pid_data, utils
+from . import binning, pid_data, utils
 
 try:
     from .version import version  # type: ignore
@@ -103,6 +103,13 @@ def decode_arguments(args):
         dest="bin_vars",
         required=True,
     )
+
+    parser.add_argument(
+        "-g",
+        "--binning-file",
+        help="file where new/alternative binnings are defines",
+    )
+
     parser.add_argument(
         "-o",
         "--output-dir",
@@ -172,6 +179,14 @@ def make_eff_hists(config: dict) -> None:
     output_dir = pathlib.Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    if config["binning_file"] is not None:
+        binning.load_binnings(config["binning_file"])
+
+    # Check that all binnings exist before reading files
+    for bin_var in config["bin_vars"]:
+        bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
+        log.debug(f"{bin_var} binning: {bin_edges}")
+
     df_total = None
     if config["local_dataframe"]:
         branch_names = pid_data.get_relevant_branch_names(
@@ -217,6 +232,16 @@ def make_eff_hists(config: dict) -> None:
         df_total = pid_data.calib_root_to_dataframe(
             calib_sample["files"], tree_paths, branch_names
         )
+
+        binning_range_cuts = []
+        for bin_var in config["bin_vars"]:
+            bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
+            binning_range_cuts.append(
+                f"{bin_var} > {bin_edges[0]} and {bin_var} < {bin_edges[-1]}"
+            )
+        log.debug(f"Applying binning range cuts: {binning_range_cuts}'")
+        utils.apply_cuts(df_total, binning_range_cuts)
+
         if "cuts" in calib_sample:
             log.debug(f"Applying hard-coded cuts: {calib_sample['cuts']}'")
             utils.apply_cuts(df_total, calib_sample["cuts"])
