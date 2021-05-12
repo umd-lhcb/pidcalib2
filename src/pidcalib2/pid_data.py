@@ -14,7 +14,7 @@ import os
 import pickle
 import re
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any, Dict, List
 
 import boost_histogram as bh
 import pandas as pd

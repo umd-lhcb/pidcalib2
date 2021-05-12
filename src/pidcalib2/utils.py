@@ -10,7 +10,7 @@
 ###############################################################################
 
 import re
-from typing import Dict, List, Union, Tuple
+from typing import Dict, List, Tuple, Union
 
 import boost_histogram as bh
 import numpy as np
@@ -234,7 +234,7 @@ def add_efficiencies(
     df_new["PIDCalibErr"] = np.sqrt(df_new["PIDCalibErr2"])  # type: ignore
     df_new.drop(columns=["PIDCalibErr2"], inplace=True)
 
-    df_new = pd.concat([df_new, df_nan]).sort_index()
+    df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
     log.debug("Particle efficiencies assigned")
 
     num_outside_range = len(df_nan.index)
@@ -314,7 +314,6 @@ def apply_cuts(df: pd.DataFrame, cuts: List[str]) -> Tuple[int, int]:
     df.query(cut_string, inplace=True)
     num_after = df.shape[0]
     log.debug(
-        f"{num_after}/{num_before} ({num_after/num_before:.1%}) events "
-        "passed cuts"
+        f"{num_after}/{num_before} ({num_after/num_before:.1%}) events " "passed cuts"
     )
     return num_before, num_after

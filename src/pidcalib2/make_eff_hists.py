@@ -194,6 +194,7 @@ def make_eff_hists(config: dict) -> None:
                 config["max_files"],
             )
         tree_paths = pid_data.get_tree_paths(config["particle"], config["sample"])
+        log.debug(f"Trees to be read: {tree_paths}")
 
         # If there are hard-coded cuts, the variables must be included in the
         # branches to read.
