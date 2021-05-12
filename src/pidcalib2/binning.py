@@ -9,6 +9,7 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+import json
 from typing import List
 
 import numpy as np
@@ -81,61 +82,122 @@ def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]
 binnings = {}
 
 binnings["Pi"] = {
-    "P": p_binning("Pi"),
-    "Brunel_P": p_binning("Pi"),
-    "ETA": eta_binning("Pi"),
-    "Brunel_ETA": eta_binning("Pi"),
-    "nTracks": ntracks_binning("Pi"),
-    "nTracks_Brunel": ntracks_binning("Pi"),
-    "nSPDhits": nspdhits_binning("Pi"),
-    "nSPDhits_Brunel": nspdhits_binning("Pi"),
-    "TRCHI2NDOF": trchi2_binning("Pi"),
+    "P": {"bin_edges": p_binning("Pi")},
+    "Brunel_P": {"bin_edges": p_binning("Pi")},
+    "ETA": {"bin_edges": eta_binning("Pi")},
+    "Brunel_ETA": {"bin_edges": eta_binning("Pi")},
+    "nTracks": {"bin_edges": ntracks_binning("Pi")},
+    "nTracks_Brunel": {"bin_edges": ntracks_binning("Pi")},
+    "nSPDhits": {"bin_edges": nspdhits_binning("Pi")},
+    "nSPDhits_Brunel": {"bin_edges": nspdhits_binning("Pi")},
+    "TRCHI2NDOF": {"bin_edges": trchi2_binning("Pi")},
 }
 
 binnings["K"] = {
-    "P": p_binning("K"),
-    "Brunel_P": p_binning("K"),
-    "ETA": eta_binning("K"),
-    "Brunel_ETA": eta_binning("K"),
-    "nTracks": ntracks_binning("K"),
-    "nTracks_Brunel": ntracks_binning("K"),
-    "nSPDhits": nspdhits_binning("K"),
-    "nSPDhits_Brunel": nspdhits_binning("K"),
-    "TRCHI2NDOF": trchi2_binning("K"),
+    "P": {"bin_edges": p_binning("K")},
+    "Brunel_P": {"bin_edges": p_binning("K")},
+    "ETA": {"bin_edges": eta_binning("K")},
+    "Brunel_ETA": {"bin_edges": eta_binning("K")},
+    "nTracks": {"bin_edges": ntracks_binning("K")},
+    "nTracks_Brunel": {"bin_edges": ntracks_binning("K")},
+    "nSPDhits": {"bin_edges": nspdhits_binning("K")},
+    "nSPDhits_Brunel": {"bin_edges": nspdhits_binning("K")},
+    "TRCHI2NDOF": {"bin_edges": trchi2_binning("K")},
 }
 
 binnings["Mu"] = {
-    "P": p_binning("Mu"),
-    "Brunel_P": p_binning("Mu"),
-    "ETA": eta_binning("Mu"),
-    "Brunel_ETA": eta_binning("Mu"),
-    "nTracks": ntracks_binning("Mu"),
-    "nTracks_Brunel": ntracks_binning("Mu"),
-    "nSPDhits": nspdhits_binning("Mu"),
-    "nSPDhits_Brunel": nspdhits_binning("Mu"),
-    "TRCHI2NDOF": trchi2_binning("Mu"),
+    "P": {"bin_edges": p_binning("Mu")},
+    "Brunel_P": {"bin_edges": p_binning("Mu")},
+    "ETA": {"bin_edges": eta_binning("Mu")},
+    "Brunel_ETA": {"bin_edges": eta_binning("Mu")},
+    "nTracks": {"bin_edges": ntracks_binning("Mu")},
+    "nTracks_Brunel": {"bin_edges": ntracks_binning("Mu")},
+    "nSPDhits": {"bin_edges": nspdhits_binning("Mu")},
+    "nSPDhits_Brunel": {"bin_edges": nspdhits_binning("Mu")},
+    "TRCHI2NDOF": {"bin_edges": trchi2_binning("Mu")},
 }
 
 binnings["P"] = {
-    "P": p_binning("P"),
-    "Brunel_P": p_binning("P"),
-    "ETA": eta_binning("P"),
-    "Brunel_ETA": eta_binning("P"),
-    "nTracks": ntracks_binning("P"),
-    "nTracks_Brunel": ntracks_binning("P"),
-    "nSPDhits": nspdhits_binning("P"),
-    "nSPDhits_Brunel": nspdhits_binning("P"),
-    "TRCHI2NDOF": trchi2_binning("P"),
+    "P": {"bin_edges": p_binning("P")},
+    "Brunel_P": {"bin_edges": p_binning("P")},
+    "ETA": {"bin_edges": eta_binning("P")},
+    "Brunel_ETA": {"bin_edges": eta_binning("P")},
+    "nTracks": {"bin_edges": ntracks_binning("P")},
+    "nTracks_Brunel": {"bin_edges": ntracks_binning("P")},
+    "nSPDhits": {"bin_edges": nspdhits_binning("P")},
+    "nSPDhits_Brunel": {"bin_edges": nspdhits_binning("P")},
+    "TRCHI2NDOF": {"bin_edges": trchi2_binning("P")},
 }
 
 binnings["e"] = {
-    "P": p_binning("e"),
-    "Brunel_P": p_binning("e"),
-    "ETA": eta_binning("e"),
-    "Brunel_ETA": eta_binning("e"),
-    "nTracks": ntracks_binning("e"),
-    "nTracks_Brunel": ntracks_binning("e"),
-    "nSPDhits": nspdhits_binning("e"),
-    "nSPDhits_Brunel": nspdhits_binning("e"),
-    "TRCHI2NDOF": trchi2_binning("e"),
+    "P": {"bin_edges": p_binning("e")},
+    "Brunel_P": {"bin_edges": p_binning("e")},
+    "ETA": {"bin_edges": eta_binning("e")},
+    "Brunel_ETA": {"bin_edges": eta_binning("e")},
+    "nTracks": {"bin_edges": ntracks_binning("e")},
+    "nTracks_Brunel": {"bin_edges": ntracks_binning("e")},
+    "nSPDhits": {"bin_edges": nspdhits_binning("e")},
+    "nSPDhits_Brunel": {"bin_edges": nspdhits_binning("e")},
+    "TRCHI2NDOF": {"bin_edges": trchi2_binning("e")},
 }
+
+
+def set_binning(particle: str, variable: str, bin_edges: List[float]) -> None:
+    """Set a new binning for a variable of a particle.
+
+    Either a binning for a new particle/variable is added or the existing
+    binning is rewritten.
+
+    Args:
+        particle: Particle name.
+        variable: Variable name, e.g., "P" or "Brunel_ETA"
+        bin_edges: A list of all bin edges.
+    """
+    if not isinstance(bin_edges, list):
+        log.error("bin_edges parameter is not a list.")
+        raise TypeError
+
+    if particle not in binnings:
+        binnings[particle] = {}
+
+    binnings[particle][variable] = {"bin_edges": bin_edges}
+
+
+def get_binning(particle: str, variable: str, verbose: bool = False) -> List[float]:
+    """Return a suitable binning for a particle and variable.
+
+    Args:
+        particle: Particle name.
+        variable: Variable name, e.g., "P" or "Brunel_ETA"
+        verbose: Optional. Print message when alternative binning is used.
+            Defaults to False.
+    """
+    if particle not in binnings or variable not in binnings[particle]:
+        # Remove particle suffix, e.g., 'DsPhi' in 'K_DsPhi'
+        pure_particle = particle.split("_", 1)[0]
+        if pure_particle not in binnings or variable not in binnings[pure_particle]:
+            log.error(f"No '{variable}' binning defined for particle {particle}")
+            raise KeyError
+        else:
+            if verbose:
+                log.info(
+                    (
+                        f"No '{variable}' binning defined for particle '{particle}'. "
+                        f"Falling back to particle '{pure_particle}' binning."
+                    )
+                )
+            return binnings[pure_particle][variable]["bin_edges"]
+
+    else:
+        return binnings[particle][variable]["bin_edges"]
+
+
+def load_binnings(path: str) -> None:
+    """Load binnings from a JSON file."""
+    new_binnings = {}
+    log.info(f"Loading binnings from {path}")
+    with open(path) as f:
+        new_binnings = json.load(f)
+    for particle, variables in new_binnings.items():
+        for variable, binning in variables.items():
+            set_binning(particle, variable, binning)

@@ -36,21 +36,8 @@ def make_hist(
 
     # Loop over bin dimensions and define the axes
     for bin_var in bin_vars:
-        # Remove particle suffix, e.g., 'DsPhi' in 'K_DsPhi'
-        pure_particle = particle.split("_", 1)[0]
-        if (
-            pure_particle not in binning.binnings
-            or bin_var not in binning.binnings[pure_particle]
-        ):
-            log.error(
-                f"No binning defined for particle {pure_particle} variable {bin_var}"
-            )
-
-        axis_list.append(
-            bh.axis.Variable(
-                binning.binnings[pure_particle][bin_var], metadata={"name": bin_var}
-            )
-        )
+        bin_edges = binning.get_binning(particle, bin_var)
+        axis_list.append(bh.axis.Variable(bin_edges, metadata={"name": bin_var}))
         vals = df[bin_var].values
         vals_list.append(vals)
 

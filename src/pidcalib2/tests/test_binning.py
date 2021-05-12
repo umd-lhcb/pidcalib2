@@ -65,3 +65,19 @@ def test_p_binning():
 
     with pytest.raises(KeyError):
         binning.p_binning("Nu")
+
+
+def test_set_binning():
+    with pytest.raises(TypeError):
+        binning.set_binning("Pi", "P", 30)
+
+    binning.set_binning("GhostParticle", "P", [10, 20])
+    assert binning.binnings["GhostParticle"]["P"] == {"bin_edges": [10, 20]}
+
+
+def test_get_binning():
+    with pytest.raises(KeyError):
+        binning.get_binning("PION", "P")
+
+    with pytest.raises(KeyError):
+        binning.get_binning("Pi", "Non-existing var")
