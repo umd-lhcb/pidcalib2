@@ -49,6 +49,22 @@ except ImportError:
     version = "N/A"
 
 
+class ListValidAction(argparse.Action):
+    """Class that overrides required parameters and prints valid configs."""
+
+    def __call__(self, parser, namespace, values, option_string=None):
+
+        for entry in pid_data.get_calibration_samples(values).keys():
+            try:
+                sample, magnet, particle = entry.split("-")
+                magnet = magnet[3:].lower()
+                print(sample, magnet, particle)
+            except ValueError:
+                # Skip group entries like "Turbo18-MagUp"
+                pass
+        parser.exit()
+
+
 def decode_arguments(args):
     """Decode CLI arguments."""
     parser = argparse.ArgumentParser(
@@ -103,13 +119,11 @@ def decode_arguments(args):
         dest="bin_vars",
         required=True,
     )
-
     parser.add_argument(
         "-g",
         "--binning-file",
         help="file where new/alternative binnings are defines",
     )
-
     parser.add_argument(
         "-o",
         "--output-dir",
@@ -118,6 +132,17 @@ def decode_arguments(args):
     )
     parser.add_argument(
         "-l",
+        "--list-valid",
+        nargs="?",
+        const=None,
+        action=ListValidAction,
+        help=(
+            "list all valid configs in a file "
+            "(if no file is supplied, list the default)"
+        ),
+    )
+    parser.add_argument(
+        "-d",
         "--local-dataframe",
         help="(debug) read a calibration DataFrame from file",
     )

@@ -211,6 +211,22 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     return f"{prefix}_{bin_var_branch}"
 
 
+def get_calibration_samples(samples_file: str = None):
+    """Return a dictionary of all files for all calibration samples.
+
+    Args:
+        samples_file: JSON file with the calibration file lists.
+    """
+    if samples_file is None:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        samples_file = str(Path(current_dir, "data/samples.json"))
+
+    log.debug(f"Reading file lists from '{samples_file}'")
+    with open(samples_file) as f:
+        samples_dict = json.load(f)
+    return samples_dict
+
+
 def get_calibration_sample(
     sample: str,
     magnet: str,
@@ -228,16 +244,10 @@ def get_calibration_sample(
         max_files: Optional. The maximum number of files to get. Defaults to
             None (= all files).
     """
+    samples_dict = get_calibration_samples(samples_file)
+
     magnet = "Mag" + magnet.capitalize()
-    if samples_file is None:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        samples_file = str(Path(current_dir, "data/samples.json"))
-
     sample_name = "-".join([sample, magnet, particle])
-
-    log.debug(f"Reading file lists from '{samples_file}'")
-    with open(samples_file) as f:
-        samples_dict = json.load(f)
 
     try:
         sample_dict = samples_dict[sample_name]

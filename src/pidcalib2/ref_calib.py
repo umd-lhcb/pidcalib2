@@ -31,7 +31,7 @@ Examples:
 
         $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
-            --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}',
+            --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' \
             --ref-pars='{"Bach": ["K", "DLLK > 4"]}'
 
 
@@ -40,7 +40,7 @@ Examples:
 
         $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
-            --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}',
+            --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' \
             --ref-pars='{"Bach": ["K", "DLLK > 4"]}' --dry-run
 
     Evaluate efficiency of multiple PID cuts and add them to the reference
@@ -48,7 +48,7 @@ Examples:
 
         $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
-            --bin-vars='{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}',
+            --bin-vars='{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}' \
             --ref-pars='{"Bach": ["K", "DLLK > 4"], "SPi": ["Pi", "DLLK < 0"]}'
 """
 
