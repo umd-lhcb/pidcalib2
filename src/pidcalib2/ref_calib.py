@@ -18,13 +18,12 @@ efficiency to the user-supplied file requires PyROOT and is optional.
 The module works in two steps:
 
 1. Calculate the efficiency and save it as a TTree in a separate file.
-2. Copy the efficiency TTree to the reference file and make it a friend of
+2. Optionally copy the efficiency TTree to the reference file and make it a friend of
    the user's TTree.
 
 The second step is an efficient way of "adding" the efficiency branches to
-the user's TTree. The step can be skipped by specifying --dry-run on the
-command line, in which case the efficiency TTree will be saved to a separate
-ROOT file but no attempt to add it to the reference file will be made.
+the user's TTree. The step must be requested by specifying --merge on the
+command line.
 
 Examples:
     Evaluate efficiency of a single PID cut and add it to the reference file::
@@ -41,7 +40,7 @@ Examples:
         $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
             --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' \
-            --ref-pars='{"Bach": ["K", "DLLK > 4"]}' --dry-run
+            --ref-pars='{"Bach": ["K", "DLLK > 4"]}'
 
     Evaluate efficiency of multiple PID cuts and add them to the reference
     file::
@@ -95,7 +94,7 @@ def decode_arguments(args):
         "--bin-vars",
         help=(
             "dictionary of binning variables (keys) and their associated names in "
-            "reference sample (values)"
+            "the reference sample (values)"
         ),
         default="{'P' : 'P', 'ETA' : 'ETA', 'nTracks' : 'nTracks'}",
         dest="bin_vars",
@@ -108,9 +107,8 @@ def decode_arguments(args):
     )
     parser.add_argument(
         "-o",
-        "--output-dir",
-        default="pidcalib_output",
-        help="directory where to save output files",
+        "--output-file",
+        help="ROOT filename into which to save the PID efficiency tree",
     )
     parser.add_argument(
         "-f",
@@ -129,14 +127,17 @@ def decode_arguments(args):
         "--ref-pars",
         help=(
             "JSON dictionary of particles from reference sample to apply "
-            "cuts to, where the keys represent the particle branch names, "
+            "cuts to, where the keys represent the particle branch name prefix, "
             "and the values passed are a list containing particle type and "
-            "PID cut e.g. \"{'D0_K' : ['K','DLLK>4.0'], 'D0_Pi' : ['Pi','DLLK<4.0']}\""
+            "PID cut e.g. \"{'D0_K' : ['K','DLLK>4'], 'D0_Pi' : ['Pi','DLLK<4']}\""
         ),
         required=True,
     )
     parser.add_argument(
-        "-d", "--dry-run", help="do not update the reference file", action="store_true"
+        "-r",
+        "--merge",
+        help="merge the PID efficiency tree with the reference file",
+        action="store_true",
     )
     parser.add_argument(
         "-v",
@@ -219,21 +220,18 @@ def ref_calib(config: Dict) -> float:
     avg_eff = df_ref["PIDCalibEff"].dropna().mean()
     log.info(f"Average per-event PID efficiency: {avg_eff:.2%}")
 
-    output_path = pathlib.Path(config["output_dir"])
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    ref_path = pathlib.Path(config["ref_file"])
-    eff_path = output_path / ref_path.name.replace(".root", "_PIDCalibResults.root")
+    output_path = pathlib.Path(config["output_file"])
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
     pid_data.save_dataframe_as_root(
         df_ref[[key for key in df_ref.keys() if key not in ref_branches]],
         "PIDCalibTree",
-        str(eff_path),
+        str(output_path),
     )
 
-    if not config["dry_run"]:
+    if config["merge"]:
         merge_trees.copy_tree_and_set_as_friend(
-            str(eff_path), "PIDCalibTree", config["ref_file"], config["ref_tree"]
+            str(output_path), "PIDCalibTree", config["ref_file"], config["ref_tree"]
         )
     else:
         log.warning("This is a dry run, the reference file was not updated")
