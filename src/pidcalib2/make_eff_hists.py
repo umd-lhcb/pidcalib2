@@ -54,19 +54,42 @@ class ListValidAction(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
 
-        header = ["Sample", "Magnet", "Particle"]
-        table = markdown_table.MarkdownTable(header)
+        if values == "configs" or values.endswith(".json"):
+            header = ["Sample", "Magnet", "Particle"]
+            table = markdown_table.MarkdownTable(header)
 
-        for entry in pid_data.get_calibration_samples(values).keys():
-            try:
-                sample, magnet, particle = entry.split("-")
-                magnet = magnet[3:].lower()
-                table.add_row([sample, magnet, particle])
-            except ValueError:
-                # Skip group entries like "Turbo18-MagUp"
-                pass
+            # Print configs from the default samples.json if no file specified
+            if values == "configs":
+                values = None
 
-        table.print()
+            for entry in pid_data.get_calibration_samples(values).keys():
+                try:
+                    sample, magnet, particle = entry.split("-")
+                    magnet = magnet[3:].lower()
+                    table.add_row([sample, magnet, particle])
+                except ValueError:
+                    # Skip group entries like "Turbo18-MagUp"
+                    pass
+
+            table.print()
+
+        elif values == "aliases":
+            table_pid = markdown_table.MarkdownTable(["Alias", "PID Variable"])
+            for alias, var in pid_data.pid_aliases.items():
+                table_pid.add_row([alias, var])
+            table_pid.print()
+
+            print()
+
+            table_bin = markdown_table.MarkdownTable(["Alias", "Binning Variable"])
+            for alias, var in pid_data.bin_aliases.items():
+                table_bin.add_row([alias, var])
+            table_bin.print()
+
+        else:
+            log.error(f"'{values}' is not a known keyword for list-valid")
+            raise KeyError
+
         parser.exit()
 
 
@@ -138,13 +161,8 @@ def decode_arguments(args):
     parser.add_argument(
         "-l",
         "--list-valid",
-        nargs="?",
-        const=None,
         action=ListValidAction,
-        help=(
-            "list all valid configs in a file "
-            "(if no file is supplied, list the default)"
-        ),
+        help="list all valid [configs, aliases]",
     )
     parser.add_argument(
         "-d",
