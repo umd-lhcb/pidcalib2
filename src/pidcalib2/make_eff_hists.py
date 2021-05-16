@@ -220,7 +220,7 @@ def make_eff_hists(config: dict) -> None:
     df_total = None
     if config["local_dataframe"]:
         branch_names = pid_data.get_relevant_branch_names(
-            "probe", config["pid_cuts"], config["bin_vars"], config["cuts"]
+            config["pid_cuts"], config["bin_vars"], config["cuts"]
         )
         df_total = pid_data.dataframe_from_local_file(
             config["local_dataframe"], list(branch_names)
@@ -250,7 +250,7 @@ def make_eff_hists(config: dict) -> None:
             cuts += calib_sample["cuts"]
 
         branch_names = pid_data.get_relevant_branch_names(
-            "probe", config["pid_cuts"], config["bin_vars"], cuts
+            config["pid_cuts"], config["bin_vars"], cuts
         )
         log.info(f"Branches to be read: {branch_names}")
         log.info(

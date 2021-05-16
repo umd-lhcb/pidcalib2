@@ -48,39 +48,38 @@ def test_get_tree_paths():
 
 
 def test_get_relevant_branch_names():
-    assert pid_data.get_relevant_branch_names("probe", ["DLLK < 4"], ["P"]) == {
+    assert pid_data.get_relevant_branch_names(["DLLK < 4"], ["P"]) == {
         "sWeight": "probe_sWeight",
         "P": "probe_P",
         "DLLK": "probe_PIDK",
     }
 
-    assert pid_data.get_relevant_branch_names("probe", ["DLLp > 4"], ["P", "ETA"]) == {
+    assert pid_data.get_relevant_branch_names(["DLLp > 4"], ["P", "ETA"]) == {
         "sWeight": "probe_sWeight",
         "P": "probe_P",
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
     }
 
-    assert pid_data.get_relevant_branch_names("probe", ["DLLp == 4"], ["P", "ETA"]) == {
+    assert pid_data.get_relevant_branch_names(["DLLp == 4"], ["P", "ETA"]) == {
         "sWeight": "probe_sWeight",
         "P": "probe_P",
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
     }
 
-    assert pid_data.get_relevant_branch_names("probe", ["DLLp != 4"], ["P", "ETA"]) == {
+    assert pid_data.get_relevant_branch_names(["DLLp != 4"], ["P", "ETA"]) == {
         "sWeight": "probe_sWeight",
         "P": "probe_P",
         "ETA": "probe_ETA",
         "DLLp": "probe_PIDp",
     }
 
-    assert pid_data.get_relevant_branch_names(
-        "notprobe", ["DLLp != 4"], ["P", "ETA"]
-    ) == {"P": "notprobe_P", "ETA": "notprobe_ETA", "DLLp": "notprobe_PIDp"}
-
-    with pytest.raises(ValueError):
-        pid_data.get_relevant_branch_names("probe", ["DLLp = 4"], ["P", "ETA"])
+    assert pid_data.get_relevant_branch_names(["test_DLL != 4"], ["special_var"]) == {
+        "sWeight": "probe_sWeight",
+        "test_DLL": "test_DLL",
+        "special_var": "special_var",
+    }
 
 
 def test_dataframe_from_local_file():

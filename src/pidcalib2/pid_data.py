@@ -89,34 +89,27 @@ simple_samples = [
     "Electron18",
 ]
 
+pid_aliases = {
+    "DLLK": "probe_PIDK",
+    "DLLp": "probe_PIDp",
+    "DLLmu": "probe_PIDmu",
+    "DLLe": "probe_PIDe",
+    "DLLd": "probe_PIDd",
+    "ProbNNpi": "probe_MC15TuneV1_ProbNNpi",
+    "ProbNNk": "probe_MC15TuneV1_ProbNNk",
+}
 
-def create_branch_names(prefix: str) -> Dict[str, str]:
-    """Return a dict of {var name: branch name in the calib. tuple}.
-
-    Args:
-        prefix: A string to be prepended to each particle-specific branch
-            name.
-    """
-    branch_names = {
-        "DLLK": f"{prefix}_PIDK",
-        "DLLp": f"{prefix}_PIDp",
-        "DLLmu": f"{prefix}_PIDmu",
-        "DLLe": f"{prefix}_PIDe",
-        "DLLd": f"{prefix}_PIDd",
-        "ProbNNpi": f"{prefix}_MC15TuneV1_ProbNNpi",
-        "ProbNNk": f"{prefix}_MC15TuneV1_ProbNNk",
-        "P": f"{prefix}_P",
-        "Brunel_P": f"{prefix}_Brunel_P",
-        "ETA": f"{prefix}_ETA",
-        "Brunel_ETA": f"{prefix}_Brunel_ETA",
-        "nTracks": "nTracks",
-        "nTracks_Brunel": "nTracks_Brunel",
-        "nSPDhits": "nSPDhits",
-        "nSPDhits_Brunel": "nSPDhits_Brunel",
-        "sWeight": f"{prefix}_sWeight",
-        "TRCHI2NDOF": f"{prefix}_TRCHI2NDOF",
-    }
-    return branch_names
+bin_aliases = {
+    "P": "probe_P",
+    "Brunel_P": "probe_Brunel_P",
+    "ETA": "probe_ETA",
+    "Brunel_ETA": "probe_Brunel_ETA",
+    "nTracks": "nTracks",
+    "nTracks_Brunel": "nTracks_Brunel",
+    "nSPDhits": "nSPDhits",
+    "nSPDhits_Brunel": "nSPDhits_Brunel",
+    "TRCHI2NDOF": "probe_TRCHI2NDOF",
+}
 
 
 def is_simple(sample: str) -> bool:
@@ -134,34 +127,38 @@ def is_simple(sample: str) -> bool:
 
 
 def get_relevant_branch_names(
-    prefix: str, pid_cuts: List[str], bin_vars: List[str], cuts: List[str] = None
+    pid_cuts: List[str], bin_vars: List[str], cuts: List[str] = None
 ) -> Dict[str, str]:
     """Return a list of branch names relevant to the cuts and binning vars.
 
     Args:
-        prefix: A prefix for the branch names, i.e., "probe".
         pid_cuts: Simplified user-level cut list, e.g., ["DLLK < 4"].
         bin_vars: Variables used for the binning.
         cuts: Arbitrary cut list, e.g., ["Dst_IPCHI2 < 10.0"].
     """
-    branch_names = create_branch_names(prefix)
+    branch_names = {"sWeight": "probe_sWeight"}
 
-    # Remove sWeight if not a calib sample
-    if prefix != "probe":
-        del branch_names["sWeight"]
-
-    # Create a list of vars in the PID cuts
-    pid_cuts_vars = []
     whitespace = re.compile(r"\s+")
     for pid_cut in pid_cuts:
         pid_cut = re.sub(whitespace, "", pid_cut)
         pid_cut_var, _, _ = re.split(r"(<|>|==|!=)", pid_cut)
-        pid_cuts_vars.append(pid_cut_var)
 
-    # Remove all vars that are not used for binning or PID cuts
-    for branch in tuple(branch_names):
-        if branch not in [*pid_cuts_vars, *bin_vars, "sWeight"]:
-            del branch_names[branch]
+        if pid_cut_var not in pid_aliases:
+            log.warning(
+                f"'{pid_cut_var}' is not a known PID variable alias, using raw variable"
+            )
+            branch_names[pid_cut_var] = pid_cut_var
+        else:
+            branch_names[pid_cut_var] = pid_aliases[pid_cut_var]
+
+    for bin_var in bin_vars:
+        if bin_var not in bin_aliases:
+            log.warning(
+                f"'{bin_var}' is not a known binning variable alias, using raw variable"
+            )
+            branch_names[bin_var] = bin_var
+        else:
+            branch_names[bin_var] = bin_aliases[bin_var]
 
     # Add vars in the arbitrary cuts
     if cuts:
