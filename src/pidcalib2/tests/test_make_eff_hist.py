@@ -207,7 +207,7 @@ def test_make_eff_hists_file_list(config):
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
 
-def test_decode_arguments():
+def test_decode_arguments(capsys):
     assert (
         make_eff_hists.decode_arguments(
             [
@@ -230,6 +230,17 @@ def test_decode_arguments():
         make_eff_hists.decode_arguments(
             ["--sample=Turbo18", "-m=up", "--particle=K", "--bin-var=P"]
         )
+
+    with pytest.raises(SystemExit):
+        make_eff_hists.decode_arguments(
+            ["--list-valid", str(Path(THIS_DIR, "test_data/test_samples.json"))]
+        )
+    captured = capsys.readouterr().out
+    assert captured == (
+        "Sample  | Magnet | Particle\n"
+        "--------|--------|---------\n"
+        "Turbo18 | up     | Pi\n"
+    )
 
 
 def test_make_eff_hists_with_custom_binning(config):

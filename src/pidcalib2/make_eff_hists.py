@@ -41,7 +41,7 @@ import sys
 import logzero
 from logzero import logger as log
 
-from . import binning, pid_data, utils
+from . import binning, markdown_table, pid_data, utils
 
 try:
     from .version import version  # type: ignore
@@ -54,14 +54,19 @@ class ListValidAction(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
 
+        header = ["Sample", "Magnet", "Particle"]
+        table = markdown_table.MarkdownTable(header)
+
         for entry in pid_data.get_calibration_samples(values).keys():
             try:
                 sample, magnet, particle = entry.split("-")
                 magnet = magnet[3:].lower()
-                print(sample, magnet, particle)
+                table.add_row([sample, magnet, particle])
             except ValueError:
                 # Skip group entries like "Turbo18-MagUp"
                 pass
+
+        table.print()
         parser.exit()
 
 
