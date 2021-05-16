@@ -23,20 +23,37 @@ from pidcalib2 import binning, make_eff_hists
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def test_make_eff_hists():
-    config = {
-        "sample": "Turbo18",
-        "magnet": "up",
-        "particle": "Pi",
-        "pid_cuts": ["DLLK < 4", "DLLK<3"],
-        "cuts": None,
-        "bin_vars": ["P"],
-        "output_dir": str(Path(THIS_DIR, "test_output")),
-        "list_valid": None,
+@pytest.fixture
+def config():
+    return {
+        "bin_vars": None,
         "binning_file": None,
-        "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
-        "verbose": False,
+        "cuts": None,
+        "file_list": None,
+        "list_valid": None,
+        "local_dataframe": None,
+        "magnet": None,
+        "output_dir": None,
+        "particle": None,
+        "pid_cuts": None,
+        "sample": None,
+        "samples_file": None,
+        "verbose": True,
     }
+
+
+def test_make_eff_hists(config):
+    config.update(
+        {
+            "bin_vars": ["P"],
+            "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+            "magnet": "up",
+            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "particle": "Pi",
+            "pid_cuts": ["DLLK < 4", "DLLK<3"],
+            "sample": "Turbo18",
+        }
+    )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
         Path(
@@ -59,20 +76,19 @@ def test_make_eff_hists():
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
 
-def test_make_eff_hists_with_user_cuts():
-    config = {
-        "sample": "Turbo18",
-        "magnet": "up",
-        "particle": "Pi",
-        "pid_cuts": ["DLLK < 4", "DLLK<3"],
-        "cuts": ["Dst_IPCHI2 < 100", "probe_TRACK_GHOSTPROB < 0.05"],
-        "bin_vars": ["P"],
-        "output_dir": str(Path(THIS_DIR, "test_output")),
-        "list_valid": None,
-        "binning_file": None,
-        "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
-        "verbose": True,
-    }
+def test_make_eff_hists_with_user_cuts(config):
+    config.update(
+        {
+            "bin_vars": ["P"],
+            "cuts": ["Dst_IPCHI2 < 100", "probe_TRACK_GHOSTPROB < 0.05"],
+            "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+            "magnet": "up",
+            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "particle": "Pi",
+            "pid_cuts": ["DLLK < 4", "DLLK<3"],
+            "sample": "Turbo18",
+        }
+    )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
         Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
@@ -110,23 +126,18 @@ def test_make_eff_hists_with_user_cuts():
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_make_eff_hists_with_hardcoded_cuts():
-    config = {
-        "sample": "Turbo16",
-        "magnet": "down",
-        "particle": "P_IncLc",
-        "pid_cuts": ["DLLp > 4"],
-        "bin_vars": ["P"],
-        "cuts": None,
-        "binning_file": None,
-        "local_dataframe": None,
-        "output_dir": str(Path(THIS_DIR, "test_output")),
-        "list_valid": None,
-        "file_list": None,
-        "samples_file": None,
-        "max_files": 1,
-        "verbose": True,
-    }
+def test_make_eff_hists_with_hardcoded_cuts(config):
+    config.update(
+        {
+            "bin_vars": ["P"],
+            "magnet": "down",
+            "max_files": 1,
+            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "particle": "P_IncLc",
+            "pid_cuts": ["DLLp > 4"],
+            "sample": "Turbo16",
+        }
+    )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
         Path(THIS_DIR, "test_output/effhists-Turbo16-down-P_IncLc-DLLp>4-P.pkl")
@@ -143,21 +154,18 @@ def test_make_eff_hists_with_hardcoded_cuts():
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_make_eff_hists_local_file_list():
-    config = {
-        "sample": "Turbo18",
-        "magnet": "up",
-        "particle": "Pi",
-        "pid_cuts": ["DLLK < 4", "DLLK<3"],
-        "cuts": None,
-        "bin_vars": ["P"],
-        "binning_file": None,
-        "local_dataframe": None,
-        "output_dir": str(Path(THIS_DIR, "test_output")),
-        "list_valid": None,
-        "file_list": str(Path(THIS_DIR, "test_data/test_file_list")),
-        "verbose": False,
-    }
+def test_make_eff_hists_local_file_list(config):
+    config.update(
+        {
+            "bin_vars": ["P"],
+            "file_list": str(Path(THIS_DIR, "test_data/test_file_list")),
+            "magnet": "up",
+            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "particle": "Pi",
+            "pid_cuts": ["DLLK < 4", "DLLK<3"],
+            "sample": "Turbo18",
+        }
+    )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
         Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
@@ -173,23 +181,19 @@ def test_make_eff_hists_local_file_list():
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_make_eff_hists_file_list():
-    config = {
-        "sample": "Turbo18",
-        "magnet": "up",
-        "particle": "Pi",
-        "pid_cuts": ["DLLK < 4", "DLLK<3"],
-        "cuts": None,
-        "bin_vars": ["P"],
-        "binning_file": None,
-        "local_dataframe": None,
-        "output_dir": str(Path(THIS_DIR, "test_output")),
-        "list_valid": None,
-        "file_list": None,
-        "samples_file": str(Path(THIS_DIR, "test_data/test_samples.json")),
-        "max_files": 1,
-        "verbose": False,
-    }
+def test_make_eff_hists_file_list(config):
+    config.update(
+        {
+            "bin_vars": ["P"],
+            "magnet": "up",
+            "max_files": 1,
+            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "particle": "Pi",
+            "pid_cuts": ["DLLK < 4", "DLLK<3"],
+            "sample": "Turbo18",
+            "samples_file": str(Path(THIS_DIR, "test_data/test_samples.json")),
+        }
+    )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
         Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
@@ -228,23 +232,22 @@ def test_decode_arguments():
         )
 
 
-def test_make_eff_hists_with_custom_binning():
+def test_make_eff_hists_with_custom_binning(config):
     # Save the original binnings so we can restore them later
     orig_binnings = copy.deepcopy(binning.binnings)
 
-    config = {
-        "sample": "Turbo18",
-        "magnet": "up",
-        "particle": "Pi",
-        "pid_cuts": ["DLLK < 4", "DLLK<3"],
-        "cuts": None,
-        "bin_vars": ["P"],
-        "output_dir": str(Path(THIS_DIR, "test_output")),
-        "list_valid": None,
-        "binning_file": str(Path(THIS_DIR, "test_data/custom_binning.json")),
-        "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
-        "verbose": True,
-    }
+    config.update(
+        {
+            "bin_vars": ["P"],
+            "binning_file": str(Path(THIS_DIR, "test_data/custom_binning.json")),
+            "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+            "magnet": "up",
+            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "particle": "Pi",
+            "pid_cuts": ["DLLK < 4", "DLLK<3"],
+            "sample": "Turbo18",
+        }
+    )
 
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
