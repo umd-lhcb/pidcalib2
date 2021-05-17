@@ -205,7 +205,12 @@ def add_efficiencies(
         error_table = (
             create_error_histogram(eff_hists[prefix]).view().flatten()  # type: ignore
         )
-        np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
+        # The original PIDCalib assigned bins with no events in the total
+        # histogram an efficiency of zero. This should not come up often and the
+        # user should be warned about it. In any case it does not seem right -
+        # we assign the bin a NaN. This might cause slightly different results
+        # when using a sample and binning that lead to such empty bins.
+        # np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
 
         # Assign efficiencies by taking the efficiency value from the relevant bin
         df_new[f"{prefix}_PIDCalibEff"] = np.take(
