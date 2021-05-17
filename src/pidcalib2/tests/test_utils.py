@@ -54,6 +54,38 @@ def test_get_per_event_effs():
     with pytest.warns(RuntimeWarning):
         df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
     assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8745793984247746)
+    assert df_ref.PIDCalibErr.mean() == pytest.approx(0.010109849956086676)
+
+
+def test_get_multiparticle_per_event_effs():
+    df_ref = pd.read_csv(Path(THIS_DIR, "test_data/ref_test_data.csv"), index_col=0)
+    prefixes = ["h1", "h2"]
+    bin_vars = {"P": "P"}
+    hists = {}
+    hists["h1"] = {}
+    with open(
+        Path(THIS_DIR, "test_data/effhists-Turbo18-up-K-DLLK>0-P.pkl"), "rb"
+    ) as f:
+        hists["h1"]["eff"] = pickle.load(f)
+        hists["h1"]["passing"] = pickle.load(f)
+        hists["h1"]["total"] = pickle.load(f)
+        hists["h1"]["passing_sumw2"] = pickle.load(f)
+        hists["h1"]["total_sumw2"] = pickle.load(f)
+
+    hists["h2"] = {}
+    with open(
+        Path(THIS_DIR, "test_data/effhists-Turbo18-up-Pi-DLLK<0-P.pkl"), "rb"
+    ) as f:
+        hists["h2"]["eff"] = pickle.load(f)
+        hists["h2"]["passing"] = pickle.load(f)
+        hists["h2"]["total"] = pickle.load(f)
+        hists["h2"]["passing_sumw2"] = pickle.load(f)
+        hists["h2"]["total_sumw2"] = pickle.load(f)
+
+    df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
+    df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
+    assert df_ref.PIDCalibEff.mean() == pytest.approx(0.928205513381871)
+    assert df_ref.PIDCalibErr.mean() == pytest.approx(0.004805856952295592)
 
 
 def test_add_bin_indices():

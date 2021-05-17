@@ -38,7 +38,7 @@ def test_copy_tree():
     new_file = ROOT.TFile(str(Path(THIS_DIR, "test_data/ref_test_data_copy.root")))
     new_tree = new_file.Get("DecayTree")
 
-    assert new_tree.GetEntry(0) == 68
+    assert new_tree.GetEntry(0) == 84
     assert new_tree.PID_eff == pytest.approx(0.9933816230604905)
 
     os.remove(Path(THIS_DIR, "test_data/ref_test_data_copy.root"))
