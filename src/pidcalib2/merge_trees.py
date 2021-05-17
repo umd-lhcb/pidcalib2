@@ -63,10 +63,11 @@ def copy_tree_and_set_as_friend(
         log.error(f"'{dest_tree_name}' not found in '{dest_file_name}'.")
         sys.exit(2)
 
-    dest_tree.AddFriend(source_tree)
-
     log.info(f"Copying {source_tree_name} to {dest_file_name}")
     source_tree.CloneTree().Write()
+
+    dest_tree.AddFriend(source_tree_name)
+
     # Avoid ROOT adding a new tree with an incremented cycle number
     dest_tree.Write("", ROOT.TObject.kOverwrite)
 
