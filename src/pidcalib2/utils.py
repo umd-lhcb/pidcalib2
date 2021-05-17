@@ -198,7 +198,7 @@ def add_efficiencies(
     df_new.dropna(inplace=True)
 
     df_new["PIDCalibEff"] = 1
-    df_new["PIDCalibErr2"] = 0
+    df_new["PIDCalibRelErr2"] = 0
 
     for prefix in prefixes:
         efficiency_table = eff_hists[prefix]["eff"].view().flatten()  # type: ignore
@@ -216,10 +216,15 @@ def add_efficiencies(
             error_table, df_new[f"{prefix}_PIDCalibBin"]
         )
         df_new["PIDCalibEff"] = df_new["PIDCalibEff"] * df_new[f"{prefix}_PIDCalibEff"]
-        df_new["PIDCalibErr2"] += df_new[f"{prefix}_PIDCalibErr"] ** 2
+        df_new["PIDCalibRelErr2"] += (
+            df_new[f"{prefix}_PIDCalibErr"] / df_new[f"{prefix}_PIDCalibEff"]
+        ) ** 2
 
-    df_new["PIDCalibErr"] = np.sqrt(df_new["PIDCalibErr2"])  # type: ignore
-    df_new.drop(columns=["PIDCalibErr2"], inplace=True)
+    df_new["PIDCalibErr"] = np.sqrt(df_new["PIDCalibRelErr2"])  # type: ignore
+    for prefix in prefixes:
+        df_new["PIDCalibErr"] *= df_new[f"{prefix}_PIDCalibEff"]
+
+    df_new.drop(columns=["PIDCalibRelErr2"], inplace=True)
 
     df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
     log.debug("Particle efficiencies assigned")

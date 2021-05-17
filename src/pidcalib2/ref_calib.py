@@ -233,8 +233,6 @@ def ref_calib(config: Dict) -> float:
         merge_trees.copy_tree_and_set_as_friend(
             str(output_path), "PIDCalibTree", config["ref_file"], config["ref_tree"]
         )
-    else:
-        log.warning("This is a dry run, the reference file was not updated")
 
     return avg_eff  # type: ignore
 
