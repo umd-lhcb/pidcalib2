@@ -32,7 +32,7 @@ The PIDCalib2 package is available on [PyPI](https://pypi.org/project/pidcalib2/
 ```sh
 pip install pidcalib2
 ```
-Note that one dependency has to be installed manually - [`xrootd`](https://pypi.org/project/xrootd/). The package is currently (5.1.1) broken and can't be installed via `pip` in a virtual environment - it [should be fixed](https://github.com/xrootd/xrootd/issues/1397) in the next release. We will then add it as an explicit dependency.
+Note that this will install the [`xrootd`](https://pypi.org/project/xrootd/) *Python bindings*. One also has to install XRootD itself for the bindings to work. See [this page](https://xrootd.slac.stanford.edu/index.html) for XRootD releases and instructions.
 
 ## `make_eff_hists`
 
