@@ -95,8 +95,11 @@ pid_aliases = {
     "DLLmu": "probe_PIDmu",
     "DLLe": "probe_PIDe",
     "DLLd": "probe_PIDd",
-    "ProbNNpi": "probe_MC15TuneV1_ProbNNpi",
+    "ProbNNe": "probe_MC15TuneV1_ProbNNe",
+    "ProbNNghost": "probe_MC15TuneV1_ProbNNghost",
     "ProbNNk": "probe_MC15TuneV1_ProbNNk",
+    "ProbNNp": "probe_MC15TuneV1_ProbNNp",
+    "ProbNNpi": "probe_MC15TuneV1_ProbNNpi",
 }
 
 bin_aliases = {
