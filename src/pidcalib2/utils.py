@@ -177,7 +177,10 @@ def add_bin_indices(
 
 
 def add_efficiencies(
-    df: pd.DataFrame, prefixes: List[str], eff_hists: Dict[str, Dict[str, bh.Histogram]]
+    df: pd.DataFrame,
+    prefixes: List[str],
+    eff_hists: Dict[str, Dict[str, bh.Histogram]],
+    compatibility: bool = False,
 ) -> pd.DataFrame:
     """Return a DataFrame with added efficiencies for each event.
 
@@ -188,6 +191,7 @@ def add_efficiencies(
         df: Input dataframe.
         prefixes: Branch prefixes of the particles in the reference sample.
         eff_hists: Efficiency histograms for each prefix/particle.
+        compatibility: Treat empty efficiency histogram bins as PIDCalib1 did
     """
     df_new = df.copy()
 
@@ -210,7 +214,8 @@ def add_efficiencies(
         # user should be warned about it. In any case it does not seem right -
         # we assign the bin a NaN. This might cause slightly different results
         # when using a sample and binning that lead to such empty bins.
-        # np.nan_to_num(efficiency_table, False)  # Replicate old PIDCalib's behavior
+        if compatibility:
+            np.nan_to_num(efficiency_table, copy=False)  # Replicate PIDCalib1 behavior
 
         # Assign efficiencies by taking the efficiency value from the relevant bin
         df_new[f"{prefix}_PIDCalibEff"] = np.take(

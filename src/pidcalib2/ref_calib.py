@@ -140,6 +140,12 @@ def decode_arguments(args):
         action="store_true",
     )
     parser.add_argument(
+        "-c",
+        "--compatibility",
+        action="store_true",
+        help="(debug) treat empty efficiency histogram bins as PIDCalib1 did",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
