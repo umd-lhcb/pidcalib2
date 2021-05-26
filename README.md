@@ -52,7 +52,7 @@ The calibration files to be processed are determined by the `sample`, `magnet`, 
 pidcalib2.make_eff_hists --list-valid configs
 ```
 
-Aliases for standard PID cut and binning variables are defined to simplify the commands. We recommend users use only the aliases when specifying variables. When you use a name that isn't an alias, a warning message like the following will show up in the log. Use with caution.
+Aliases for standard variables are defined to simplify the commands. We recommend users use only the aliases when specifying variables. When you use a name that isn't an alias, a warning message like the following will show up in the log. Use with caution.
 ```
 'probe_PIDK' is not a known PID variable alias, using raw variable
 ```
@@ -67,17 +67,24 @@ A file with alternative binnings can be specified using `--binning-file`. The fi
 ```
 An arbitrary number of binnings can be defined in a single file.
 
+Complex cut expressions can be created by chaining simpler expressions using `&`. One can also use standard mathematical symbols, like `*`, `/`, `+`, `-`, `(`, `)`. Whitespace does not matter.
+
 ### Examples:
 - Create a single efficiency histogram for a single PID cut
   ```sh
-  pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "DLLK > 4" --bin-var P --bin-var ETA --bin-var nSPDHits --output-dir pidcalib_output
+  pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "DLLK > 4" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
   ```
 
 - Create multiple histograms in one run (most of the time is spent reading
 in data, so specifying multiple cuts is much faster than running
 make_eff_hists sequentially)
   ```sh
-  pidcalib2.make_eff_hists --sample Turbo16 --magnet up --particle Pi --pid-cut "DLLK > 0" --pid-cut "DLLK > 4" --pid-cut "DLLK > 6" --bin-var P --bin-var ETA --bin-var nSPDHits --output-dir pidcalib_output
+  pidcalib2.make_eff_hists --sample Turbo16 --magnet up --particle Pi --pid-cut "DLLK > 0" --pid-cut "DLLK > 4" --pid-cut "DLLK > 6" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
+  ```
+
+- Create a single efficiency histogram for a complex PID cut
+  ```sh
+  pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "MC15TuneV1_ProbNNp*(1-MC15TuneV1_ProbNNpi)*(1-MC15TuneV1_ProbNNk) < 0.5 & DLLK < 3" --cut "isMuon==0" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
   ```
 
 ## `ref_calib`

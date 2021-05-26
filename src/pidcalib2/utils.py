@@ -9,8 +9,9 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+import difflib
 import re
-from typing import Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import boost_histogram as bh
 import numpy as np
@@ -319,3 +320,58 @@ def apply_cuts(df: pd.DataFrame, cuts: List[str]) -> Tuple[int, int]:
         f"{num_after}/{num_before} ({num_after/num_before:.1%}) events " "passed cuts"
     )
     return num_before, num_after
+
+
+def extract_variable_names(expression: str) -> List[str]:
+    """Extract variable names from simple math expressions.
+
+    This is useful to extract var names from PID cuts
+
+    Args:
+        expression: The expression to parse.
+
+    Returns:
+        A list of variable names found in the expression.
+    """
+    parts = re.split(r"<|>|==|!=|\(|\)|\*|/|\+|-|\^|&", expression)
+    variables = []
+    for part in parts:
+        if not is_float(part) and part != "":
+            variables.append(part)
+    return variables
+
+
+def is_float(entity: Any) -> bool:
+    """Check if an entity can be converted to a float.
+
+    Args:
+        entity: Could be string, int, or many other things.
+    """
+    try:
+        float(entity)
+        return True
+    except ValueError:
+        return False
+
+
+def find_similar_strings(
+    comparison_string: str, list_of_strings: List[str], ratio: float
+):
+    """Return a list of strings similar to the comparison string.
+
+    Args:
+        comparison_string: The string against which to compare.
+        list_of_strings: List of strings to search.
+        ratio: Minimal SequenceMatcher similarity ratio.
+    """
+    similar_strings = {}
+    for string in list_of_strings:
+        string_ratio = difflib.SequenceMatcher(None, comparison_string, string).ratio()
+        if string_ratio > ratio:
+            similar_strings[string] = string_ratio
+
+    sorted_similar_strings = sorted(
+        similar_strings.items(), key=lambda x: x[1], reverse=True
+    )
+
+    return [string for string, ratio in sorted_similar_strings]

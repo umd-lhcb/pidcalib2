@@ -44,7 +44,9 @@ from logzero import logger as log
 
 from . import binning, markdown_table, pid_data, utils
 
-uproot.open.defaults["xrootd_handler"] = uproot.source.xrootd.XRootDSource
+uproot.open.defaults[
+    "xrootd_handler"
+] = uproot.source.xrootd.XRootDSource  # type: ignore
 
 try:
     from .version import version  # type: ignore
@@ -77,18 +79,10 @@ class ListValidAction(argparse.Action):
             table.print()
 
         elif values == "aliases":
-            table_pid = markdown_table.MarkdownTable(["Alias", "PID Variable"])
-            for alias, var in pid_data.pid_aliases.items():
+            table_pid = markdown_table.MarkdownTable(["Alias", "Variable"])
+            for alias, var in pid_data.aliases.items():
                 table_pid.add_row([alias, var])
             table_pid.print()
-
-            print()
-
-            table_bin = markdown_table.MarkdownTable(["Alias", "Binning Variable"])
-            for alias, var in pid_data.bin_aliases.items():
-                table_bin.add_row([alias, var])
-            table_bin.print()
-
         else:
             log.error(f"'{values}' is not a known keyword for list-valid")
             raise KeyError
@@ -126,7 +120,7 @@ def decode_arguments(args):
         "--pid-cut",
         help=(
             "PID cut string, e.g., 'DLLK < 4.0' (-i can be used multiple times for "
-            "multiple cuts). Supported operators are <, >, ==, and !="
+            "multiple cuts)."
         ),
         action="append",
         dest="pid_cuts",
@@ -137,7 +131,7 @@ def decode_arguments(args):
         "--cut",
         help=(
             "arbitrary cut string, e.g., 'Dst_IPCHI2 < 10.0' (-c can be used multiple "
-            "times for multiple cuts). Supported operators are <, >, ==, and !="
+            "times for multiple cuts)."
         ),
         action="append",
         dest="cuts",

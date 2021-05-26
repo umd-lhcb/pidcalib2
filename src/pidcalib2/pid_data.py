@@ -89,20 +89,32 @@ simple_samples = [
     "Electron18",
 ]
 
-pid_aliases = {
+aliases = {
     "DLLK": "probe_PIDK",
     "DLLp": "probe_PIDp",
     "DLLmu": "probe_PIDmu",
     "DLLe": "probe_PIDe",
     "DLLd": "probe_PIDd",
-    "ProbNNe": "probe_MC15TuneV1_ProbNNe",
-    "ProbNNghost": "probe_MC15TuneV1_ProbNNghost",
-    "ProbNNk": "probe_MC15TuneV1_ProbNNk",
-    "ProbNNp": "probe_MC15TuneV1_ProbNNp",
-    "ProbNNpi": "probe_MC15TuneV1_ProbNNpi",
-}
-
-bin_aliases = {
+    "MC12TuneV2_ProbNNe": "probe_MC12TuneV2_ProbNNe",
+    "MC12TuneV2_ProbNNghost": "probe_MC12TuneV2_ProbNNghost",
+    "MC12TuneV2_ProbNNk": "probe_MC12TuneV2_ProbNNk",
+    "MC12TuneV2_ProbNNp": "probe_MC12TuneV2_ProbNNp",
+    "MC12TuneV2_ProbNNpi": "probe_MC12TuneV2_ProbNNpi",
+    "MC12TuneV3_ProbNNe": "probe_MC12TuneV3_ProbNNe",
+    "MC12TuneV3_ProbNNghost": "probe_MC12TuneV3_ProbNNghost",
+    "MC12TuneV3_ProbNNk": "probe_MC12TuneV3_ProbNNk",
+    "MC12TuneV3_ProbNNp": "probe_MC12TuneV3_ProbNNp",
+    "MC12TuneV3_ProbNNpi": "probe_MC12TuneV3_ProbNNpi",
+    "MC12TuneV4_ProbNNe": "probe_MC12TuneV4_ProbNNe",
+    "MC12TuneV4_ProbNNghost": "probe_MC12TuneV4_ProbNNghost",
+    "MC12TuneV4_ProbNNk": "probe_MC12TuneV4_ProbNNk",
+    "MC12TuneV4_ProbNNp": "probe_MC12TuneV4_ProbNNp",
+    "MC12TuneV4_ProbNNpi": "probe_MC12TuneV4_ProbNNpi",
+    "MC15TuneV1_ProbNNe": "probe_MC15TuneV1_ProbNNe",
+    "MC15TuneV1_ProbNNghost": "probe_MC15TuneV1_ProbNNghost",
+    "MC15TuneV1_ProbNNk": "probe_MC15TuneV1_ProbNNk",
+    "MC15TuneV1_ProbNNp": "probe_MC15TuneV1_ProbNNp",
+    "MC15TuneV1_ProbNNpi": "probe_MC15TuneV1_ProbNNpi",
     "P": "probe_P",
     "Brunel_P": "probe_Brunel_P",
     "ETA": "probe_ETA",
@@ -112,6 +124,7 @@ bin_aliases = {
     "nSPDhits": "nSPDhits",
     "nSPDhits_Brunel": "nSPDhits_Brunel",
     "TRCHI2NDOF": "probe_TRCHI2NDOF",
+    "isMuon": "probe_isMuon",
 }
 
 
@@ -144,31 +157,45 @@ def get_relevant_branch_names(
     whitespace = re.compile(r"\s+")
     for pid_cut in pid_cuts:
         pid_cut = re.sub(whitespace, "", pid_cut)
-        pid_cut_var, _, _ = re.split(r"(<|>|==|!=)", pid_cut)
+        pid_cut_vars = utils.extract_variable_names(pid_cut)
 
-        if pid_cut_var not in pid_aliases:
-            log.warning(
-                f"'{pid_cut_var}' is not a known PID variable alias, using raw variable"
-            )
-            branch_names[pid_cut_var] = pid_cut_var
-        else:
-            branch_names[pid_cut_var] = pid_aliases[pid_cut_var]
+        for pid_cut_var in pid_cut_vars:
+            if pid_cut_var not in aliases:
+                log.warning(
+                    (
+                        f"PID cut variable '{pid_cut_var}' is not a known alias, "
+                        "using raw variable"
+                    )
+                )
+                branch_names[pid_cut_var] = pid_cut_var
+            else:
+                branch_names[pid_cut_var] = aliases[pid_cut_var]
 
     for bin_var in bin_vars:
-        if bin_var not in bin_aliases:
+        if bin_var not in aliases:
             log.warning(
-                f"'{bin_var}' is not a known binning variable alias, using raw variable"
+                f"'Binning variable {bin_var}' is not a known alias, using raw variable"
             )
             branch_names[bin_var] = bin_var
         else:
-            branch_names[bin_var] = bin_aliases[bin_var]
+            branch_names[bin_var] = aliases[bin_var]
 
     # Add vars in the arbitrary cuts
     if cuts:
         for cut in cuts:
             cut = re.sub(whitespace, "", cut)
-            cut_var, _, _ = re.split(r"(<|>|==|!=)", cut)
-            branch_names[cut_var] = cut_var
+            cut_vars = utils.extract_variable_names(cut)
+            for cut_var in cut_vars:
+                if cut_var not in aliases:
+                    log.warning(
+                        (
+                            f"'Cut variable {cut_var}' is not a known alias, "
+                            "using raw variable"
+                        )
+                    )
+                    branch_names[cut_var] = cut_var
+                else:
+                    branch_names[cut_var] = aliases[cut_var]
 
     return branch_names
 
@@ -280,8 +307,15 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
         branches: Branches to put in the DataFrame.
     """
     tree = uproot.open(path)[tree_name]
-    df = tree.arrays(branches, library="pd")  # type: ignore
-    return df
+    try:
+        df = tree.arrays(branches, library="pd")  # type: ignore
+        return df
+    except uproot.exceptions.KeyInFileError as exc:  # type: ignore
+        similar_keys = utils.find_similar_strings(exc.key, tree.keys(), 0.80)
+        log.error(
+            f"Branch '{exc.key}' not found; similar branches that exist: {similar_keys}"
+        )
+        raise
 
 
 def calib_root_to_dataframe(
