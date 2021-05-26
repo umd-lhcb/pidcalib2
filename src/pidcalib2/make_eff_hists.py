@@ -39,14 +39,9 @@ import re
 import sys
 
 import logzero
-import uproot
 from logzero import logger as log
 
 from . import binning, markdown_table, pid_data, utils
-
-uproot.open.defaults[
-    "xrootd_handler"
-] = uproot.source.xrootd.XRootDSource  # type: ignore
 
 try:
     from .version import version  # type: ignore
