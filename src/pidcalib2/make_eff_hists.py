@@ -39,6 +39,7 @@ import re
 import sys
 
 import logzero
+import uproot
 from logzero import logger as log
 
 from . import binning, markdown_table, pid_data, utils
@@ -47,6 +48,8 @@ try:
     from .version import version  # type: ignore
 except ImportError:
     version = "N/A"
+
+uproot.open.defaults["xrootd_handler"] = uproot.MultithreadedXRootDSource
 
 
 class ListValidAction(argparse.Action):
