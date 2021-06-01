@@ -106,6 +106,8 @@ The `sample` and `magnet` options are used solely to select the correct PID effi
 
 `ref-pars` must be a dictionary of particles from the reference sample to apply cuts to. The keys represent the particle branch name prefix (`D0_K` in the previous example), and the values passed are a list containing particle type and PID cut, e.g. `'{"D0_K" : ["K", "DLLK > 4"], "D0_Pi" : ["Pi", "DLLK < 4"]}'`.
 
+The `--merge` option will copy the PID efficiency tree to your input file and make the PID efficiency tree a "Friend" of your input tree. Then you can treat your input tree as if it had the PID efficiency branches itself. E.g., `input_tree->Draw("PIDCalibEff")` should work. ROOT's "Friend" mechanism is an efficient way to add branches from one tree to another. Take a look [here](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html#example-3-adding-friends-to-trees) if you would like to know more.
+
 ### Examples:
 - Evaluate efficiency of a single PID cut and save it to `user_ntuple_PID_eff.root` without adding it to `user_ntuple.root`
   ```sh
