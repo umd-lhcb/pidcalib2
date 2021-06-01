@@ -30,7 +30,7 @@ def config():
         "binning_file": None,
         "cuts": None,
         "file_list": None,
-        "list_valid": None,
+        "list": None,
         "local_dataframe": None,
         "magnet": None,
         "output_dir": None,
@@ -233,7 +233,7 @@ def test_decode_arguments(capsys):
 
     with pytest.raises(SystemExit):
         make_eff_hists.decode_arguments(
-            ["--list-valid", str(Path(THIS_DIR, "test_data/test_samples.json"))]
+            ["--list", str(Path(THIS_DIR, "test_data/test_samples.json"))]
         )
     captured = capsys.readouterr().out
     assert captured == (

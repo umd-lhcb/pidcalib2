@@ -155,9 +155,9 @@ def decode_arguments(args):
     )
     parser.add_argument(
         "-l",
-        "--list-valid",
+        "--list",
         action=ListValidAction,
-        help="list all valid [configs, aliases]",
+        help="list all [configs, aliases]",
     )
     parser.add_argument(
         "-d",

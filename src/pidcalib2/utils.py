@@ -79,7 +79,7 @@ def create_eff_histograms(
 
         # Replace zeros with NaNs which suppresses duplicate Numpy warnings
         hist_total_nan = hists["total"].view()
-        hist_total_nan[hist_total_nan == 0] = np.nan
+        hist_total_nan[hist_total_nan == 0] = np.nan  # type: ignore
         hists["total"][...] = hist_total_nan
 
     n_total = len(df_total.index)
@@ -356,7 +356,7 @@ def is_float(entity: Any) -> bool:
 
 def find_similar_strings(
     comparison_string: str, list_of_strings: List[str], ratio: float
-):
+) -> List[str]:
     """Return a list of strings similar to the comparison string.
 
     Args:

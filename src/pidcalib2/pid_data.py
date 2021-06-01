@@ -124,7 +124,8 @@ aliases = {
     "nSPDhits": "nSPDhits",
     "nSPDhits_Brunel": "nSPDhits_Brunel",
     "TRCHI2NDOF": "probe_TRCHI2NDOF",
-    "isMuon": "probe_isMuon",
+    "IsMuon": "probe_isMuon",
+    "HasRich": "probe_hasRich",
 }
 
 
@@ -311,9 +312,18 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
         df = tree.arrays(branches, library="pd")  # type: ignore
         return df
     except uproot.exceptions.KeyInFileError as exc:  # type: ignore
-        similar_keys = utils.find_similar_strings(exc.key, tree.keys(), 0.80)
+        similar_keys = utils.find_similar_strings(exc.key, list(aliases), 0.80)
+        similar_keys += utils.find_similar_strings(exc.key, tree.keys(), 0.80)
+        similar_keys += utils.find_similar_strings(
+            "probe_" + exc.key, tree.keys(), 0.80
+        )
+        # Remove duplicates while preserving ordering
+        similar_keys = list(dict.fromkeys(similar_keys))
         log.error(
-            f"Branch '{exc.key}' not found; similar branches that exist: {similar_keys}"
+            (
+                f"Branch '{exc.key}' not found; similar aliases and/or branches "
+                f"that exist: {similar_keys}"
+            )
         )
         raise
 

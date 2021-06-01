@@ -49,7 +49,7 @@ pidcalib2.make_eff_hists --help
 
 The calibration files to be processed are determined by the `sample`, `magnet`, and `particle` options. All the valid combinations can be listed by running
 ```sh
-pidcalib2.make_eff_hists --list-valid configs
+pidcalib2.make_eff_hists --list configs
 ```
 
 Aliases for standard variables are defined to simplify the commands. We recommend users use only the aliases when specifying variables. When you use a name that isn't an alias, a warning message like the following will show up in the log. Use with caution.
@@ -58,7 +58,7 @@ Aliases for standard variables are defined to simplify the commands. We recommen
 ```
 All aliases can be listed by running
 ```sh
-pidcalib2.make_eff_hists --list-valid aliases
+pidcalib2.make_eff_hists --list aliases
 ```
 
 A file with alternative binnings can be specified using `--binning-file`. The file must contain valid JSON specifying bin edges. For example, a two-bin binning for particle `Pi`, variable `P` can be defined as
