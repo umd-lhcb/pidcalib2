@@ -242,8 +242,11 @@ def add_efficiencies(
 
     num_outside_range = len(df_nan.index)
     num_outside_range_frac = len(df_nan.index) / len(df_new.index)
-    log.debug(
-        f"Events out of range: {num_outside_range} ({num_outside_range_frac:.2%})"
+    log.warning(
+        (
+            "Events out of binning range: "
+            f"{num_outside_range} ({num_outside_range_frac:.2%})"
+        )
     )
     return df_new
 
