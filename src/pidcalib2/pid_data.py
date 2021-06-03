@@ -115,6 +115,26 @@ aliases = {
     "MC15TuneV1_ProbNNk": "probe_MC15TuneV1_ProbNNk",
     "MC15TuneV1_ProbNNp": "probe_MC15TuneV1_ProbNNp",
     "MC15TuneV1_ProbNNpi": "probe_MC15TuneV1_ProbNNpi",
+    "Brunel_MC12TuneV2_ProbNNe": "probe_Brunel_MC12TuneV2_ProbNNe",
+    "Brunel_MC12TuneV2_ProbNNghost": "probe_Brunel_MC12TuneV2_ProbNNghost",
+    "Brunel_MC12TuneV2_ProbNNk": "probe_Brunel_MC12TuneV2_ProbNNk",
+    "Brunel_MC12TuneV2_ProbNNp": "probe_Brunel_MC12TuneV2_ProbNNp",
+    "Brunel_MC12TuneV2_ProbNNpi": "probe_Brunel_MC12TuneV2_ProbNNpi",
+    "Brunel_MC12TuneV3_ProbNNe": "probe_Brunel_MC12TuneV3_ProbNNe",
+    "Brunel_MC12TuneV3_ProbNNghost": "probe_Brunel_MC12TuneV3_ProbNNghost",
+    "Brunel_MC12TuneV3_ProbNNk": "probe_Brunel_MC12TuneV3_ProbNNk",
+    "Brunel_MC12TuneV3_ProbNNp": "probe_Brunel_MC12TuneV3_ProbNNp",
+    "Brunel_MC12TuneV3_ProbNNpi": "probe_Brunel_MC12TuneV3_ProbNNpi",
+    "Brunel_MC12TuneV4_ProbNNe": "probe_Brunel_MC12TuneV4_ProbNNe",
+    "Brunel_MC12TuneV4_ProbNNghost": "probe_Brunel_MC12TuneV4_ProbNNghost",
+    "Brunel_MC12TuneV4_ProbNNk": "probe_Brunel_MC12TuneV4_ProbNNk",
+    "Brunel_MC12TuneV4_ProbNNp": "probe_Brunel_MC12TuneV4_ProbNNp",
+    "Brunel_MC12TuneV4_ProbNNpi": "probe_Brunel_MC12TuneV4_ProbNNpi",
+    "Brunel_MC15TuneV1_ProbNNe": "probe_Brunel_MC15TuneV1_ProbNNe",
+    "Brunel_MC15TuneV1_ProbNNghost": "probe_Brunel_MC15TuneV1_ProbNNghost",
+    "Brunel_MC15TuneV1_ProbNNk": "probe_Brunel_MC15TuneV1_ProbNNk",
+    "Brunel_MC15TuneV1_ProbNNp": "probe_Brunel_MC15TuneV1_ProbNNp",
+    "Brunel_MC15TuneV1_ProbNNpi": "probe_Brunel_MC15TuneV1_ProbNNpi",
     "P": "probe_P",
     "Brunel_P": "probe_Brunel_P",
     "ETA": "probe_ETA",
@@ -124,8 +144,11 @@ aliases = {
     "nSPDhits": "nSPDhits",
     "nSPDhits_Brunel": "nSPDhits_Brunel",
     "TRCHI2NDOF": "probe_TRCHI2NDOF",
+    "Brunel_TRCHI2NDOF": "probe_Brunel_TRCHI2NDOF",
     "IsMuon": "probe_isMuon",
+    "Brunel_IsMuon": "probe_Brunel_isMuon",
     "HasRich": "probe_hasRich",
+    "Brunel_HasRich": "probe_Brunel_hasRich",
 }
 
 
@@ -190,7 +213,7 @@ def get_relevant_branch_names(
                 if cut_var not in aliases:
                     log.warning(
                         (
-                            f"'Cut variable {cut_var}' is not a known alias, "
+                            f"Cut variable '{cut_var}' is not a known alias, "
                             "using raw variable"
                         )
                     )
