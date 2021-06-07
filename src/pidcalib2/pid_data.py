@@ -330,7 +330,33 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
         tree_name: Name of a tree inside the ROOT file.
         branches: Branches to put in the DataFrame.
     """
-    tree = uproot.open(path)[tree_name]
+    tree = None
+    for _ in range(3):
+        # EOS sometimes fails with a message saying the operation expired. It is
+        # intermittent and hard to replicate. See this related issue:
+        # https://github.com/scikit-hep/uproot4/issues/351. To avoid PIDCalib2
+        # completely failing in these cases, we retry a few times, and skip the
+        # file with a warning message if this happens.
+        try:
+            tree = uproot.open(path)[tree_name]
+            break
+        except OSError as err:
+            if "Operation expired" in err.args[0]:
+                log.warning(
+                    (
+                        "XRootD operation expired when trying to open "
+                        f"'{path}'; retrying..."
+                    )
+                )
+            else:
+                raise
+
+    if tree is None:
+        log.error(
+            f"Failed to open '{path}' because an XRootD operation expired; skipping"
+        )
+        return  # type: ignore
+
     try:
         df = tree.arrays(branches, library="pd")  # type: ignore
         return df
@@ -375,7 +401,8 @@ def calib_root_to_dataframe(
     for path in tqdm(paths, leave=False, desc="Reading files"):
         for tree_path in tree_paths:
             df = root_to_dataframe(path, tree_path, list(branches.values()))
-            df_tot = df_tot.append(df)
+            if df is not None:
+                df_tot = df_tot.append(df)
 
     # Rename colums of the dataset from branch names to simple user-level
     # names, e.g., probe_PIDK -> DLLK.
