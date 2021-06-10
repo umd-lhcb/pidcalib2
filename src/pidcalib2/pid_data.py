@@ -13,6 +13,7 @@ import json
 import os
 import pickle
 import re
+import time
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -331,7 +332,7 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
         branches: Branches to put in the DataFrame.
     """
     tree = None
-    for _ in range(3):
+    for i in range(3):
         # EOS sometimes fails with a message saying the operation expired. It is
         # intermittent and hard to replicate. See this related issue:
         # https://github.com/scikit-hep/uproot4/issues/351. To avoid PIDCalib2
@@ -342,12 +343,17 @@ def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.Data
             break
         except OSError as err:
             if "Operation expired" in err.args[0]:
+                if i == 0:
+                    # Go to a new line to avoid the warning message being on the
+                    # same line as the tqdm progess bar
+                    print()
                 log.warning(
                     (
                         "XRootD operation expired when trying to open "
                         f"'{path}'; retrying..."
                     )
                 )
+                time.sleep(1)
             else:
                 raise
 
@@ -397,19 +403,26 @@ def calib_root_to_dataframe(
         Pandas DataFrame with the requested branches from a decay tree of a
         single particle.
     """
+    files_read = 0
     df_tot = pd.DataFrame()
     for path in tqdm(paths, leave=False, desc="Reading files"):
         for tree_path in tree_paths:
             df = root_to_dataframe(path, tree_path, list(branches.values()))
             if df is not None:
                 df_tot = df_tot.append(df)
+                files_read += 1
 
     # Rename colums of the dataset from branch names to simple user-level
     # names, e.g., probe_PIDK -> DLLK.
     inverse_branch_dict = {val: key for key, val in branches.items()}
     df_tot = df_tot.rename(columns=inverse_branch_dict)  # type: ignore
 
-    log.info(f"Read {len(paths)} files with a total of {len(df_tot.index)} events")
+    log.info(
+        (
+            f"Read {files_read}/{len(paths)} files with a total "
+            f"of {len(df_tot.index)} events"
+        )
+    )
     return df_tot
 
 
