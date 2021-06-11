@@ -17,6 +17,7 @@ import boost_histogram as bh
 import numpy as np
 import pandas as pd
 from logzero import logger as log
+from tqdm import tqdm
 
 from . import binning, pid_data
 
@@ -52,9 +53,7 @@ def make_hist(
     return hist
 
 
-def create_eff_histograms(
-    df_total: pd.DataFrame, particle: str, pid_cuts: List[str], bin_vars: List[str]
-) -> Dict[str, bh.Histogram]:
+def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histogram]:
     """Create efficiency histograms for all supplied PID cuts.
 
     Args:
@@ -67,14 +66,14 @@ def create_eff_histograms(
         A dictionary with all the efficiency histograms, with the PID cuts as
         keys.
     """
-
-    hists = {}
-    hists["total"] = make_hist(df_total, particle, bin_vars)
-    hists["total_sumw2"] = make_hist(df_total, particle, bin_vars, True)
-
     zero_bins = np.count_nonzero(hists["total"].view(flow=False) == 0)
     if zero_bins:
-        log.warning(f"There are {zero_bins} empty bins in the total histogram!")
+        log.warning(
+            (
+                f"There are {zero_bins} empty bins in the total histogram! "
+                "You might want to change the binning."
+            )
+        )
         log.debug(hists["total"].view(flow=False))
 
         # Replace zeros with NaNs which suppresses duplicate Numpy warnings
@@ -82,26 +81,14 @@ def create_eff_histograms(
         hist_total_nan[hist_total_nan == 0] = np.nan  # type: ignore
         hists["total"][...] = hist_total_nan
 
-    n_total = len(df_total.index)
-    for i, pid_cut in enumerate(pid_cuts):
-        log.info(f"Processing '{pid_cuts[i]}' cut")
-        df_passing = df_total.query(pid_cut)
-        n_passing = len(df_passing.index)
-        percent_passing = n_passing / n_total * 100
-        log.info(
-            f"{n_passing}/{n_total} ({percent_passing:.2f}%) events passed the cut"
-        )
-        hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
-        hists[f"passing_sumw2_{pid_cut}"] = make_hist(
-            df_passing, particle, bin_vars, True
-        )
-        log.debug("Created 'passing' histogram")
-
-        hists[f"eff_{pid_cut}"] = hists[f"passing_{pid_cut}"].copy()
-        hists[f"eff_{pid_cut}"][...] = hists[f"passing_{pid_cut}"].view(
-            flow=False
-        ) / hists["total"].view(flow=False)
-        log.debug(f"Created 'eff_{pid_cut}' histogram")
+    for name in list(hists):
+        if name.startswith("passing_") and not name.startswith("passing_sumw2_"):
+            eff_name = name.replace("passing_", "eff_", 1)
+            hists[eff_name] = hists[name].copy()
+            hists[eff_name][...] = hists[name].view(flow=False) / hists["total"].view(
+                flow=False
+            )  # type: ignore
+            log.debug(f"Created '{eff_name}' histogram")
 
     return hists
 
@@ -320,7 +307,7 @@ def apply_cuts(df: pd.DataFrame, cuts: List[str]) -> Tuple[int, int]:
     df.query(cut_string, inplace=True)
     num_after = df.shape[0]
     log.debug(
-        f"{num_after}/{num_before} ({num_after/num_before:.1%}) events " "passed cuts"
+        f"{num_after}/{num_before} ({num_after/num_before:.1%}) events passed cuts"
     )
     return num_before, num_after
 
@@ -378,3 +365,196 @@ def find_similar_strings(
     )
 
     return [string for string, ratio in sorted_similar_strings]
+
+
+def add_hists(all_hists: List[Dict[str, bh.Histogram]]) -> Dict[str, bh.Histogram]:
+    """Add a list of histograms in dictionaries.
+
+    Args:
+        all_hists: List of dictionaries with histograms to add.
+
+    Returns:
+        A dictionary of histograms with the same structure as any
+        single dictionary that went into the merge.
+    """
+    total_hists = all_hists[0]
+    for hist_dict in all_hists[1:]:
+        for name in total_hists:
+            total_hists[name] += hist_dict[name]
+    return total_hists
+
+
+def create_histograms(config):
+    calib_sample = {}
+    if config["file_list"]:
+        with open(config["file_list"]) as f_list:
+            calib_sample["files"] = f_list.read().splitlines()
+    else:
+        calib_sample = pid_data.get_calibration_sample(
+            config["sample"],
+            config["magnet"],
+            config["particle"],
+            config["samples_file"],
+            config["max_files"],
+        )
+    tree_paths = pid_data.get_tree_paths(config["particle"], config["sample"])
+    log.debug(f"Trees to be read: {tree_paths}")
+
+    # If there are hard-coded cuts, the variables must be included in the
+    # branches to read.
+    cuts = config["cuts"]
+    if "cuts" in calib_sample:
+        if cuts is None:
+            cuts = []
+        cuts += calib_sample["cuts"]
+
+    branch_names = pid_data.get_relevant_branch_names(
+        config["pid_cuts"], config["bin_vars"], cuts
+    )
+    log.info(f"Branches to be read: {branch_names}")
+    log.info(
+        f"{len(calib_sample['files'])} calibration files from EOS will be processed"
+    )
+    for path in calib_sample["files"]:
+        log.debug(f"  {path}")
+
+    binning_range_cuts = []
+    for bin_var in config["bin_vars"]:
+        bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
+        binning_range_cuts.append(
+            f"{bin_var} > {bin_edges[0]} and {bin_var} < {bin_edges[-1]}"
+        )
+
+    cut_stats = {
+        "binning range": {"before": 0, "after": 0},
+        "hard-coded": {"before": 0, "after": 0},
+        "user": {"before": 0, "after": 0},
+    }
+    all_hists = {}
+    for path in tqdm(calib_sample["files"], leave=False, desc="Processing files"):
+        df = pid_data.root_to_dataframe(path, tree_paths, list(branch_names.values()))
+        if df is not None:
+            # Rename colums of the dataset from branch names to simple user-level
+            # names, e.g., probe_PIDK -> DLLK.
+            inverse_branch_dict = {val: key for key, val in branch_names.items()}
+            df = df.rename(columns=inverse_branch_dict)  # type: ignore
+
+            apply_all_cuts(
+                df,
+                cut_stats,
+                binning_range_cuts,
+                calib_sample["cuts"] if "cuts" in calib_sample else [],
+                config["cuts"] if "cuts" in config else [],
+            )
+
+            hists = {}
+            hists["total"] = make_hist(df, config["particle"], config["bin_vars"])
+            hists["total_sumw2"] = make_hist(
+                df, config["particle"], config["bin_vars"], True
+            )
+
+            hists_passing = create_passing_histograms(
+                df,
+                cut_stats,
+                config["particle"],
+                config["bin_vars"],
+                config["pid_cuts"],
+            )
+
+            # Merge dictionaries
+            hists = {**hists, **hists_passing}
+            all_hists[path] = hists
+
+    log.info(f"Processed {len(all_hists)}/{len(calib_sample['files'])} files")
+    print_cut_summary(cut_stats)
+    return all_hists
+
+
+def create_histograms_from_local_dataframe(config):
+    branch_names = pid_data.get_relevant_branch_names(
+        config["pid_cuts"], config["bin_vars"], config["cuts"]
+    )
+    df = pid_data.dataframe_from_local_file(
+        config["local_dataframe"], list(branch_names)
+    )
+    if config["cuts"]:
+        log.debug(f"Applying user cuts: '{config['cuts']}'")
+        num_before, num_after = apply_cuts(df, config["cuts"])
+
+    particle = config["particle"]
+    bin_vars = config["bin_vars"]
+    pid_cuts = config["pid_cuts"]
+
+    hists = {}
+    hists["total"] = make_hist(df, particle, bin_vars)
+    hists["total_sumw2"] = make_hist(df, particle, bin_vars, True)
+
+    for i, pid_cut in enumerate(pid_cuts):
+        log.info(f"Processing '{pid_cuts[i]}' cut")
+        df_passing = df.query(pid_cut)
+        hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
+        hists[f"passing_sumw2_{pid_cut}"] = make_hist(
+            df_passing, particle, bin_vars, True
+        )
+        log.debug("Created 'passing' histogram")
+
+    return hists
+
+
+def apply_all_cuts(
+    df: pd.DataFrame,
+    cut_stats: Dict[str, Dict[str, int]],
+    binning_range_cuts: List[str],
+    hardcoded_cuts: List[str],
+    user_cuts: List[str],
+) -> Dict[str, Dict[str, int]]:
+
+    log.debug(f"Applying binning range cuts: {binning_range_cuts}'")
+    num_before, num_after = apply_cuts(df, binning_range_cuts)
+    cut_stats["binning range"]["before"] += num_before
+    cut_stats["binning range"]["after"] += num_after
+
+    if hardcoded_cuts:
+        log.debug(f"Applying hard-coded cuts: {hardcoded_cuts}'")
+        num_before, num_after = apply_cuts(df, hardcoded_cuts)
+        cut_stats["hard-coded"]["before"] += num_before
+        cut_stats["hard-coded"]["after"] += num_after
+
+    if user_cuts:
+        log.debug(f"Applying user cuts: '{user_cuts}'")
+        num_before, num_after = apply_cuts(df, user_cuts)
+        cut_stats["user"]["before"] += num_before
+        cut_stats["user"]["after"] += num_after
+
+    return cut_stats
+
+
+def create_passing_histograms(df, cut_stats, particle, bin_vars, pid_cuts):
+    hists = {}
+    num_total = len(df.index)
+    for i, pid_cut in enumerate(pid_cuts):
+        log.debug(f"Processing '{pid_cuts[i]}' cut")
+        df_passing = df.query(pid_cut)
+        hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
+        hists[f"passing_sumw2_{pid_cut}"] = make_hist(
+            df_passing, particle, bin_vars, True
+        )
+        log.debug("Created 'passing' histogram")
+        if f"'{pid_cut}'" not in cut_stats:
+            cut_stats[f"'{pid_cut}'"] = {"before": 0, "after": 0}
+        cut_stats[f"'{pid_cut}'"]["after"] += len(df_passing.index)
+        cut_stats[f"'{pid_cut}'"]["before"] += num_total
+    return hists
+
+
+def print_cut_summary(cut_stats: Dict[str, Dict[str, int]]):
+    for name, cut_stat in cut_stats.items():
+        num_after = cut_stat["after"]
+        num_before = cut_stat["before"]
+        if num_before != 0:
+            log.info(
+                (
+                    f"{num_after}/{num_before} "
+                    f"({num_after/num_before:.1%}) events passed {name} cut"
+                )
+            )

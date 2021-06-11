@@ -227,75 +227,13 @@ def make_eff_hists(config: dict) -> None:
         bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
         log.debug(f"{bin_var} binning: {bin_edges}")
 
-    df_total = None
     if config["local_dataframe"]:
-        branch_names = pid_data.get_relevant_branch_names(
-            config["pid_cuts"], config["bin_vars"], config["cuts"]
-        )
-        df_total = pid_data.dataframe_from_local_file(
-            config["local_dataframe"], list(branch_names)
-        )
+        hists = utils.create_histograms_from_local_dataframe(config)
     else:
-        calib_sample = {}
-        if config["file_list"]:
-            with open(config["file_list"]) as f_list:
-                calib_sample["files"] = f_list.read().splitlines()
-        else:
-            calib_sample = pid_data.get_calibration_sample(
-                config["sample"],
-                config["magnet"],
-                config["particle"],
-                config["samples_file"],
-                config["max_files"],
-            )
-        tree_paths = pid_data.get_tree_paths(config["particle"], config["sample"])
-        log.debug(f"Trees to be read: {tree_paths}")
+        hists_list = utils.create_histograms(config)
+        hists = utils.add_hists(list(hists_list.values()))
 
-        # If there are hard-coded cuts, the variables must be included in the
-        # branches to read.
-        cuts = config["cuts"]
-        if "cuts" in calib_sample:
-            if cuts is None:
-                cuts = []
-            cuts += calib_sample["cuts"]
-
-        branch_names = pid_data.get_relevant_branch_names(
-            config["pid_cuts"], config["bin_vars"], cuts
-        )
-        log.info(f"Branches to be read: {branch_names}")
-        log.info(
-            f"{len(calib_sample['files'])} calibration files from EOS will be processed"
-        )
-        for path in calib_sample["files"]:
-            log.debug(f"  {path}")
-
-        df_total = pid_data.calib_root_to_dataframe(
-            calib_sample["files"], tree_paths, branch_names
-        )
-
-        binning_range_cuts = []
-        for bin_var in config["bin_vars"]:
-            bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
-            binning_range_cuts.append(
-                f"{bin_var} > {bin_edges[0]} and {bin_var} < {bin_edges[-1]}"
-            )
-        log.debug(f"Applying binning range cuts: {binning_range_cuts}'")
-        utils.apply_cuts(df_total, binning_range_cuts)
-
-        if "cuts" in calib_sample:
-            log.debug(f"Applying hard-coded cuts: {calib_sample['cuts']}'")
-            utils.apply_cuts(df_total, calib_sample["cuts"])
-
-        # df_total.to_pickle("local_dataframe.pkl")
-        # df_total.to_csv("local_dataframe.csv")
-
-    if config["cuts"]:
-        log.debug(f"Applying user cuts: '{config['cuts']}'")
-        utils.apply_cuts(df_total, config["cuts"])
-
-    eff_hists = utils.create_eff_histograms(
-        df_total, config["particle"], config["pid_cuts"], config["bin_vars"]
-    )
+    eff_hists = utils.create_eff_histograms(hists)
 
     for name in eff_hists:
         if name.startswith("eff_"):

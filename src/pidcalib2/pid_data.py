@@ -13,7 +13,6 @@ import json
 import os
 import pickle
 import re
-import time
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -22,7 +21,6 @@ import pandas as pd
 import uproot
 import uproot3
 from logzero import logger as log
-from tqdm import tqdm
 
 from . import utils
 
@@ -322,108 +320,57 @@ def get_calibration_sample(
     return calibration_sample
 
 
-def root_to_dataframe(path: str, tree_name: str, branches: List[str]) -> pd.DataFrame:
+def root_to_dataframe(
+    path: str, tree_names: List[str], branches: List[str]
+) -> pd.DataFrame:
     """Return DataFrame with requested branches from tree in ROOT file.
 
     Args:
         path: Path to the ROOT file; either file system path or URL, e.g.
             root:///eos/lhcb/file.root.
-        tree_name: Name of a tree inside the ROOT file.
+        tree_names: Names of trees inside the ROOT file to read.
         branches: Branches to put in the DataFrame.
     """
     tree = None
-    for i in range(3):
-        # EOS sometimes fails with a message saying the operation expired. It is
-        # intermittent and hard to replicate. See this related issue:
-        # https://github.com/scikit-hep/uproot4/issues/351. To avoid PIDCalib2
-        # completely failing in these cases, we retry a few times, and skip the
-        # file with a warning message if this happens.
-        try:
-            tree = uproot.open(path)[tree_name]
-            break
-        except OSError as err:
-            if "Operation expired" in err.args[0]:
-                if i == 0:
-                    # Go to a new line to avoid the warning message being on the
-                    # same line as the tqdm progess bar
-                    print()
-                log.warning(
-                    (
-                        "XRootD operation expired when trying to open "
-                        f"'{path}'; retrying..."
-                    )
-                )
-                time.sleep(1)
-            else:
-                raise
-
-    if tree is None:
-        log.error(
-            f"Failed to open '{path}' because an XRootD operation expired; skipping"
-        )
-        return  # type: ignore
-
+    # EOS sometimes fails with a message saying the operation expired. It is
+    # intermittent and hard to replicate. See this related issue:
+    # https://github.com/scikit-hep/uproot4/issues/351. To avoid PIDCalib2
+    # completely failing in these cases, we skip the file with a warning
+    # message if this happens.
     try:
-        df = tree.arrays(branches, library="pd")  # type: ignore
-        return df
-    except uproot.exceptions.KeyInFileError as exc:  # type: ignore
-        similar_keys = utils.find_similar_strings(exc.key, list(aliases), 0.80)
-        similar_keys += utils.find_similar_strings(exc.key, tree.keys(), 0.80)
-        similar_keys += utils.find_similar_strings(
-            "probe_" + exc.key, tree.keys(), 0.80
-        )
-        # Remove duplicates while preserving ordering
-        similar_keys = list(dict.fromkeys(similar_keys))
-        log.error(
-            (
-                f"Branch '{exc.key}' not found; similar aliases and/or branches "
-                f"that exist: {similar_keys}"
+        root_file = uproot.open(path)
+    except OSError as err:
+        if "Operation expired" in err.args[0]:
+            log.error(
+                f"Failed to open '{path}' because an XRootD operation expired; skipping"
             )
-        )
-        raise
+            print(err)
+            return None  # type: ignore
+        else:
+            raise
 
+    dfs = []
+    for tree_name in tree_names:
+        tree = root_file[tree_name]
+        try:
+            dfs.append(tree.arrays(branches, library="pd"))  # type: ignore
+        except uproot.exceptions.KeyInFileError as exc:  # type: ignore
+            similar_keys = utils.find_similar_strings(exc.key, list(aliases), 0.80)
+            similar_keys += utils.find_similar_strings(exc.key, tree.keys(), 0.80)
+            similar_keys += utils.find_similar_strings(
+                "probe_" + exc.key, tree.keys(), 0.80
+            )
+            # Remove duplicates while preserving ordering
+            similar_keys = list(dict.fromkeys(similar_keys))
+            log.error(
+                (
+                    f"Branch '{exc.key}' not found; similar aliases and/or branches "
+                    f"that exist: {similar_keys}"
+                )
+            )
+            raise
 
-def calib_root_to_dataframe(
-    paths: List[str], tree_paths: List[str], branches: Dict[str, str]
-) -> pd.DataFrame:
-    """Read ROOT files via XRootD, extract branches, and save to a Pandas DF.
-
-    DataFrame columns are not named after the branches in the ROOT trees, but
-    rather by their associated 'simple user-level' analogues. E.g., 'DLLK'
-    instead of 'probe_PIDK'.
-
-    Args:
-        paths: Paths to ROOT files; either file system paths or URLs, e.g.
-            ["root:///eos/lhcb/file.root"].
-        tree_paths: Internal ROOT file paths to the relevant trees
-        branches: Dict of the branches {simple_name: branch_name} to include
-           in the DataFrame.
-
-    Returns:
-        Pandas DataFrame with the requested branches from a decay tree of a
-        single particle.
-    """
-    files_read = 0
-    df_tot = pd.DataFrame()
-    for path in tqdm(paths, leave=False, desc="Reading files"):
-        for tree_path in tree_paths:
-            df = root_to_dataframe(path, tree_path, list(branches.values()))
-            if df is not None:
-                df_tot = df_tot.append(df)
-                files_read += 1
-
-    # Rename colums of the dataset from branch names to simple user-level
-    # names, e.g., probe_PIDK -> DLLK.
-    inverse_branch_dict = {val: key for key, val in branches.items()}
-    df_tot = df_tot.rename(columns=inverse_branch_dict)  # type: ignore
-
-    log.info(
-        (
-            f"Read {files_read}/{len(paths)} files with a total "
-            f"of {len(df_tot.index)} events"
-        )
-    )
-    return df_tot
+    return pd.concat(dfs, ignore_index=True)  # type: ignore
 
 
 def get_tree_paths(particle: str, sample: str) -> List[str]:
