@@ -22,14 +22,12 @@ THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_calib_root_to_dataframe():
+def test_root_to_dataframe():
     assert (
-        pid_data.calib_root_to_dataframe(
-            [
-                "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision15/PIDCALIB.ROOT/00064787/0000/00064787_00000037_1.pidcalib.root"  # noqa: E501
-            ],
+        pid_data.root_to_dataframe(
+            "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Collision15/PIDCALIB.ROOT/00064787/0000/00064787_00000037_1.pidcalib.root",  # noqa: E501
             ["DSt_PiMTuple/DecayTree", "DSt_PiPTuple/DecayTree"],
-            {"DLLK": "probe_PIDK"},
+            ["probe_PIDK"],
         ).shape[0]
         == 18400
     )

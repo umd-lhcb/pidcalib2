@@ -204,7 +204,7 @@ def ref_calib(config: Dict) -> float:
 
     log.info(f"Loading reference sample '{config['ref_file']}' ...")
     df_ref = pid_data.root_to_dataframe(
-        config["ref_file"], config["ref_tree"], ref_branches
+        config["ref_file"], [config["ref_tree"]], ref_branches
     )
     log.debug(
         f"Reference sample '{config['ref_file']}' with {len(df_ref.index)} events loaded"  # noqa
