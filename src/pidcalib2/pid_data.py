@@ -351,8 +351,8 @@ def root_to_dataframe(
 
     dfs = []
     for tree_name in tree_names:
-        tree = root_file[tree_name]
         try:
+            tree = root_file[tree_name]
             dfs.append(tree.arrays(branches, library="pd"))  # type: ignore
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
             similar_keys = utils.find_similar_strings(exc.key, list(aliases), 0.80)
@@ -369,6 +369,18 @@ def root_to_dataframe(
                 )
             )
             raise
+        except OSError as err:
+            if "Operation expired" in err.args[0]:
+                log.error(
+                    (
+                        f"Failed to open '{path}' because an XRootD operation "
+                        "expired; skipping"
+                    )
+                )
+                print(err)
+                return None  # type: ignore
+            else:
+                raise
 
     return pd.concat(dfs, ignore_index=True)  # type: ignore
 
