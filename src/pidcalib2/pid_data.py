@@ -356,9 +356,11 @@ def root_to_dataframe(
             dfs.append(tree.arrays(branches, library="pd"))  # type: ignore
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
             similar_keys = utils.find_similar_strings(exc.key, list(aliases), 0.80)
-            similar_keys += utils.find_similar_strings(exc.key, tree.keys(), 0.80)
             similar_keys += utils.find_similar_strings(
-                "probe_" + exc.key, tree.keys(), 0.80
+                exc.key, tree.keys(), 0.80  # type: ignore
+            )
+            similar_keys += utils.find_similar_strings(
+                "probe_" + exc.key, tree.keys(), 0.80  # type: ignore
             )
             # Remove duplicates while preserving ordering
             similar_keys = list(dict.fromkeys(similar_keys))
