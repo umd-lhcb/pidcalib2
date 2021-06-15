@@ -93,7 +93,7 @@ def decode_arguments(args):
     parser.add_argument(
         "-s",
         "--sample",
-        help="calibration sample (Turbo18, Electron16, ...)",
+        help="calibration sample; see pidcalib2.make_eff_hists --list configs",
         required=True,
         type=str,
     )
@@ -107,7 +107,7 @@ def decode_arguments(args):
     parser.add_argument(
         "-p",
         "--particle",
-        help="particle type",
+        help="particle type; see pidcalib2.make_eff_hists --list configs",
         required=True,
     )
     parser.add_argument(

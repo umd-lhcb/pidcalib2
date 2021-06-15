@@ -302,7 +302,12 @@ def get_calibration_sample(
     try:
         sample_dict = samples_dict[sample_name]
     except KeyError:
-        log.error(f"Sample '{sample_name}' not found in {samples_file}")
+        log.error(
+            (
+                f"Sample '{sample_name}' not found. "
+                "Consult 'pidcalib2.make_eff_hists --list configs'."
+            )
+        )
         raise
 
     calibration_sample = sample_dict.copy()
@@ -478,12 +483,22 @@ def get_calib_hists(
         log.debug(f"Loading efficiency histograms from '{calib_name}'")
 
         hists[ref_par] = {}
-        with open(calib_name, "rb") as f:
-            hists[ref_par]["eff"] = pickle.load(f)
-            hists[ref_par]["passing"] = pickle.load(f)
-            hists[ref_par]["total"] = pickle.load(f)
-            hists[ref_par]["passing_sumw2"] = pickle.load(f)
-            hists[ref_par]["total_sumw2"] = pickle.load(f)
+        try:
+            with open(calib_name, "rb") as f:
+                hists[ref_par]["eff"] = pickle.load(f)
+                hists[ref_par]["passing"] = pickle.load(f)
+                hists[ref_par]["total"] = pickle.load(f)
+                hists[ref_par]["passing_sumw2"] = pickle.load(f)
+                hists[ref_par]["total_sumw2"] = pickle.load(f)
+        except FileNotFoundError:
+            log.error(
+                (
+                    "Efficiency histogram file not found. You must first "
+                    "run make_eff_hists with matching parameters to create the "
+                    "efficiency histograms."
+                )
+            )
+            raise
     return hists
 
 
