@@ -219,13 +219,11 @@ def make_eff_hists(config: dict) -> None:
     output_dir = pathlib.Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    if config["binning_file"] is not None:
-        binning.load_binnings(config["binning_file"])
-
-    # Check that all binnings exist before reading files
-    for bin_var in config["bin_vars"]:
-        bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
-        log.debug(f"{bin_var} binning: {bin_edges}")
+    binning.check_and_load_binnings(
+        config["particle"],
+        config["bin_vars"],
+        config["binning_file"] if "binning_file" in config else None,
+    )
 
     if config["local_dataframe"]:
         hists = utils.create_histograms_from_local_dataframe(config)

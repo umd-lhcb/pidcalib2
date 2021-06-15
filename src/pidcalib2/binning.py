@@ -10,7 +10,7 @@
 ###############################################################################
 
 import json
-from typing import List
+from typing import Dict, List, Union
 
 import numpy as np
 from logzero import logger as log
@@ -192,8 +192,15 @@ def get_binning(particle: str, variable: str, verbose: bool = False) -> List[flo
         return binnings[particle][variable]["bin_edges"]
 
 
-def load_binnings(path: str) -> None:
-    """Load binnings from a JSON file."""
+def load_binnings(path: str) -> Dict[str, Dict]:
+    """Load binnings from a JSON file.
+
+    Args:
+        path: Path to the binning JSON file.
+
+    Returns:
+        A dictionary with the new binnings.
+    """
     new_binnings = {}
     log.info(f"Loading binnings from {path}")
     with open(path) as f:
@@ -201,3 +208,43 @@ def load_binnings(path: str) -> None:
     for particle, variables in new_binnings.items():
         for variable, binning in variables.items():
             set_binning(particle, variable, binning)
+
+    return new_binnings
+
+
+def check_and_load_binnings(
+    particle: str, bin_vars: List[str], binning_file: Union[str, None]
+) -> None:
+    """Load custom binnings and check if all necessary binnings exits.
+
+    Args:
+        particle: Particle type (K, pi, etc.).
+        bin_vars: Binning variables.
+        binning_file: Optional. Path to the binning JSON file.
+    """
+    custom_binnings = {}
+    if binning_file is not None:
+        custom_binnings = load_binnings(binning_file)
+
+    # Check that all binnings exist
+    for bin_var in bin_vars:
+        bin_edges = get_binning(particle, bin_var, verbose=True)
+        log.debug(f"{bin_var} binning: {bin_edges}")
+        # Check if a custom binning exists and label it as used
+        if particle in custom_binnings and bin_var in custom_binnings[particle]:
+            custom_binnings[particle][bin_var] = "used"
+
+    unused_custom_binnings = []
+    for particle in custom_binnings:
+        for bin_var in custom_binnings[particle]:
+            if custom_binnings[particle][bin_var] != "used":
+                unused_custom_binnings.append(
+                    {"particle": particle, "bin_var": bin_var}
+                )
+    if unused_custom_binnings:
+        log.warning(
+            (
+                "The following custom binnings are not "
+                f"being used: {unused_custom_binnings}"
+            )
+        )
