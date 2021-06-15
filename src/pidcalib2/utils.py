@@ -22,16 +22,13 @@ from tqdm import tqdm
 from . import binning, pid_data
 
 
-def make_hist(
-    df: pd.DataFrame, particle: str, bin_vars: List[str], square_weights: bool = False
-) -> bh.Histogram:
+def make_hist(df: pd.DataFrame, particle: str, bin_vars: List[str]) -> bh.Histogram:
     """Create a histogram of sWeighted events with appropriate binning
 
     Args:
         df: DataFrame from which to histogram events.
         particle: Particle type (K, Pi, etc.).
         bin_vars: Binning variables in the user-convention, e.g., ["P", "ETA"].
-        square_weights: Use square of sWeights instead of sWeights as the weights.
     """
     axis_list = []
     vals_list = []
@@ -44,11 +41,8 @@ def make_hist(
         vals_list.append(vals)
 
     # Create boost-histogram with the desired axes, and fill with sWeight applied
-    hist = bh.Histogram(*axis_list)
-    if square_weights:
-        hist.fill(*vals_list, weight=np.square(df["sWeight"]))  # type: ignore
-    else:
-        hist.fill(*vals_list, weight=df["sWeight"])
+    hist = bh.Histogram(*axis_list, storage=bh.storage.Weight())
+    hist.fill(*vals_list, weight=df["sWeight"])
 
     return hist
 
@@ -66,7 +60,7 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
         A dictionary with all the efficiency histograms, with the PID cuts as
         keys.
     """
-    zero_bins = np.count_nonzero(hists["total"].view(flow=False) == 0)
+    zero_bins = np.count_nonzero(hists["total"].values(flow=False) == 0)
     if zero_bins:
         log.warning(
             (
@@ -77,17 +71,27 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
         log.debug(hists["total"].view(flow=False))
 
         # Replace zeros with NaNs which suppresses duplicate Numpy warnings
-        hist_total_nan = hists["total"].view()
-        hist_total_nan[hist_total_nan == 0] = np.nan  # type: ignore
-        hists["total"][...] = hist_total_nan
+        hist_total_nan = hists["total"].values()
+        hist_total_nan[hist_total_nan == 0] = np.nan
+        hists["total"].view().value = hist_total_nan  # type: ignore
 
     for name in list(hists):
         if name.startswith("passing_") and not name.startswith("passing_sumw2_"):
             eff_name = name.replace("passing_", "eff_", 1)
             hists[eff_name] = hists[name].copy()
-            hists[eff_name][...] = hists[name].view(flow=False) / hists["total"].view(
+            hists[eff_name].view().value = hists[name].values(flow=False) / hists[  # type: ignore # noqa
+                "total"
+            ].values(
                 flow=False
-            )  # type: ignore
+            )
+            hists[eff_name].view().variance = np.square(  # type: ignore
+                binomial_uncertainty(
+                    hists[name].values(flow=False),
+                    hists["total"].values(flow=False),
+                    hists[name].variances(flow=False),  # type: ignore
+                    hists["total"].variances(flow=False),  # type: ignore
+                )
+            )
             log.debug(f"Created '{eff_name}' histogram")
 
     return hists
@@ -449,9 +453,6 @@ def create_histograms(config):
 
             hists = {}
             hists["total"] = make_hist(df, config["particle"], config["bin_vars"])
-            hists["total_sumw2"] = make_hist(
-                df, config["particle"], config["bin_vars"], True
-            )
 
             hists_passing = create_passing_histograms(
                 df,
@@ -487,15 +488,11 @@ def create_histograms_from_local_dataframe(config):
 
     hists = {}
     hists["total"] = make_hist(df, particle, bin_vars)
-    hists["total_sumw2"] = make_hist(df, particle, bin_vars, True)
 
     for i, pid_cut in enumerate(pid_cuts):
         log.info(f"Processing '{pid_cuts[i]}' cut")
         df_passing = df.query(pid_cut)
         hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
-        hists[f"passing_sumw2_{pid_cut}"] = make_hist(
-            df_passing, particle, bin_vars, True
-        )
         log.debug("Created 'passing' histogram")
 
     return hists
@@ -536,9 +533,6 @@ def create_passing_histograms(df, cut_stats, particle, bin_vars, pid_cuts):
         log.debug(f"Processing '{pid_cuts[i]}' cut")
         df_passing = df.query(pid_cut)
         hists[f"passing_{pid_cut}"] = make_hist(df_passing, particle, bin_vars)
-        hists[f"passing_sumw2_{pid_cut}"] = make_hist(
-            df_passing, particle, bin_vars, True
-        )
         log.debug("Created 'passing' histogram")
         if f"'{pid_cut}'" not in cut_stats:
             cut_stats[f"'{pid_cut}'"] = {"before": 0, "after": 0}

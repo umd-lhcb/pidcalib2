@@ -25,8 +25,8 @@ def test_make_hist():
     df = pd.read_csv(Path(THIS_DIR, "test_data/cal_test_data.csv"), index_col=0)
     hist = utils.make_hist(df, "Pi", ["P"])
     assert hist.size == 20
-    assert hist.sum() == pytest.approx(71.55106080517815)
-    assert hist[3] == pytest.approx(13.581349537355582)
+    assert hist.sum().value == pytest.approx(71.55106080517815)  # type: ignore
+    assert hist[3].value == pytest.approx(13.581349537355582)  # type: ignore
 
 
 def test_create_eff_histograms():
@@ -38,16 +38,12 @@ def test_create_eff_histograms():
 
     hists = {}
     hists["total"] = utils.make_hist(df, particle, bin_vars)
-    hists["total_sumw2"] = utils.make_hist(df, particle, bin_vars, True)
 
     df_passing = df.query(pid_cut)
     hists[f"passing_{pid_cut}"] = utils.make_hist(df_passing, particle, bin_vars)
-    hists[f"passing_sumw2_{pid_cut}"] = utils.make_hist(
-        df_passing, particle, bin_vars, True
-    )
 
     eff_hists = utils.create_eff_histograms(hists)
-    assert eff_hists["eff_DLLK>4"].sum() == pytest.approx(0.18751578358705173)
+    assert eff_hists["eff_DLLK>4"].sum().value == pytest.approx(0.18751578358705173)  # type: ignore # noqa
     assert eff_hists["eff_DLLK>4"].size == 20
 
 

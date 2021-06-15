@@ -64,9 +64,9 @@ def test_make_eff_hists(config):
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
-    assert eff_histo.sum(flow=False) == pytest.approx(17.812484216412948)
-    assert eff_histo.sum(flow=True) == pytest.approx(23.57053953265155)
-    assert eff_histo[1] == 0.8978157343833105
+    assert eff_histo.sum(flow=False).value == pytest.approx(17.812484216412948)
+    assert eff_histo.sum(flow=True).value == pytest.approx(23.57053953265155)
+    assert eff_histo[1].value == 0.8978157343833105
 
     eff_histo_reference = pd.read_pickle(
         Path(THIS_DIR, "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl")
@@ -96,9 +96,9 @@ def test_make_eff_hists_with_user_cuts(config):
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
-    assert eff_histo.sum(flow=False) == pytest.approx(17.812484216412948)
-    assert eff_histo.sum(flow=True) == pytest.approx(23.57053953265155)
-    assert eff_histo[1] == 0.8978157343833105
+    assert eff_histo.sum(flow=False).value == pytest.approx(17.812484216412948)
+    assert eff_histo.sum(flow=True).value == pytest.approx(23.57053953265155)
+    assert eff_histo[1].value == 0.8978157343833105
 
     eff_histo_reference = pd.read_pickle(
         Path(THIS_DIR, "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl")
@@ -115,9 +115,9 @@ def test_make_eff_hists_with_user_cuts(config):
     )
 
     # With stricter cuts, some bins in the efficiency histogram become empty
-    assert math.isnan(eff_histo.sum(flow=False))
-    assert math.isnan(eff_histo.sum(flow=True))
-    assert eff_histo[1] == 0.806456926487749
+    assert math.isnan(eff_histo.sum(flow=False).value)
+    assert math.isnan(eff_histo.sum(flow=True).value)
+    assert eff_histo[1].value == 0.806456926487749
 
     assert eff_histo != eff_histo_reference
 
@@ -146,8 +146,8 @@ def test_make_eff_hists_with_hardcoded_cuts(config):
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
     assert eff_histo.sum(flow=False) == eff_histo.sum(flow=True)
-    assert eff_histo.sum(flow=True) == pytest.approx(17.3387622437092)
-    assert eff_histo[1] == 0.9686555826741122
+    assert eff_histo.sum(flow=True).value == pytest.approx(17.3387622437092)
+    assert eff_histo[1].value == 0.9686555826741122
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
@@ -173,8 +173,8 @@ def test_make_eff_hists_local_file_list(config):
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
-    assert eff_histo.sum(flow=False) == pytest.approx(17.378390835392615)
-    assert eff_histo[1] == 0.9797018332573063
+    assert eff_histo.sum(flow=False).value == pytest.approx(17.378390835392615)
+    assert eff_histo[1].value == 0.9797018332573063
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
@@ -201,8 +201,8 @@ def test_make_eff_hists_file_list(config):
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
-    assert eff_histo.sum(flow=False) == pytest.approx(17.378390835392615)
-    assert eff_histo[1] == 0.9797018332573063
+    assert eff_histo.sum(flow=False).value == pytest.approx(17.378390835392615)
+    assert eff_histo[1].value == 0.9797018332573063
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
@@ -267,9 +267,9 @@ def test_make_eff_hists_with_custom_binning(config):
 
     # These asserts might come in handy when some detail in the boost_histogram
     # implementation changes, thus failing the reference histogram comparison.
-    assert eff_histo.sum(flow=False) == pytest.approx(1.8099485065453211)
-    assert eff_histo.sum(flow=True) == pytest.approx(41.404466293590865)
-    assert eff_histo[1] == 0.9625150986552666
+    assert eff_histo.sum(flow=False).value == pytest.approx(1.8099485065453211)
+    assert eff_histo.sum(flow=True).value == pytest.approx(41.404466293590865)
+    assert eff_histo[1].value == 0.9625150986552666
 
     shutil.rmtree(Path(THIS_DIR, "test_output"))
 
