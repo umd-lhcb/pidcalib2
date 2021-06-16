@@ -488,8 +488,6 @@ def get_calib_hists(
                 hists[ref_par]["eff"] = pickle.load(f)
                 hists[ref_par]["passing"] = pickle.load(f)
                 hists[ref_par]["total"] = pickle.load(f)
-                hists[ref_par]["passing_sumw2"] = pickle.load(f)
-                hists[ref_par]["total_sumw2"] = pickle.load(f)
         except FileNotFoundError:
             log.error(
                 (

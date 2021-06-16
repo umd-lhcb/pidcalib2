@@ -94,6 +94,12 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
             )
             log.debug(f"Created '{eff_name}' histogram")
 
+    if zero_bins:
+        # Return the zeros that were temporarily replaced by NaNs
+        hists["total"].view().value = np.nan_to_num(  # type:ignore
+            hists["total"].view().value  # type:ignore
+        )
+
     return hists
 
 
@@ -159,7 +165,7 @@ def add_bin_indices(
         df_new.dropna(inplace=True)
         index_names = [f"{axis}_PIDCalibBin" for axis in axes]
         indices = np.ravel_multi_index(
-            df_new[index_names].transpose().to_numpy().astype(int),  # type: ignore
+            df_new[index_names].transpose().to_numpy().astype(int),
             eff_histo.axes.size,
         )
         df_new[f"{prefix}_PIDCalibBin"] = indices
@@ -197,10 +203,9 @@ def add_efficiencies(
     df_new["PIDCalibRelErr2"] = 0
 
     for prefix in prefixes:
-        efficiency_table = eff_hists[prefix]["eff"].view().flatten()  # type: ignore
-        error_table = (
-            create_error_histogram(eff_hists[prefix]).view().flatten()  # type: ignore
-        )
+        efficiency_table = eff_hists[prefix]["eff"].values().flatten()
+        error_table = np.sqrt(eff_hists[prefix]["eff"].variances().flatten())  # type: ignore # noqa
+
         # The original PIDCalib assigned bins with no events in the total
         # histogram an efficiency of zero. This should not come up often and the
         # user should be warned about it. In any case it does not seem right -
