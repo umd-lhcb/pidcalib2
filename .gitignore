@@ -151,3 +151,4 @@ dmypy.json
 /pidcalib_output*
 /data
 /temp
+.virtual_documents

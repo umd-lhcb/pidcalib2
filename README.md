@@ -69,7 +69,7 @@ An arbitrary number of binnings can be defined in a single file.
 
 Complex cut expressions can be created by chaining simpler expressions using `&`. One can also use standard mathematical symbols, like `*`, `/`, `+`, `-`, `(`, `)`. Whitespace does not matter.
 
-### Examples:
+### Examples
 - Create a single efficiency histogram for a single PID cut
   ```sh
   pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "DLLK > 4" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
@@ -108,7 +108,7 @@ The `sample` and `magnet` options are used solely to select the correct PID effi
 
 The `--merge` option will copy the PID efficiency tree to your input file and make the PID efficiency tree a "Friend" of your input tree. Then you can treat your input tree as if it had the PID efficiency branches itself. E.g., `input_tree->Draw("PIDCalibEff")` should work. ROOT's "Friend" mechanism is an efficient way to add branches from one tree to another. Take a look [here](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html#example-3-adding-friends-to-trees) if you would like to know more.
 
-### Examples:
+### Examples
 - Evaluate efficiency of a single PID cut and save it to `user_ntuple_PID_eff.root` without adding it to `user_ntuple.root`
   ```sh
   python -m pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --output-dir pidcalib_output --bin-vars '{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"]}'
@@ -121,6 +121,17 @@ The `--merge` option will copy the PID efficiency tree to your input file and ma
   ```sh
   python -m pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --output-dir pidcalib_output --bin-vars '{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"], "SPi": ["Pi", "DLLK < 0"]}' --merge
   ```
+
+### Caveats
+
+You might notice that some of the events in you reference sample are assigned `PIDCalibEff`, `PIDCalibErr`, or both of -999.
+- `PIDCalibEff` is -999 when for at least one particle
+  - The event is out of range
+  - The relevant bin in the efficiency histogram has no events whatsoever
+- `PIDCalibErr` is -999 when for at least one particle
+  - The event is out of range
+  - The relevant bin in the efficiency histogram has no events whatsoever
+  - The relevant bin in the efficiency histogram has no events passing PID cuts
 
 
 ## Development
