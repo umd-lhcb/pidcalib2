@@ -136,6 +136,8 @@ aliases = {
     "Brunel_MC15TuneV1_ProbNNpi": "probe_Brunel_MC15TuneV1_ProbNNpi",
     "P": "probe_P",
     "Brunel_P": "probe_Brunel_P",
+    "PT": "probe_PT",
+    "Brunel_PT": "probe_Brunel_PT",
     "ETA": "probe_ETA",
     "Brunel_ETA": "probe_Brunel_ETA",
     "nTracks": "nTracks",
@@ -148,6 +150,10 @@ aliases = {
     "Brunel_IsMuon": "probe_Brunel_isMuon",
     "HasRich": "probe_hasRich",
     "Brunel_HasRich": "probe_Brunel_hasRich",
+    "IPCHI2": "probe_IPCHI2",
+    "Brunel_IPCHI2": "probe_Brunel_IPCHI2",
+    "TRACK_GHOSTPROB": "probe_TRACK_GHOSTPROB",
+    "Brunel_TRACK_GHOSTPROB": "probe_Brunel_TRACK_GHOSTPROB",
 }
 
 
