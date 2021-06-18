@@ -16,14 +16,13 @@ higher-dimensional histograms will result in an exception.
 """
 
 import itertools
+import math
 import pathlib
 import pickle
 import sys
 
 import boost_histogram as bh
 import ROOT
-
-from . import utils
 
 
 def convert_to_root_histo(
@@ -34,11 +33,12 @@ def convert_to_root_histo(
     Only 1D, 2D, and 3D histograms are supported by ROOT. Attempting to convert
     higher-dimensional histograms will result in an exception.
 
+    Furthermore, the boost histogram must have a storage type that stores
+    variance, e.g., Weight.
+
     Args:
         name: Name of the new ROOT histogram.
         bh_histo: The histogram to convert.
-        bh_error_histo: Optional. Histogram from which to bin read errors. If
-            none is supplied, ROOT will calculate Poisson errors.
 
     Returns:
         The converted ROOT histogram. Type depends on dimensionality.
@@ -77,25 +77,23 @@ def convert_to_root_histo(
     indices_ranges = [list(range(n)) for n in bh_histo.axes.size]
     for indices_tuple in itertools.product(*indices_ranges):
         root_indices = [index + 1 for index in indices_tuple]
-        histo.SetBinContent(histo.GetBin(*root_indices), bh_histo[indices_tuple])
-        if bh_error_histo is not None:
-            histo.SetBinError(
-                histo.GetBin(*root_indices), bh_error_histo[indices_tuple]
-            )
+        histo.SetBinContent(
+            histo.GetBin(*root_indices), bh_histo[indices_tuple].value  # type: ignore
+        )
+        histo.SetBinError(
+            histo.GetBin(*root_indices), math.sqrt(bh_histo[indices_tuple].variance)  # type: ignore # noqa
+        )
 
     return histo
 
 
-def main():
-    pkl_path = pathlib.Path(sys.argv[1])
+def convert_pklfile_to_rootfile(path: str):
+    pkl_path = pathlib.Path(path)
     eff_histos = {}
     with open(pkl_path, "rb") as f:
         eff_histos["eff"] = pickle.load(f)
         eff_histos["passing"] = pickle.load(f)
         eff_histos["total"] = pickle.load(f)
-        eff_histos["passing_sumw2"] = pickle.load(f)
-        eff_histos["total_sumw2"] = pickle.load(f)
-        eff_histos["error"] = utils.create_error_histogram(eff_histos)
 
         for item in eff_histos.values():
             assert isinstance(item, bh.Histogram)
@@ -103,18 +101,20 @@ def main():
         root_path = pkl_path.with_suffix(".root")
         root_file = ROOT.TFile(str(root_path), "RECREATE")
 
-        eff_histo = convert_to_root_histo(
-            "eff_histo", eff_histos["eff"], eff_histos["error"]
-        )
+        eff_histo = convert_to_root_histo("eff", eff_histos["eff"])
         eff_histo.Write()
 
-        passing_histo = convert_to_root_histo("passing_histo", eff_histos["passing"])
+        passing_histo = convert_to_root_histo("passing", eff_histos["passing"])
         passing_histo.Write()
 
-        total_histo = convert_to_root_histo("total_histo", eff_histos["total"])
+        total_histo = convert_to_root_histo("total", eff_histos["total"])
         total_histo.Write()
 
         root_file.Close()
+
+
+def main():
+    convert_pklfile_to_rootfile(sys.argv[1])
 
 
 if __name__ == "__main__":

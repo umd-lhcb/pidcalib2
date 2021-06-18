@@ -25,8 +25,8 @@ def test_make_hist():
     df = pd.read_csv(Path(THIS_DIR, "test_data/cal_test_data.csv"), index_col=0)
     hist = utils.make_hist(df, "Pi", ["P"])
     assert hist.size == 20
-    assert hist.sum() == pytest.approx(71.55106080517815)
-    assert hist[3] == pytest.approx(13.581349537355582)
+    assert hist.sum().value == pytest.approx(71.55106080517815)  # type: ignore
+    assert hist[3].value == pytest.approx(13.581349537355582)  # type: ignore
 
 
 def test_create_eff_histograms():
@@ -38,16 +38,12 @@ def test_create_eff_histograms():
 
     hists = {}
     hists["total"] = utils.make_hist(df, particle, bin_vars)
-    hists["total_sumw2"] = utils.make_hist(df, particle, bin_vars, True)
 
     df_passing = df.query(pid_cut)
     hists[f"passing_{pid_cut}"] = utils.make_hist(df_passing, particle, bin_vars)
-    hists[f"passing_sumw2_{pid_cut}"] = utils.make_hist(
-        df_passing, particle, bin_vars, True
-    )
 
     eff_hists = utils.create_eff_histograms(hists)
-    assert eff_hists["eff_DLLK>4"].sum() == pytest.approx(0.18751578358705173)
+    assert eff_hists["eff_DLLK>4"].sum().value == pytest.approx(0.18751578358705173)  # type: ignore # noqa
     assert eff_hists["eff_DLLK>4"].size == 20
 
 
@@ -63,11 +59,9 @@ def test_get_per_event_effs():
         hists["Bach"]["eff"] = pickle.load(f)
         hists["Bach"]["passing"] = pickle.load(f)
         hists["Bach"]["total"] = pickle.load(f)
-        hists["Bach"]["passing_sumw2"] = pickle.load(f)
-        hists["Bach"]["total_sumw2"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
-    with pytest.warns(RuntimeWarning):
-        df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
+    # with pytest.warns(RuntimeWarning):
+    df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
     assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8745793984247746)
     assert df_ref.PIDCalibErr.mean() == pytest.approx(0.010109849956086676)
 
@@ -84,8 +78,6 @@ def test_get_multiparticle_per_event_effs():
         hists["h1"]["eff"] = pickle.load(f)
         hists["h1"]["passing"] = pickle.load(f)
         hists["h1"]["total"] = pickle.load(f)
-        hists["h1"]["passing_sumw2"] = pickle.load(f)
-        hists["h1"]["total_sumw2"] = pickle.load(f)
 
     hists["h2"] = {}
     with open(
@@ -94,8 +86,6 @@ def test_get_multiparticle_per_event_effs():
         hists["h2"]["eff"] = pickle.load(f)
         hists["h2"]["passing"] = pickle.load(f)
         hists["h2"]["total"] = pickle.load(f)
-        hists["h2"]["passing_sumw2"] = pickle.load(f)
-        hists["h2"]["total_sumw2"] = pickle.load(f)
 
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
@@ -115,8 +105,6 @@ def test_add_bin_indices():
         hists["Bach"]["eff"] = pickle.load(f)
         hists["Bach"]["passing"] = pickle.load(f)
         hists["Bach"]["total"] = pickle.load(f)
-        hists["Bach"]["passing_sumw2"] = pickle.load(f)
-        hists["Bach"]["total_sumw2"] = pickle.load(f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     assert df_ref["Bach_P_PIDCalibBin"].sum() == 623
     assert df_ref["Bach_ETA_PIDCalibBin"].sum() == 120

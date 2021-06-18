@@ -33,8 +33,7 @@ def test_ref_calib():
         "verbose": False,
     }
 
-    with pytest.warns(RuntimeWarning):
-        assert ref_calib.ref_calib(config) == pytest.approx(0.8745793984247746)
+    assert ref_calib.ref_calib(config) == pytest.approx(0.8745793984247746)
     assert Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root").exists()
     os.remove(Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root"))
 

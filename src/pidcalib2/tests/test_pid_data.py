@@ -124,17 +124,25 @@ def test_get_reference_branch_name():
 def test_get_calib_hists():
     ref_pars = {"Bach": ["K", "DLLK > 4"]}
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
-    eff_histos = pid_data.get_calib_hists(
+    eff_hists = pid_data.get_calib_hists(
         str(Path(THIS_DIR, "test_data")), "Turbo18", "up", ref_pars, bin_vars
     )
-    assert math.isnan(eff_histos["Bach"]["eff"].sum())  # type: ignore
-    assert eff_histos["Bach"]["eff"][4, 2, 1] == pytest.approx(0.9672206239134171)
-    assert eff_histos["Bach"]["passing"].sum() == pytest.approx(103762743.76872134)
-    assert eff_histos["Bach"]["total"].sum() == pytest.approx(114809531.81162772)
-    assert eff_histos["Bach"]["passing_sumw2"].sum() == pytest.approx(
+    assert math.isnan(eff_hists["Bach"]["eff"].sum().value)  # type: ignore
+    assert eff_hists["Bach"]["eff"][4, 2, 1].value == pytest.approx(  # type: ignore
+        0.9672206239134171
+    )
+    assert eff_hists["Bach"]["passing"].sum().value == pytest.approx(  # type: ignore
+        103762743.76872134
+    )
+    assert eff_hists["Bach"]["total"].sum().value == pytest.approx(  # type: ignore
+        114809531.81162772
+    )
+    assert eff_hists["Bach"]["passing"].sum().variance == pytest.approx(  # type: ignore
         130492602.73047148
     )
-    assert eff_histos["Bach"]["total_sumw2"].sum() == pytest.approx(149177697.03949496)
+    assert eff_hists["Bach"]["total"].sum().variance == pytest.approx(  # type: ignore
+        149177697.03949496
+    )
 
     with pytest.raises(FileNotFoundError):
         pid_data.get_calib_hists(

@@ -42,5 +42,6 @@ uproot==4.0.6
 uproot3==3.14.4
 uproot3-methods==0.10.1
 virtualenv==20.4.3
+wheel==0.36.2
 xrootd==5.2.0
 zipp==3.4.1

@@ -46,7 +46,7 @@ def test_copy_tree():
 
 @pytest.mark.pyroot
 def test_copy_tree_bad_filenames():
-    with pytest.raises(SystemExit):
+    with pytest.raises(OSError):
         merge_trees.copy_tree_and_set_as_friend(
             str(Path(THIS_DIR, "test_data/x.root")),
             "PID_eff_tree",
