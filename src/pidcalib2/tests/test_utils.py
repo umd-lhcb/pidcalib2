@@ -62,8 +62,8 @@ def test_get_per_event_effs():
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     # with pytest.warns(RuntimeWarning):
     df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
-    assert df_ref.PIDCalibEff.mean() == pytest.approx(0.8745793984247746)
-    assert df_ref.PIDCalibErr.mean() == pytest.approx(0.010109849956086676)
+    assert df_ref.PIDCalibEff.mean() == pytest.approx(0.879822126172073)
+    assert df_ref.PIDCalibErr.mean() == pytest.approx(0.0131223551397001)
 
 
 def test_get_multiparticle_per_event_effs():

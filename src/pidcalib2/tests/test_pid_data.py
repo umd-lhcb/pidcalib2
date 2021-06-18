@@ -129,19 +129,19 @@ def test_get_calib_hists():
     )
     assert math.isnan(eff_hists["Bach"]["eff"].sum().value)  # type: ignore
     assert eff_hists["Bach"]["eff"][4, 2, 1].value == pytest.approx(  # type: ignore
-        0.9672206239134171
+        0.9759721725381351
     )
     assert eff_hists["Bach"]["passing"].sum().value == pytest.approx(  # type: ignore
-        103762743.76872134
+        77882.51311058077
     )
     assert eff_hists["Bach"]["total"].sum().value == pytest.approx(  # type: ignore
-        114809531.81162772
+        86103.98549868543
     )
     assert eff_hists["Bach"]["passing"].sum().variance == pytest.approx(  # type: ignore
-        130492602.73047148
+        97895.25547125406
     )
     assert eff_hists["Bach"]["total"].sum().variance == pytest.approx(  # type: ignore
-        149177697.03949496
+        111911.08518551107
     )
 
     with pytest.raises(FileNotFoundError):
