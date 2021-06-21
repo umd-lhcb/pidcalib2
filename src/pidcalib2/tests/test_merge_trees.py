@@ -46,7 +46,10 @@ def test_copy_tree():
 
 @pytest.mark.pyroot
 def test_copy_tree_bad_filenames():
-    with pytest.raises(OSError):
+    # It seems some versions of pyroot raise OSError when a file that should be
+    # opened doesn't exist, while others don't and we catch the issue later,
+    # raising a SystemExit
+    with pytest.raises((OSError, SystemExit)):
         merge_trees.copy_tree_and_set_as_friend(
             str(Path(THIS_DIR, "test_data/x.root")),
             "PID_eff_tree",

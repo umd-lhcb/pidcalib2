@@ -78,10 +78,21 @@ def test_decode_arguments():
                 "-m=up",
                 "--ref-file=ref_file.root",
                 "--ref-pars={'Ref': ['pi', 'DLLK<5']}",
+                "--output-file=output.root",
             ]
         ).magnet
         == "up"
     )
+
+    with pytest.raises(SystemExit):
+        ref_calib.decode_arguments(
+            [
+                "--sample=Turbo18",
+                "-m=up",
+                "--ref-file=ref_file.root",
+                "--ref-pars={'Ref': ['pi', 'DLLK<5']}",
+            ]
+        ).magnet
 
     with pytest.raises(SystemExit):
         ref_calib.decode_arguments(
