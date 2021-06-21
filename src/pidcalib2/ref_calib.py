@@ -109,6 +109,7 @@ def decode_arguments(args):
         "-o",
         "--output-file",
         help="ROOT filename into which to save the PID efficiency tree",
+        required=True,
     )
     parser.add_argument(
         "-f",

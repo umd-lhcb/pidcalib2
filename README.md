@@ -104,6 +104,8 @@ The `sample` and `magnet` options are used solely to select the correct PID effi
 
 `bin-vars` must be a dictionary that relates the binning variables (or aliases) used to make the efficiency histograms with the variables in the reference sample. We assume that the reference sample branch names have the format `[ParticleName]_[VariableName]`. E.g., `D0_K_calcETA`, corresponds to a particle named `D0_K` and variable `calcETA`. If the user wants to estimate PID efficiency of their sample using 1D binning, where `calcETA` corresponds to the `ETA` binning variable alias of the calibration sample, they should specify `--bin-vars '{"ETA": "calcETA"}'`.
 
+`ref-file` is the user's reference file to which they want to assign PID efficiencies. The parameter can be a local file or a remote file, e.g., on EOS (`--ref-file root://eoslhcb.cern.ch//eos/lhcb/user/a/anonymous/tuple.root`).
+
 `ref-pars` must be a dictionary of particles from the reference sample to apply cuts to. The keys represent the particle branch name prefix (`D0_K` in the previous example), and the values passed are a list containing particle type and PID cut, e.g. `'{"D0_K" : ["K", "DLLK > 4"], "D0_Pi" : ["Pi", "DLLK < 4"]}'`.
 
 The `--merge` option will copy the PID efficiency tree to your input file and make the PID efficiency tree a "Friend" of your input tree. Then you can treat your input tree as if it had the PID efficiency branches itself. E.g., `input_tree->Draw("PIDCalibEff")` should work. ROOT's "Friend" mechanism is an efficient way to add branches from one tree to another. Take a look [here](https://root.cern.ch/root/htmldoc/guides/users-guide/Trees.html#example-3-adding-friends-to-trees) if you would like to know more.
@@ -111,15 +113,15 @@ The `--merge` option will copy the PID efficiency tree to your input file and ma
 ### Examples
 - Evaluate efficiency of a single PID cut and save it to `user_ntuple_PID_eff.root` without adding it to `user_ntuple.root`
   ```sh
-  python -m pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --output-dir pidcalib_output --bin-vars '{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"]}'
+  pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --histo-dir pidcalib_output --bin-vars '{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"]}' --output-file user_ntuple_PID_eff.root
   ```
 - Evaluate efficiency of a single PID cut and add it to the reference file `user_ntuple.root`
   ```sh
-  python -m pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --output-dir pidcalib_output --bin-vars '{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"]}' --merge
+  pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --histo-dir pidcalib_output --bin-vars '{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"]}' --output-file user_ntuple_PID_eff.root --merge
   ```
 - Evaluate efficiency of multiple PID cuts and add them to the reference file
   ```sh
-  python -m pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --output-dir pidcalib_output --bin-vars '{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"], "SPi": ["Pi", "DLLK < 0"]}' --merge
+  pidcalib2.ref_calib --sample Turbo18 --magnet up --ref-file data/user_ntuple.root --histo-dir pidcalib_output --bin-vars '{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}' --ref-pars '{"Bach": ["K", "DLLK > 4"], "SPi": ["Pi", "DLLK < 0"]}' --output-file user_ntuple_PID_eff.root --merge
   ```
 
 ### Caveats
