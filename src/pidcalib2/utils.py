@@ -441,7 +441,9 @@ def create_histograms(config):
     }
     all_hists = {}
     for path in tqdm(calib_sample["files"], leave=False, desc="Processing files"):
-        df = pid_data.root_to_dataframe(path, tree_paths, list(branch_names.values()))
+        df = pid_data.root_to_dataframe(
+            path, tree_paths, list(branch_names.values()), True
+        )
         if df is not None:
             # Rename colums of the dataset from branch names to simple user-level
             # names, e.g., probe_PIDK -> DLLK.

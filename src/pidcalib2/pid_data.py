@@ -332,7 +332,7 @@ def get_calibration_sample(
 
 
 def root_to_dataframe(
-    path: str, tree_names: List[str], branches: List[str]
+    path: str, tree_names: List[str], branches: List[str], calibration: bool = False
 ) -> pd.DataFrame:
     """Return DataFrame with requested branches from tree in ROOT file.
 
@@ -350,6 +350,15 @@ def root_to_dataframe(
     # message if this happens.
     try:
         root_file = uproot.open(path)
+    except FileNotFoundError as exc:
+        if "Server responded with an error: [3010]" in exc.args[0]:
+            log.error(
+                (
+                    "Permission denied; do you have Kerberos credentials? "
+                    "Try running 'kinit -f [USERNAME]@CERN.CH'"
+                )
+            )
+        raise
     except OSError as err:
         if "Operation expired" in err.args[0]:
             log.error(
@@ -366,12 +375,17 @@ def root_to_dataframe(
             tree = root_file[tree_name]
             dfs.append(tree.arrays(branches, library="pd"))  # type: ignore
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
-            similar_keys = utils.find_similar_strings(exc.key, list(aliases), 0.80)
+            similar_keys = []
+            if calibration:
+                similar_keys += utils.find_similar_strings(exc.key, list(aliases), 0.80)
+                similar_keys += utils.find_similar_strings(
+                    "probe_" + exc.key, tree.keys(), 0.80  # type: ignore
+                )
             similar_keys += utils.find_similar_strings(
                 exc.key, tree.keys(), 0.80  # type: ignore
             )
             similar_keys += utils.find_similar_strings(
-                "probe_" + exc.key, tree.keys(), 0.80  # type: ignore
+                exc.key.replace("Brunel", ""), tree.keys(), 0.80  # type: ignore
             )
             # Remove duplicates while preserving ordering
             similar_keys = list(dict.fromkeys(similar_keys))
