@@ -381,9 +381,7 @@ def root_to_dataframe(
                 similar_keys += utils.find_similar_strings(
                     "probe_" + exc.key, tree.keys(), 0.80  # type: ignore
                 )
-            similar_keys += utils.find_similar_strings(
-                exc.key, tree.keys(), 0.80  # type: ignore
-            )
+            similar_keys += utils.find_similar_strings(exc.key, tree.keys(), 0.80)  # type: ignore # noqa
             similar_keys += utils.find_similar_strings(
                 exc.key.replace("Brunel", ""), tree.keys(), 0.80  # type: ignore
             )

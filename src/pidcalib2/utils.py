@@ -233,7 +233,7 @@ def add_efficiencies(
 
     df_new.drop(columns=["PIDCalibRelErr2"], inplace=True)
 
-    df_new = pd.concat([df_new, df_nan]).sort_index()  # type: ignore
+    df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
 
     num_outside_range = len(df_nan.index)

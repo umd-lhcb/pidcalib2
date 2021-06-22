@@ -127,20 +127,14 @@ def test_get_calib_hists():
     eff_hists = pid_data.get_calib_hists(
         str(Path(THIS_DIR, "test_data")), "Turbo18", "up", ref_pars, bin_vars
     )
-    assert math.isnan(eff_hists["Bach"]["eff"].sum().value)  # type: ignore
-    assert eff_hists["Bach"]["eff"][4, 2, 1].value == pytest.approx(  # type: ignore
-        0.9759721725381351
-    )
-    assert eff_hists["Bach"]["passing"].sum().value == pytest.approx(  # type: ignore
-        77882.51311058077
-    )
-    assert eff_hists["Bach"]["total"].sum().value == pytest.approx(  # type: ignore
-        86103.98549868543
-    )
-    assert eff_hists["Bach"]["passing"].sum().variance == pytest.approx(  # type: ignore
+    assert math.isnan(eff_hists["Bach"]["eff"].sum().value)
+    assert eff_hists["Bach"]["eff"][4, 2, 1].value == pytest.approx(0.9759721725381351)
+    assert eff_hists["Bach"]["passing"].sum().value == pytest.approx(77882.51311058077)
+    assert eff_hists["Bach"]["total"].sum().value == pytest.approx(86103.98549868543)
+    assert eff_hists["Bach"]["passing"].sum().variance == pytest.approx(
         97895.25547125406
     )
-    assert eff_hists["Bach"]["total"].sum().variance == pytest.approx(  # type: ignore
+    assert eff_hists["Bach"]["total"].sum().variance == pytest.approx(
         111911.08518551107
     )
 

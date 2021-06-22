@@ -69,7 +69,7 @@ def test_p_binning():
 
 def test_set_binning():
     with pytest.raises(TypeError):
-        binning.set_binning("Pi", "P", 30)
+        binning.set_binning("Pi", "P", 30)  # type: ignore
 
     binning.set_binning("GhostParticle", "P", [10, 20])
     assert binning.binnings["GhostParticle"]["P"] == {"bin_edges": [10, 20]}

@@ -9,7 +9,7 @@ dataclasses==0.8
 distlib==0.3.1
 filelock==3.0.12
 flake8==3.9.0
-identify==2.2.0
+identify==2.2.2
 importlib-metadata==3.7.3
 importlib-resources==5.1.2
 iniconfig==1.1.1
@@ -38,7 +38,8 @@ toml==0.10.2
 tqdm==4.59.0
 typed-ast==1.4.2
 typing-extensions==3.7.4.3
-uproot==4.0.6
+uproot==4.0.8
+uproot-methods==0.9.2
 uproot3==3.14.4
 uproot3-methods==0.10.1
 virtualenv==20.4.3
