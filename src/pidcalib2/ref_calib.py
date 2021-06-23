@@ -28,7 +28,7 @@ command line.
 Examples:
     Evaluate efficiency of a single PID cut and add it to the reference file::
 
-        $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
+        $ python -m src.pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
             --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' \
             --ref-pars='{"Bach": ["K", "DLLK > 4"]}'
@@ -37,7 +37,7 @@ Examples:
     Evaluate efficiency of a single PID cut and save it to
     user_ntuple_PID_eff.root without adding it to user_ntuple.root::
 
-        $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
+        $ python -m src.pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
             --bin-vars='{"P": "mom", "ETA": "Eta", "nSPDHits": "nSPDhits"}' \
             --ref-pars='{"Bach": ["K", "DLLK > 4"]}'
@@ -45,7 +45,7 @@ Examples:
     Evaluate efficiency of multiple PID cuts and add them to the reference
     file::
 
-        $ python -m pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
+        $ python -m src.pidcalib2.ref_calib --sample=Turbo18 --magnet=up \
             --ref-file=data/user_ntuple.root --output-dir=pidcalib_output \
             --bin-vars='{"P": "P", "ETA": "ETA", "nSPDHits": "nSPDHits"}' \
             --ref-pars='{"Bach": ["K", "DLLK > 4"], "SPi": ["Pi", "DLLK < 0"]}'

@@ -17,7 +17,7 @@ efficiency of a user's sample.
 Examples:
     Create a single efficiency histogram for a single PID cut::
 
-        $ python -m pidcalib2.make_eff_hists --sample=Turbo18 --magnet=up \
+        $ python -m src.pidcalib2.make_eff_hists --sample=Turbo18 --magnet=up \
             --particle=Pi --pid-cut="DLLK > 4" --bin-var=P --bin-var=ETA \
             --bin-var=nSPDHits --output-dir=pidcalib_output
 
@@ -25,7 +25,7 @@ Examples:
     in data, so specifying multiple cuts is much faster than running
     make_eff_hists sequentially)::
 
-        $ python -m pidcalib2.make_eff_hists --sample=Turbo16 --magnet=up \
+        $ python -m src.pidcalib2.make_eff_hists --sample=Turbo16 --magnet=up \
             --particle=Pi --pid-cut="DLLK > 0" --pid-cut="DLLK > 4" \
             --pid-cut="DLLK > 6" --bin-var=P --bin-var=ETA \
             --bin-var=nSPDHits --output-dir=pidcalib_output
