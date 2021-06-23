@@ -163,7 +163,9 @@ def set_binning(particle: str, variable: str, bin_edges: List[float]) -> None:
     binnings[particle][variable] = {"bin_edges": bin_edges}
 
 
-def get_binning(particle: str, variable: str, verbose: bool = False) -> List[float]:
+def get_binning(
+    particle: str, variable: str, verbose: bool = False, quiet: bool = False
+) -> List[float]:
     """Return a suitable binning for a particle and variable.
 
     Args:
@@ -171,21 +173,25 @@ def get_binning(particle: str, variable: str, verbose: bool = False) -> List[flo
         variable: Variable name, e.g., "P" or "Brunel_ETA"
         verbose: Optional. Print message when alternative binning is used.
             Defaults to False.
+        quiet: Optional. Suppress all logging messages. Defaults to False.
     """
     if particle not in binnings or variable not in binnings[particle]:
         # Remove particle suffix, e.g., 'DsPhi' in 'K_DsPhi'
         pure_particle = particle.split("_", 1)[0]
         if pure_particle not in binnings or variable not in binnings[pure_particle]:
-            log.error(f"No '{variable}' binning defined for particle {particle}")
+            if not quiet:
+                log.error(f"No '{variable}' binning defined for particle {particle}")
             raise KeyError
         else:
-            if verbose:
-                log.info(
-                    (
-                        f"No '{variable}' binning defined for particle '{particle}'. "
-                        f"Falling back to particle '{pure_particle}' binning."
+            if not quiet:
+                if verbose:
+                    log.info(
+                        (
+                            f"No '{variable}' binning defined for particle "
+                            f"'{particle}'. Falling back to particle "
+                            f"'{pure_particle}' binning."
+                        )
                     )
-                )
             return binnings[pure_particle][variable]["bin_edges"]
 
     else:

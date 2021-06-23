@@ -41,48 +41,12 @@ import sys
 import logzero
 from logzero import logger as log
 
-from . import binning, markdown_table, pid_data, utils
+from . import argparse_actions, binning, utils
 
 try:
     from .version import version  # type: ignore
 except ImportError:
     version = "N/A"
-
-
-class ListValidAction(argparse.Action):
-    """Class that overrides required parameters and prints valid configs."""
-
-    def __call__(self, parser, namespace, values, option_string=None):
-
-        if values == "configs" or values.endswith(".json"):
-            header = ["Sample", "Magnet", "Particle"]
-            table = markdown_table.MarkdownTable(header)
-
-            # Print configs from the default samples.json if no file specified
-            if values == "configs":
-                values = None
-
-            for entry in pid_data.get_calibration_samples(values).keys():
-                try:
-                    sample, magnet, particle = entry.split("-")
-                    magnet = magnet[3:].lower()
-                    table.add_row([sample, magnet, particle])
-                except ValueError:
-                    # Skip group entries like "Turbo18-MagUp"
-                    pass
-
-            table.print()
-
-        elif values == "aliases":
-            table_pid = markdown_table.MarkdownTable(["Alias", "Variable"])
-            for alias, var in pid_data.aliases.items():
-                table_pid.add_row([alias, var])
-            table_pid.print()
-        else:
-            log.error(f"'{values}' is not a known keyword for list-valid")
-            raise KeyError
-
-        parser.exit()
 
 
 def decode_arguments(args):
@@ -153,7 +117,7 @@ def decode_arguments(args):
     parser.add_argument(
         "-l",
         "--list",
-        action=ListValidAction,
+        action=argparse_actions.ListValidAction,
         help="list all [configs, aliases]",
     )
     parser.add_argument(

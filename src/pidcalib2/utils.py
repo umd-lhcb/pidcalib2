@@ -515,10 +515,11 @@ def apply_all_cuts(
     user_cuts: List[str],
 ) -> Dict[str, Dict[str, int]]:
 
-    log.debug(f"Applying binning range cuts: {binning_range_cuts}'")
-    num_before, num_after = apply_cuts(df, binning_range_cuts)
-    cut_stats["binning range"]["before"] += num_before
-    cut_stats["binning range"]["after"] += num_after
+    if binning_range_cuts:
+        log.debug(f"Applying binning range cuts: {binning_range_cuts}'")
+        num_before, num_after = apply_cuts(df, binning_range_cuts)
+        cut_stats["binning range"]["before"] += num_before
+        cut_stats["binning range"]["after"] += num_after
 
     if hardcoded_cuts:
         log.debug(f"Applying hard-coded cuts: {hardcoded_cuts}'")
