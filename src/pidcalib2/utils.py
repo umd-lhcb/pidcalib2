@@ -365,7 +365,9 @@ def find_similar_strings(
     """
     similar_strings = {}
     for string in list_of_strings:
-        string_ratio = difflib.SequenceMatcher(None, comparison_string, string).ratio()
+        string_ratio = difflib.SequenceMatcher(
+            None, comparison_string.lower(), string.lower()
+        ).ratio()
         if string_ratio > ratio:
             similar_strings[string] = string_ratio
 
