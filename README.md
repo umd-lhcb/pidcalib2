@@ -10,7 +10,7 @@ The package includes several user-callable modules:
 
 ## Setup
 
-When working on a computer that where the LHCb software stack is available (LXPLUS, some university cluster, etc.), one can setup PIDCalib2 by running
+When working on a computer that where the LHCb software stack is available (LXPLUS, university cluster, etc.), one can setup PIDCalib2 by running
 ```sh
 lb-conda pidcalib bash
 ```
@@ -126,7 +126,7 @@ The `--merge` option will copy the PID efficiency tree to your input file and ma
 
 ### Caveats
 
-You might notice that some of the events in you reference sample are assigned `PIDCalibEff`, `PIDCalibErr`, or both of -999.
+You might notice that some of the events in your reference sample are assigned `PIDCalibEff`, `PIDCalibErr`, or both of -999.
 - `PIDCalibEff` is -999 when for at least one particle
   - The event is out of range
   - The relevant bin in the efficiency histogram has no events whatsoever
@@ -135,6 +135,38 @@ You might notice that some of the events in you reference sample are assigned `P
   - The relevant bin in the efficiency histogram has no events whatsoever
   - The relevant bin in the efficiency histogram has no events passing PID cuts
 
+## `plot_calib_distributions`
+
+This tool allows you to plot distributions of variables in the calibration datasets. You can supply the same cuts and custom binnings that you would use for `make_eff_hists`. If you wish to plot a variable for which no binning exists, a uniform binning with 50 bins will be used. You can change the number of bins using `--bins` and force a uniform binning even if another binning is defined via `--force-uniform`.
+
+A plot for every requested variable will be created in the `--output-dir` directory. The format of the plots can be controlled by `--format`. Furthermore, `plot_calib_distributions.pkl` will be saved in the same directory, containing all the histograms, should the user want to make the plots manually.
+
+### Examples
+
+- Create plots of the variables DLLK and P using 1 calibration file
+  ```sh
+  pidcalib2.plot_calib_distributions --sample Turbo18 --magnet up --particle Pi --bin-var DLLK --bin-var P --output-dir pidcalib_output --max-files 1
+  ```
+- Create PDF plots of variable P with 95 uniform bins
+  ```sh
+  pidcalib2.plot_calib_distributions --sample Turbo18 --magnet up --particle Pi --bin-var P --output-dir pidcalib_output --max-files 1 --format pdf --force-uniform --bins 95
+  ```
+- Create plots of variable P using custom binning
+  ```sh
+  pidcalib2.plot_calib_distributions --sample Turbo18 --magnet up --particle Pi --bin-var P --output-dir pidcalib_output --max-files 1 --format png --binning-file my_binning.json
+  ```
+
+## `pklhisto2root`
+
+This tool converts pickled PIDCalib2 histograms to TH*D & saves them in a ROOT file. It can be used on histograms produced by `make_eff_hists` or `plot_calib_distributions`. Note that ROOT supports only 1-, 2-, and 3-dimensional histograms; attempting to convert higher-dimensional histograms will fail.
+
+### Example
+
+- Convert pickled boost_histograms from `make_eff_hists` to ROOT
+  ```sh
+  pidcalib2.pklhist2root "pidcalib_output/effhists-Turbo18-up-Pi-DLLK>4-P.ETA.nSPDhits.pkl"
+  ```
+  This will translate the histograms and save them to `pidcalib_output/effhists-Turbo18-up-Pi-DLLK>4-P.ETA.nSPDhits.root`.
 
 ## Development
 
