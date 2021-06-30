@@ -23,6 +23,12 @@ Examples:
         $ python -m src.pidcalib2.plot_calib_distributions --sample=Turbo18 \
             --magnet=up --particle=Pi --bin-var=P  --output-dir=pidcalib_output \
             --max-files=1 --format=pdf --force-uniform --bins=95
+
+    Create plots of variable P using custom binning and 1 calib. file::
+
+        $ python -m src.pidcalib2.plot_calib_distributions --sample=Turbo18 \
+            --magnet=up --particle=Pi --bin-var=P  --output-dir=pidcalib_output \
+            --max-files=1 --format=png --binning-file=my_binning.json
 """
 
 import argparse
@@ -160,6 +166,16 @@ def decode_arguments(args):
 
 
 def plot_calib_distributions(config: Dict) -> None:
+    """Create, plot, and save histograms of a calibration sample.
+
+    The specified calibration sample is processed with cuts taken into account.
+    The requested variables are histogrammed, possibly with custom binning
+    (specified in the same way as for make_eff_hists).
+
+    Args:
+        config: A configuration dictionary. See decode_arguments(args) for
+            details.
+    """
     if config["verbose"]:
         logzero.loglevel(logging.DEBUG)
     else:
@@ -221,6 +237,21 @@ def plot_calib_distributions(config: Dict) -> None:
 def create_plot_histograms(
     config, calib_sample, tree_paths, branch_names
 ) -> Dict[str, Dict[str, bh.Histogram]]:
+    """Create histograms for plotting.
+
+    A separate set of histograms is created for each file in the calib_sample.
+    The set comprises histograms for each variable in branch_names.
+
+    Args:
+        config: A configuration dictionary. See decode_arguments(args) for
+            details.
+        calib_sample: Calibration sample - files, cuts, etc.
+        tree_paths: List of internal ROOT paths to relevant trees in the files.
+        branch_names: Dict of branch names {user-level name: branch name}.
+
+    Returns:
+        A dictionary {file: {var: histogram}}.
+    """
     bin_vars_without_binnings = []
     binning_range_cuts = []
     for bin_var in config["bin_vars"]:
@@ -291,7 +322,16 @@ def create_plot_histograms(
     return all_hists
 
 
-def save_plots(total_hists, output_dir, format):
+def save_plots(
+    total_hists: Dict[str, bh.Histogram], output_dir: pathlib.Path, format: str
+) -> None:
+    """Create and save plots of the supplied 1D histograms.
+
+    Args:
+        total_hists: A dictionary of the histograms to be plotted.
+        output_dir: Directory to which to save the plots.
+        format: Image format, e.g., png.
+    """
     mplhep.set_style("LHCb2")
     for var, hist in total_hists.items():
         plt.hist(
@@ -309,7 +349,15 @@ def save_plots(total_hists, output_dir, format):
         plt.close()
 
 
-def save_histograms(total_hists, output_dir):
+def save_histograms(
+    total_hists: Dict[str, bh.Histogram], output_dir: pathlib.Path
+) -> None:
+    """Pickle histograms and save them to a file.
+
+    Args:
+        total_hists: A dictionary of the histograms to be plotted.
+        output_dir: Directory to which to save the histograms.
+    """
     path = output_dir / pathlib.Path("plot_calib_distributions.pkl")
     log.info(f"Saving histograms to {path}")
     with open(path, "wb") as f:
