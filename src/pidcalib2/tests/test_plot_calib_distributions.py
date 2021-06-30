@@ -15,7 +15,7 @@ import boost_histogram as bh
 import numpy as np
 import pytest
 
-from pidcalib2 import plot_calib_distributions
+from pidcalib2 import binning, plot_calib_distributions
 
 
 @pytest.mark.xrootd
@@ -37,7 +37,11 @@ def test_plot_calib_distributions(tmp_path):
         "format": "png",
         "cuts": ["P > 10000"],
     }
+    # Save and restore binnings that are destroyed by "force_uniform" to avoid
+    # breaking following tests
+    orig_binnings = binning.binnings.copy()
     plot_calib_distributions.plot_calib_distributions(config)
+    binning.binnings = orig_binnings
 
     plot_path = tmp_path / "DLLK.png"
     assert plot_path.stat().st_size > 2e4
