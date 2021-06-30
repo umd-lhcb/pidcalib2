@@ -174,7 +174,10 @@ def is_simple(sample: str) -> bool:
 def get_relevant_branch_names(
     pid_cuts: List[str], bin_vars: List[str], cuts: List[str] = None
 ) -> Dict[str, str]:
-    """Return a list of branch names relevant to the cuts and binning vars.
+    """Return a dict of branch names relevant to the cuts and binning vars.
+
+    The key is user-level variable name/alias. The value is the actual branch
+    name.
 
     Args:
         pid_cuts: Simplified user-level cut list, e.g., ["DLLK < 4"].
@@ -267,7 +270,7 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     return f"{prefix}_{bin_var_branch}"
 
 
-def get_calibration_samples(samples_file: str = None):
+def get_calibration_samples(samples_file: str = None) -> Dict:
     """Return a dictionary of all files for all calibration samples.
 
     Args:

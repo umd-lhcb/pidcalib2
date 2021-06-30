@@ -201,18 +201,17 @@ def ref_calib(config: Dict) -> float:
         log.error("The --ref-pars string is not valid Python dict")
         raise
 
-    ref_branches = pid_data.get_reference_branch_names(ref_pars, bin_vars)
+    eff_histos = pid_data.get_calib_hists(
+        config["histo_dir"], config["sample"], config["magnet"], ref_pars, bin_vars
+    )
 
     log.info(f"Loading reference sample '{config['ref_file']}' ...")
+    ref_branches = pid_data.get_reference_branch_names(ref_pars, bin_vars)
     df_ref = pid_data.root_to_dataframe(
         config["ref_file"], [config["ref_tree"]], ref_branches
     )
     log.debug(
         f"Reference sample '{config['ref_file']}' with {len(df_ref.index)} events loaded"  # noqa
-    )
-
-    eff_histos = pid_data.get_calib_hists(
-        config["histo_dir"], config["sample"], config["magnet"], ref_pars, bin_vars
     )
 
     start = time.perf_counter()
