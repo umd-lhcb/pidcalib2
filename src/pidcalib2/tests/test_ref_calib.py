@@ -16,37 +16,37 @@ import pytest
 
 from pidcalib2 import ref_calib
 
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@pytest.fixture
+def test_path():
+    return Path(os.path.dirname(os.path.abspath(__file__)))
 
 
-def test_ref_calib():
+def test_ref_calib(test_path, tmp_path):
     config = {
         "sample": "Turbo18",
         "magnet": "up",
         "bin_vars": '{"P": "P", "ETA": "ETA", "nTracks": "nTracks"}',
-        "histo_dir": str(Path(THIS_DIR, "test_data")),
-        "output_file": str(Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root")),
+        "histo_dir": str(test_path / "test_data"),
+        "output_file": str(tmp_path / "PIDCalibResults.root"),
         "merge": False,
-        "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),
+        "ref_file": str(test_path / "test_data/ref_test_data.root"),
         "ref_tree": "DecayTree",
         "ref_pars": '{"Bach": ["K", "DLLK > 4"]}',
         "verbose": False,
     }
 
     assert ref_calib.ref_calib(config) == pytest.approx(0.8798221261720731)
-    assert Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root").exists()
-    os.remove(Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root"))
+    assert (tmp_path / "PIDCalibResults.root").exists()
 
     with pytest.raises(SyntaxError):
         config = {
             "sample": "Turbo18",
             "magnet": "up",
             "bin_vars": '{"P", "ETA", "nTracks"}',
-            "output_file": str(
-                Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root")
-            ),
+            "output_file": str(tmp_path / "test_data/test_data_PIDCalibResults.root"),
             "merge": False,
-            "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),
+            "ref_file": str(test_path / "test_data/ref_test_data.root"),
             "ref_tree": "DecayTree",
             "ref_pars": '{"Bach": ["K", "DLLK > 4"]}',
             "verbose": False,
@@ -58,11 +58,9 @@ def test_ref_calib():
             "sample": "Turbo18",
             "magnet": "up",
             "bin_vars": '{"P": "P", "ETA": "ETA", "nTracks": "nTracks"}',
-            "output_file": str(
-                Path(THIS_DIR, "test_data/test_data_PIDCalibResults.root")
-            ),
+            "output_file": str(tmp_path / "test_data/test_data_PIDCalibResults.root"),
             "merge": False,
-            "ref_file": str(Path(THIS_DIR, "test_data/ref_test_data.root")),
+            "ref_file": str(test_path / "test_data/ref_test_data.root"),
             "ref_tree": "DecayTree",
             "ref_pars": '{"Bach"}',
             "verbose": False,

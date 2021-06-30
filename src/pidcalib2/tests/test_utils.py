@@ -18,19 +18,22 @@ import pytest
 
 from pidcalib2 import utils
 
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@pytest.fixture
+def test_path():
+    return Path(os.path.dirname(os.path.abspath(__file__)))
 
 
-def test_make_hist():
-    df = pd.read_csv(Path(THIS_DIR, "test_data/cal_test_data.csv"), index_col=0)
+def test_make_hist(test_path):
+    df = pd.read_csv(str(test_path / "test_data/cal_test_data.csv"), index_col=0)
     hist = utils.make_hist(df, "Pi", ["P"])
     assert hist.size == 20
     assert hist.sum().value == pytest.approx(71.55106080517815)  # type: ignore
     assert hist[3].value == pytest.approx(13.581349537355582)  # type: ignore
 
 
-def test_create_eff_histograms():
-    df = pd.read_csv(Path(THIS_DIR, "test_data/cal_test_data.csv"), index_col=0)
+def test_create_eff_histograms(test_path):
+    df = pd.read_csv(str(test_path / "test_data/cal_test_data.csv"), index_col=0)
 
     particle = "Pi"
     pid_cut = "DLLK>4"
@@ -47,14 +50,14 @@ def test_create_eff_histograms():
     assert eff_hists["eff_DLLK>4"].size == 20
 
 
-def test_get_per_event_effs():
-    df_ref = pd.read_csv(Path(THIS_DIR, "test_data/ref_test_data.csv"), index_col=0)
+def test_get_per_event_effs(test_path):
+    df_ref = pd.read_csv(str(test_path / "test_data/ref_test_data.csv"), index_col=0)
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
     hists["Bach"] = {}
     with open(
-        Path(THIS_DIR, "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl"), "rb"
+        test_path / "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl", "rb"
     ) as f:
         hists["Bach"]["eff"] = pickle.load(f)
         hists["Bach"]["passing"] = pickle.load(f)
@@ -66,23 +69,19 @@ def test_get_per_event_effs():
     assert df_ref.PIDCalibErr.mean() == pytest.approx(0.0131223551397001)
 
 
-def test_get_multiparticle_per_event_effs():
-    df_ref = pd.read_csv(Path(THIS_DIR, "test_data/ref_test_data.csv"), index_col=0)
+def test_get_multiparticle_per_event_effs(test_path):
+    df_ref = pd.read_csv(str(test_path / "test_data/ref_test_data.csv"), index_col=0)
     prefixes = ["h1", "h2"]
     bin_vars = {"P": "P"}
     hists = {}
     hists["h1"] = {}
-    with open(
-        Path(THIS_DIR, "test_data/effhists-Turbo18-up-K-DLLK>0-P.pkl"), "rb"
-    ) as f:
+    with open(test_path / "test_data/effhists-Turbo18-up-K-DLLK>0-P.pkl", "rb") as f:
         hists["h1"]["eff"] = pickle.load(f)
         hists["h1"]["passing"] = pickle.load(f)
         hists["h1"]["total"] = pickle.load(f)
 
     hists["h2"] = {}
-    with open(
-        Path(THIS_DIR, "test_data/effhists-Turbo18-up-Pi-DLLK<0-P.pkl"), "rb"
-    ) as f:
+    with open(test_path / "test_data/effhists-Turbo18-up-Pi-DLLK<0-P.pkl", "rb") as f:
         hists["h2"]["eff"] = pickle.load(f)
         hists["h2"]["passing"] = pickle.load(f)
         hists["h2"]["total"] = pickle.load(f)
@@ -93,14 +92,14 @@ def test_get_multiparticle_per_event_effs():
     assert df_ref.PIDCalibErr.mean() == pytest.approx(0.004805856952295592)
 
 
-def test_add_bin_indices():
-    df_ref = pd.read_csv(Path(THIS_DIR, "test_data/ref_test_data.csv"), index_col=0)
+def test_add_bin_indices(test_path):
+    df_ref = pd.read_csv(str(test_path / "test_data/ref_test_data.csv"), index_col=0)
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
     hists = {}
     hists["Bach"] = {}
     with open(
-        Path(THIS_DIR, "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl"), "rb"
+        test_path / "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl", "rb"
     ) as f:
         hists["Bach"]["eff"] = pickle.load(f)
         hists["Bach"]["passing"] = pickle.load(f)

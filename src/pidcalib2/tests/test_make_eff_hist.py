@@ -12,7 +12,6 @@
 import copy
 import math
 import os
-import shutil
 from pathlib import Path
 
 import pandas as pd
@@ -20,7 +19,10 @@ import pytest
 
 from pidcalib2 import binning, make_eff_hists
 
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@pytest.fixture
+def test_path():
+    return Path(os.path.dirname(os.path.abspath(__file__)))
 
 
 @pytest.fixture
@@ -42,13 +44,13 @@ def config():
     }
 
 
-def test_make_eff_hists(config):
+def test_make_eff_hists(config, test_path, tmp_path):
     config.update(
         {
             "bin_vars": ["P"],
-            "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+            "local_dataframe": str(test_path / "test_data/cal_test_data.csv"),
             "magnet": "up",
-            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "output_dir": str(tmp_path / "test_output"),
             "particle": "Pi",
             "pid_cuts": ["DLLK < 4", "DLLK<3"],
             "sample": "Turbo18",
@@ -56,10 +58,7 @@ def test_make_eff_hists(config):
     )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(
-            THIS_DIR,
-            "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl",
-        )
+        tmp_path / "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl"
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -69,21 +68,19 @@ def test_make_eff_hists(config):
     assert eff_histo[1].value == 0.8978157343833105
 
     eff_histo_reference = pd.read_pickle(
-        Path(THIS_DIR, "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl")
+        test_path / "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl"
     )
     assert eff_histo == eff_histo_reference
 
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
 
-
-def test_make_eff_hists_with_user_cuts(config):
+def test_make_eff_hists_with_user_cuts(config, test_path, tmp_path):
     config.update(
         {
             "bin_vars": ["P"],
             "cuts": ["Dst_IPCHI2 < 100", "probe_TRACK_GHOSTPROB < 0.05"],
-            "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+            "local_dataframe": str(test_path / "test_data/cal_test_data.csv"),
             "magnet": "up",
-            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "output_dir": str(tmp_path / "test_output"),
             "particle": "Pi",
             "pid_cuts": ["DLLK < 4", "DLLK<3"],
             "sample": "Turbo18",
@@ -91,7 +88,7 @@ def test_make_eff_hists_with_user_cuts(config):
     )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
+        tmp_path / "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl"
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -101,17 +98,15 @@ def test_make_eff_hists_with_user_cuts(config):
     assert eff_histo[1].value == 0.8978157343833105
 
     eff_histo_reference = pd.read_pickle(
-        Path(THIS_DIR, "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl")
+        test_path / "test_data/effhists-Turbo18-up-pi-DLLK<4-P.pkl"
     )
     assert eff_histo == eff_histo_reference
-
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
 
     # Test that stricter cuts have an effect
     config["cuts"] = ["Dst_IPCHI2 < 9", "probe_TRACK_GHOSTPROB < 0.01"]
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
+        tmp_path / "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl"
     )
 
     # With stricter cuts, some bins in the efficiency histogram become empty
@@ -121,18 +116,16 @@ def test_make_eff_hists_with_user_cuts(config):
 
     assert eff_histo != eff_histo_reference
 
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
-
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_make_eff_hists_with_hardcoded_cuts(config):
+def test_make_eff_hists_with_hardcoded_cuts(config, tmp_path):
     config.update(
         {
             "bin_vars": ["P"],
             "magnet": "down",
             "max_files": 1,
-            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "output_dir": str(tmp_path / "test_output"),
             "particle": "P_IncLc",
             "pid_cuts": ["DLLp > 4"],
             "sample": "Turbo16",
@@ -140,7 +133,7 @@ def test_make_eff_hists_with_hardcoded_cuts(config):
     )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists-Turbo16-down-P_IncLc-DLLp>4-P.pkl")
+        tmp_path / "test_output/effhists-Turbo16-down-P_IncLc-DLLp>4-P.pkl"
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -149,18 +142,16 @@ def test_make_eff_hists_with_hardcoded_cuts(config):
     assert eff_histo.sum(flow=True).value == pytest.approx(17.3387622437092)
     assert eff_histo[1].value == 0.9686555826741122
 
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
-
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_make_eff_hists_local_file_list(config):
+def test_make_eff_hists_local_file_list(config, test_path, tmp_path):
     config.update(
         {
             "bin_vars": ["P"],
-            "file_list": str(Path(THIS_DIR, "test_data/test_file_list")),
+            "file_list": str(test_path / "test_data/test_file_list"),
             "magnet": "up",
-            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "output_dir": str(tmp_path / "test_output"),
             "particle": "Pi",
             "pid_cuts": ["DLLK < 4", "DLLK<3"],
             "sample": "Turbo18",
@@ -168,7 +159,7 @@ def test_make_eff_hists_local_file_list(config):
     )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
+        tmp_path / "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl"
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -176,27 +167,25 @@ def test_make_eff_hists_local_file_list(config):
     assert eff_histo.sum(flow=False).value == pytest.approx(17.378390835392615)
     assert eff_histo[1].value == 0.9797018332573063
 
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
-
 
 @pytest.mark.xrootd
 @pytest.mark.slow
-def test_make_eff_hists_file_list(config):
+def test_make_eff_hists_file_list(config, test_path, tmp_path):
     config.update(
         {
             "bin_vars": ["P"],
             "magnet": "up",
             "max_files": 1,
-            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "output_dir": str(tmp_path / "test_output"),
             "particle": "Pi",
             "pid_cuts": ["DLLK < 4", "DLLK<3"],
             "sample": "Turbo18",
-            "samples_file": str(Path(THIS_DIR, "test_data/test_samples.json")),
+            "samples_file": str(test_path / "test_data/test_samples.json"),
         }
     )
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
+        tmp_path / "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl"
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -204,10 +193,8 @@ def test_make_eff_hists_file_list(config):
     assert eff_histo.sum(flow=False).value == pytest.approx(17.378390835392615)
     assert eff_histo[1].value == 0.9797018332573063
 
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
 
-
-def test_decode_arguments(capsys):
+def test_decode_arguments(capsys, test_path, tmp_path):
     assert (
         make_eff_hists.decode_arguments(
             [
@@ -233,7 +220,7 @@ def test_decode_arguments(capsys):
 
     with pytest.raises(SystemExit):
         make_eff_hists.decode_arguments(
-            ["--list", str(Path(THIS_DIR, "test_data/test_samples.json"))]
+            ["--list", str(test_path / "test_data/test_samples.json")]
         )
     captured = capsys.readouterr().out
     assert captured == (
@@ -243,17 +230,17 @@ def test_decode_arguments(capsys):
     )
 
 
-def test_make_eff_hists_with_custom_binning(config):
+def test_make_eff_hists_with_custom_binning(config, test_path, tmp_path):
     # Save the original binnings so we can restore them later
     orig_binnings = copy.deepcopy(binning.binnings)
 
     config.update(
         {
             "bin_vars": ["P"],
-            "binning_file": str(Path(THIS_DIR, "test_data/custom_binning.json")),
-            "local_dataframe": str(Path(THIS_DIR, "test_data/cal_test_data.csv")),
+            "binning_file": str(test_path / "test_data/custom_binning.json"),
+            "local_dataframe": str(test_path / "test_data/cal_test_data.csv"),
             "magnet": "up",
-            "output_dir": str(Path(THIS_DIR, "test_output")),
+            "output_dir": str(tmp_path / "test_output"),
             "particle": "Pi",
             "pid_cuts": ["DLLK < 4", "DLLK<3"],
             "sample": "Turbo18",
@@ -262,7 +249,7 @@ def test_make_eff_hists_with_custom_binning(config):
 
     make_eff_hists.make_eff_hists(config)
     eff_histo = pd.read_pickle(
-        Path(THIS_DIR, "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl")
+        tmp_path / "test_output/effhists-Turbo18-up-Pi-DLLK<4-P.pkl"
     )
 
     # These asserts might come in handy when some detail in the boost_histogram
@@ -270,8 +257,6 @@ def test_make_eff_hists_with_custom_binning(config):
     assert eff_histo.sum(flow=False).value == pytest.approx(1.8099485065453211)
     assert eff_histo.sum(flow=True).value == pytest.approx(41.404466293590865)
     assert eff_histo[1].value == 0.9625150986552666
-
-    shutil.rmtree(Path(THIS_DIR, "test_output"))
 
     # Restore original binnings for other tests
     binning.binnings = orig_binnings

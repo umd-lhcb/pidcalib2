@@ -18,75 +18,78 @@ import ROOT
 
 from pidcalib2 import merge_trees
 
-THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+
+@pytest.fixture
+def test_path():
+    return Path(os.path.dirname(os.path.abspath(__file__)))
 
 
 @pytest.mark.pyroot
-def test_copy_tree():
+def test_copy_tree(test_path, tmp_path):
     shutil.copy(
-        Path(THIS_DIR, "test_data/ref_test_data.root"),
-        Path(THIS_DIR, "test_data/ref_test_data_copy.root"),
+        test_path / "test_data/ref_test_data.root",
+        tmp_path / "ref_test_data_copy.root",
     )
 
     merge_trees.copy_tree_and_set_as_friend(
-        str(Path(THIS_DIR, "test_data/ref_PID_eff.root")),
+        str(test_path / "test_data/ref_PID_eff.root"),
         "PID_eff_tree",
-        str(Path(THIS_DIR, "test_data/ref_test_data_copy.root")),
+        str(tmp_path / "ref_test_data_copy.root"),
         "DecayTree",
     )
 
-    new_file = ROOT.TFile(str(Path(THIS_DIR, "test_data/ref_test_data_copy.root")))
+    new_file = ROOT.TFile(str(tmp_path / "ref_test_data_copy.root"))
     new_tree = new_file.Get("DecayTree")
 
     assert new_tree.GetEntry(0) == 84
     assert new_tree.PID_eff == pytest.approx(0.9933816230604905)
 
-    os.remove(Path(THIS_DIR, "test_data/ref_test_data_copy.root"))
-
 
 @pytest.mark.pyroot
-def test_copy_tree_bad_filenames():
+def test_copy_tree_bad_filenames(test_path, tmp_path):
+    shutil.copy(
+        test_path / "test_data/ref_test_data.root",
+        tmp_path / "ref_test_data_copy.root",
+    )
     # It seems some versions of pyroot raise OSError when a file that should be
     # opened doesn't exist, while others don't and we catch the issue later,
     # raising a SystemExit
     with pytest.raises((OSError, SystemExit)):
         merge_trees.copy_tree_and_set_as_friend(
-            str(Path(THIS_DIR, "test_data/x.root")),
+            str(test_path / "test_data/x.root"),
             "PID_eff_tree",
-            str(Path(THIS_DIR, "test_data/ref_test_data_copy.root")),
+            str(tmp_path / "ref_test_data_copy.root"),
             "DecayTree",
         )
 
     with pytest.raises(SystemExit):
         merge_trees.copy_tree_and_set_as_friend(
-            str(Path(THIS_DIR, "test_data/ref_PID_eff.root")),
+            str(test_path / "test_data/ref_PID_eff.root"),
             "PID_eff_tree",
-            str(Path(THIS_DIR, "test_data/x.root")),
+            str(test_path / "test_data/x.root"),
             "DecayTree",
         )
 
 
 @pytest.mark.pyroot
-def test_copy_tree_bad_treenames():
+def test_copy_tree_bad_treenames(test_path, tmp_path):
     shutil.copy(
-        Path(THIS_DIR, "test_data/ref_test_data.root"),
-        Path(THIS_DIR, "test_data/ref_test_data_copy.root"),
+        test_path / "test_data/ref_test_data.root",
+        tmp_path / "ref_test_data_copy.root",
     )
 
     with pytest.raises(SystemExit):
         merge_trees.copy_tree_and_set_as_friend(
-            str(Path(THIS_DIR, "test_data/ref_PID_eff.root")),
+            str(test_path / "test_data/ref_PID_eff.root"),
             "x",
-            str(Path(THIS_DIR, "test_data/ref_test_data_copy.root")),
+            str(tmp_path / "ref_test_data_copy.root"),
             "DecayTree",
         )
 
     with pytest.raises(SystemExit):
         merge_trees.copy_tree_and_set_as_friend(
-            str(Path(THIS_DIR, "test_data/ref_PID_eff.root")),
+            str(test_path / "test_data/ref_PID_eff.root"),
             "PID_eff_tree",
-            str(Path(THIS_DIR, "test_data/ref_test_data_copy.root")),
+            str(tmp_path / "ref_test_data_copy.root"),
             "x",
         )
-
-    os.remove(Path(THIS_DIR, "test_data/ref_test_data_copy.root"))
