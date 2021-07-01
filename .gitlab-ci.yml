@@ -36,10 +36,19 @@ mypy:
     - .venv/run mypy src/pidcalib2
   allow_failure: true
 
-run_tests:
+default_env_tests:
   stage: test
   script:
     - .venv/run pytest -v
+
+pidcalib_env_tests:
+  stage: test
+  script:
+    - lb-conda pidcalib/2021-06-30 pytest -v
+  before_script:
+    - echo $LBDATARO_KEYTAB | base64 -d > .keytab && kinit lbdataro@CERN.CH -k -t .keytab && rm .keytab
+    - klist
+    - source /cvmfs/lhcb.cern.ch/lib/LbEnv
 
 package:
   stage: build
