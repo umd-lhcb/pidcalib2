@@ -51,10 +51,7 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
     """Create efficiency histograms for all supplied PID cuts.
 
     Args:
-        df_total: DataFrame with all events.
-        particle: Particle type (K, Pi, etc.).
-        pid_cuts: Simple user-level cut list, e.g., ["DLLK<4"].
-        bin_vars: Variables used for binning.
+        hists: A dictionary with total and passing histograms.
 
     Returns:
         A dictionary with all the efficiency histograms, with the PID cuts as
@@ -433,7 +430,7 @@ def create_histograms(config):
     for bin_var in config["bin_vars"]:
         bin_edges = binning.get_binning(config["particle"], bin_var, verbose=True)
         binning_range_cuts.append(
-            f"{bin_var} > {bin_edges[0]} and {bin_var} < {bin_edges[-1]}"
+            f"{bin_var} >= {bin_edges[0]} and {bin_var} < {bin_edges[-1]}"
         )
 
     cut_stats = {
