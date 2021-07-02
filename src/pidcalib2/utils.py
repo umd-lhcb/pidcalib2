@@ -193,7 +193,7 @@ def add_efficiencies(
     # We separate the dataframe into two parts: one where all the events have
     # PID indices (events inside the PID binning) and those that don't.
     # Efficiency is added only for events inside the PID binning.
-    df_nan = df_new[df_new.isna().any(axis=1)]
+    df_nan = df_new[df_new.isna().any(axis=1)]  # type: ignore
     df_new.dropna(inplace=True)
 
     df_new["PIDCalibEff"] = 1
@@ -226,7 +226,7 @@ def add_efficiencies(
 
     df_new["PIDCalibErr"] = np.sqrt(df_new["PIDCalibRelErr2"])  # type: ignore
     for prefix in prefixes:
-        df_new["PIDCalibErr"] *= df_new[f"{prefix}_PIDCalibEff"]
+        df_new["PIDCalibErr"] *= df_new[f"{prefix}_PIDCalibEff"]  # type: ignore
 
     df_new.drop(columns=["PIDCalibRelErr2"], inplace=True)
 

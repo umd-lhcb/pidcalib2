@@ -9,6 +9,7 @@
 # or submit itself to any jurisdiction.                                       #
 ###############################################################################
 
+import collections
 import json
 import os
 import pickle
@@ -237,6 +238,19 @@ def get_relevant_branch_names(
                 else:
                     branch_names[cut_var] = aliases[cut_var]
 
+    if len(branch_names) != len(set(branch_names.values())):
+        duplicates = [
+            item
+            for item, count in collections.Counter(branch_names.values()).items()
+            if count > 1
+        ]
+        log.error(
+            (
+                "You are mixing aliases and raw variable names for the same "
+                f"variable(s): {duplicates}"
+            )
+        )
+        raise KeyError
     return branch_names
 
 
