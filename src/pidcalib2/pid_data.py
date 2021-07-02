@@ -405,7 +405,13 @@ def root_to_dataframe(
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
             similar_keys = []
             if calibration:
-                similar_keys += utils.find_similar_strings(exc.key, list(aliases), 0.80)
+                aliases_in_tree = []
+                for alias, var in aliases.items():
+                    if var in tree.keys():  # type: ignore
+                        aliases_in_tree.append(alias)
+                similar_keys += utils.find_similar_strings(
+                    exc.key, aliases_in_tree, 0.80
+                )
                 similar_keys += utils.find_similar_strings(
                     "probe_" + exc.key, tree.keys(), 0.80  # type: ignore
                 )
@@ -418,7 +424,7 @@ def root_to_dataframe(
             log.error(
                 (
                     f"Branch '{exc.key}' not found; similar aliases and/or branches "
-                    f"that exist: {similar_keys}"
+                    f"that exist in the tree: {similar_keys}"
                 )
             )
             raise
