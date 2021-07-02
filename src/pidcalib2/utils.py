@@ -65,7 +65,7 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
                 "You might want to change the binning."
             )
         )
-        log.debug(hists["total"].view(flow=False))
+        log.debug(hists["total"].values(flow=False))
 
         # Replace zeros with NaNs which suppresses duplicate Numpy warnings
         hist_total_nan = hists["total"].values()
@@ -73,7 +73,7 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
         hists["total"].view().value = hist_total_nan  # type: ignore
 
     for name in list(hists):
-        if name.startswith("passing_") and not name.startswith("passing_sumw2_"):
+        if name.startswith("passing_"):
             eff_name = name.replace("passing_", "eff_", 1)
             hists[eff_name] = hists[name].copy()
             hists[eff_name].view().value = hists[name].values(flow=False) / hists[  # type: ignore # noqa
@@ -90,6 +90,16 @@ def create_eff_histograms(hists: Dict[str, bh.Histogram]) -> Dict[str, bh.Histog
                 )
             )
             log.debug(f"Created '{eff_name}' histogram")
+
+            negative_bins = np.count_nonzero(hists[eff_name].values(flow=False) < 0)
+            if negative_bins:
+                log.warning(
+                    (
+                        f"There are {negative_bins} negative bins in the '{eff_name}' "
+                        "efficiency histogram! You might want to change the binning."
+                    )
+                )
+                log.debug(hists[eff_name].values(flow=False))
 
     if zero_bins:
         # Return the zeros that were temporarily replaced by NaNs
