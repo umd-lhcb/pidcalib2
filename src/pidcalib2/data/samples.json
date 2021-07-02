@@ -4027,7 +4027,17 @@
             "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Ionproton16/PIDCALIB.ROOT/00072818/0000/00072818_00000006_1.pidcalib.root",
             "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Ionproton16/PIDCALIB.ROOT/00072818/0000/00072818_00000007_1.pidcalib.root",
             "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Ionproton16/PIDCALIB.ROOT/00072818/0000/00072818_00000008_1.pidcalib.root"
-        ]
+        ],
+        "tuple_names": {
+            "P": [
+                "Lam0_PTuple",
+                "Lam0_PbarTuple",
+                "Lam0_HPT_PTuple",
+                "Lam0_HPT_PbarTuple",
+                "Lam0_VHPT_PTuple",
+                "Lam0_VHPT_PbarTuple"
+            ]
+        }
     },
     "ApTurbo16-MagDown-K": {
         "link": "ApTurbo16-MagDown"
@@ -6822,7 +6832,17 @@
             "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Protonion16/PIDCALIB.ROOT/00072816/0000/00072816_00000006_1.pidcalib.root",
             "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Protonion16/PIDCALIB.ROOT/00072816/0000/00072816_00000007_1.pidcalib.root",
             "root://eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/LHCb/Protonion16/PIDCALIB.ROOT/00072816/0000/00072816_00000008_1.pidcalib.root"
-        ]
+        ],
+        "tuple_names": {
+            "P": [
+                "Lam0_PTuple",
+                "Lam0_PbarTuple",
+                "Lam0_HPT_PTuple",
+                "Lam0_HPT_PbarTuple",
+                "Lam0_VHPT_PTuple",
+                "Lam0_VHPT_PbarTuple"
+            ]
+        }
     },
     "pATurbo16-MagDown-K": {
         "link": "pATurbo16-MagDown"

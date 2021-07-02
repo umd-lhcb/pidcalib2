@@ -405,7 +405,11 @@ def create_histograms(config):
             config["samples_file"],
             config["max_files"],
         )
-    tree_paths = pid_data.get_tree_paths(config["particle"], config["sample"])
+    tree_paths = pid_data.get_tree_paths(
+        config["particle"],
+        config["sample"],
+        calib_sample["tuple_names"] if "tuple_names" in calib_sample else None,
+    )
     log.debug(f"Trees to be read: {tree_paths}")
 
     # If there are hard-coded cuts, the variables must be included in the

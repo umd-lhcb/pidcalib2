@@ -350,6 +350,13 @@ def get_calibration_sample(
         except KeyError:
             log.error(f"Linked sample '{link}' not found in {samples_file}")
             raise
+        # Copy configuration from the link (tuple_names, cuts, etc.), but only
+        # if it doesn't override the upstream configuration
+        for key, item in samples_dict[link].items():
+            if key == "files":
+                continue
+            if key not in calibration_sample:
+                calibration_sample[key] = item
 
     if max_files:
         log.warning(
@@ -444,7 +451,9 @@ def root_to_dataframe(
     return pd.concat(dfs, ignore_index=True)  # type: ignore
 
 
-def get_tree_paths(particle: str, sample: str) -> List[str]:
+def get_tree_paths(
+    particle: str, sample: str, override_tuple_names: Dict[str, List[str]] = None
+) -> List[str]:
     """Return a list of internal ROOT paths to relevant trees in the files
 
     Args:
@@ -458,8 +467,13 @@ def get_tree_paths(particle: str, sample: str) -> List[str]:
         tree_paths.append("DecayTree")
     else:
         # Run 2 ROOT file structure with multiple trees
-        for tuple_name in tuple_names[particle]:
-            tree_paths.append(f"{tuple_name}/DecayTree")
+        if override_tuple_names and particle in override_tuple_names:
+            log.debug("Tree paths overriden by tuple_names")
+            for tuple_name in override_tuple_names[particle]:
+                tree_paths.append(f"{tuple_name}/DecayTree")
+        else:
+            for tuple_name in tuple_names[particle]:
+                tree_paths.append(f"{tuple_name}/DecayTree")
 
     return tree_paths
 
