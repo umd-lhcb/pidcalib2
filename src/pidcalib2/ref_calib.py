@@ -62,7 +62,7 @@ from typing import Dict
 import logzero
 from logzero import logger as log
 
-from . import merge_trees, pid_data, utils
+from . import argparse_actions, merge_trees, pid_data, utils
 
 try:
     from .version import version  # type: ignore
@@ -145,6 +145,12 @@ def decode_arguments(args):
         "--compatibility",
         action="store_true",
         help="(debug) treat empty efficiency histogram bins as PIDCalib1 did",
+    )
+    parser.add_argument(
+        "-l",
+        "--list",
+        action=argparse_actions.ListValidAction,
+        help="list all [configs, aliases]",
     )
     parser.add_argument(
         "-v",
