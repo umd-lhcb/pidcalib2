@@ -236,7 +236,10 @@ def add_efficiencies(
 
     df_new["PIDCalibErr"] = np.sqrt(df_new["PIDCalibRelErr2"])  # type: ignore
     for prefix in prefixes:
-        df_new["PIDCalibErr"] *= df_new[f"{prefix}_PIDCalibEff"]  # type: ignore
+        # The absolute value is so that we match PIDCalib1. However if any of
+        # the efficiencies are negative the overall efficiency and error are
+        # meaningless.
+        df_new["PIDCalibErr"] *= abs(df_new[f"{prefix}_PIDCalibEff"])  # type: ignore
 
     df_new.drop(columns=["PIDCalibRelErr2"], inplace=True)
 
