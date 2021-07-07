@@ -130,13 +130,17 @@ The `--merge` option will copy the PID efficiency tree to your input file and ma
 ### Caveats
 
 You might notice that some of the events in your reference sample are assigned `PIDCalibEff`, `PIDCalibErr`, or both of -999.
-- `PIDCalibEff` is -999 when for at least one particle
+- `PIDCalibEff` is -999 when for at least one track
   - The event is out of range
   - The relevant bin in the efficiency histogram has no events whatsoever
-- `PIDCalibErr` is -999 when for at least one particle
+  - The efficiency is negative
+- `PIDCalibErr` is -999 when for at least one track
   - The event is out of range
   - The relevant bin in the efficiency histogram has no events whatsoever
   - The relevant bin in the efficiency histogram has no events passing PID cuts
+  - The efficiency is negative
+
+Because of double → float conversion in the original PIDCalib, tiny discrepancies (<1e−3 relative difference) in the efficiencies and/or uncertainties are to be expected.
 
 ## `plot_calib_distributions`
 

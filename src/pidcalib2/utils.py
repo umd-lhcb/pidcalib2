@@ -239,9 +239,23 @@ def add_efficiencies(
         # The absolute value is so that we match PIDCalib1. However if any of
         # the efficiencies are negative the overall efficiency and error are
         # meaningless.
-        df_new["PIDCalibErr"] *= abs(df_new[f"{prefix}_PIDCalibEff"])  # type: ignore
-
+        df_new["PIDCalibErr"] *= df_new[f"{prefix}_PIDCalibEff"]  # type: ignore
     df_new.drop(columns=["PIDCalibRelErr2"], inplace=True)
+
+    # Assign -999 to events where any track has negative efficiency; this
+    # behavior is different to the original PIDCalib
+    negative_mask = df_new.eval(
+        "|".join([f"{prefix}_PIDCalibEff<0" for prefix in prefixes])
+    )
+    if any(negative_mask):
+        df_new.loc[negative_mask, ["PIDCalibEff"]] = -999
+        df_new.loc[negative_mask, ["PIDCalibErr"]] = -999
+        log.warning(
+            (
+                f"{np.count_nonzero(negative_mask)} events include tracks with "
+                "negative efficiencies; assigning -999"
+            )
+        )
 
     df_new = pd.concat([df_new, df_nan]).sort_index()
     log.debug("Particle efficiencies assigned")
