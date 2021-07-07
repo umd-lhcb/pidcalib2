@@ -140,7 +140,7 @@ You might notice that some of the events in your reference sample are assigned `
   - The relevant bin in the efficiency histogram has no events passing PID cuts
   - The efficiency is negative
 
-Because of double → float conversion in the original PIDCalib, tiny discrepancies (<1e−3 relative difference) in the efficiencies and/or uncertainties are to be expected.
+Because of `double` → `float` conversion in the original PIDCalib, tiny discrepancies (<1e−3 relative difference) in the efficiencies and/or uncertainties are to be expected.
 
 ## `plot_calib_distributions`
 
