@@ -332,7 +332,7 @@ def save_plots(
         output_dir: Directory to which to save the plots.
         format: Image format, e.g., png.
     """
-    mplhep.set_style("LHCb2")
+    mplhep.style.use("LHCb2")
     for var, hist in total_hists.items():
         plt.hist(
             hist.axes[0].edges[:-1],
