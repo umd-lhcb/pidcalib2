@@ -87,7 +87,7 @@ make_eff_hists sequentially)
 
 - Create a single efficiency histogram for a complex PID cut
   ```sh
-  pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "MC15TuneV1_ProbNNp*(1-MC15TuneV1_ProbNNpi)*(1-MC15TuneV1_ProbNNk) < 0.5 & DLLK < 3" --cut "isMuon==0" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
+  pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "MC15TuneV1_ProbNNp*(1-MC15TuneV1_ProbNNpi)*(1-MC15TuneV1_ProbNNk) < 0.5 & DLLK < 3" --cut "IsMuon==0" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
   ```
 
 ## `ref_calib`
