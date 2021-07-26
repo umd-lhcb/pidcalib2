@@ -171,7 +171,7 @@ This tool converts pickled PIDCalib2 histograms to TH*D & saves them in a ROOT f
 
 - Convert pickled boost_histograms from `make_eff_hists` to ROOT
   ```sh
-  pidcalib2.pklhist2root "pidcalib_output/effhists-Turbo18-up-Pi-DLLK>4-P.ETA.nSPDhits.pkl"
+  pidcalib2.pklhisto2root "pidcalib_output/effhists-Turbo18-up-Pi-DLLK>4-P.ETA.nSPDhits.pkl"
   ```
   This will translate the histograms and save them to `pidcalib_output/effhists-Turbo18-up-Pi-DLLK>4-P.ETA.nSPDhits.root`.
 
