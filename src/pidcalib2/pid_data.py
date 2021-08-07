@@ -465,15 +465,13 @@ def get_tree_paths(
         # Run 1 (and Run 2 Electron) files have a simple structure with a single
         # tree
         tree_paths.append("DecayTree")
+    elif override_tuple_names and particle in override_tuple_names:
+        log.debug("Tree paths overriden by tuple_names")
+        for tuple_name in override_tuple_names[particle]:
+            tree_paths.append(f"{tuple_name}/DecayTree")
     else:
-        # Run 2 ROOT file structure with multiple trees
-        if override_tuple_names and particle in override_tuple_names:
-            log.debug("Tree paths overriden by tuple_names")
-            for tuple_name in override_tuple_names[particle]:
-                tree_paths.append(f"{tuple_name}/DecayTree")
-        else:
-            for tuple_name in tuple_names[particle]:
-                tree_paths.append(f"{tuple_name}/DecayTree")
+        for tuple_name in tuple_names[particle]:
+            tree_paths.append(f"{tuple_name}/DecayTree")
 
     return tree_paths
 
@@ -536,9 +534,6 @@ def get_calib_hists(
         whitespace = re.compile(r"\s+")
         pid_cut = re.sub(whitespace, "", pid_cut)
 
-        bin_str = ""
-        for bin_var in bin_vars:
-            bin_str += f"_{bin_var}"
         calib_name = Path(
             hist_dir,
             utils.create_hist_filename(

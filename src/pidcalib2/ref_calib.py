@@ -159,8 +159,7 @@ def decode_arguments(args):
         help="(debug) increase verbosity",
     )
     parser.add_argument("-V", "--version", action="version", version=version)
-    parsed_args = parser.parse_args(args)
-    return parsed_args
+    return parser.parse_args(args)
 
 
 def ref_calib(config: Dict) -> float:

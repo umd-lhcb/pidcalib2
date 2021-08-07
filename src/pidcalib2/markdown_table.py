@@ -20,7 +20,7 @@ class MarkdownTable:
         Args:
             header: A list containing column titles.
         """
-        assert type(header) == list or type(header) == tuple
+        assert type(header) in [list, tuple]
         self.header = header
         self.rows = []
         self.precision = [3 for _ in header]
@@ -35,7 +35,7 @@ class MarkdownTable:
                 each column.
         """
         assert len(precisions) == len(self.header)
-        assert type(precisions) == list or type(precisions) == tuple
+        assert type(precisions) in [list, tuple]
         self.precision = precisions
 
     def add_row(self, row):

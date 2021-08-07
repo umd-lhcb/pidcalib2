@@ -31,7 +31,7 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
         raise KeyError
 
     bins = []
-    if particle in ["Pi", "K", "P", "e"]:
+    if particle in {"Pi", "K", "P", "e"}:
         bins.append(low)
         bins.append(9300)  # R1 kaon threshold
         bins.append(15600)  # R2 kaon threshold
@@ -59,23 +59,19 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
 
 
 def eta_binning(particle, low: float = 1.5, high: float = 5.0) -> List[float]:
-    bins = np.linspace(low, high, 5).tolist()  # type:ignore
-    return bins
+    return list(np.linspace(low, high, 5))
 
 
 def ntracks_binning(particle, low: float = 0, high: float = 500) -> List[float]:
-    bins = [low, 50, 200, 300, high]
-    return bins
+    return [low, 50, 200, 300, high]
 
 
 def nspdhits_binning(particle, low: float = 0, high: float = 1000) -> List[float]:
-    bins = [low, 200, 400, 600, 800, high]
-    return bins
+    return [low, 200, 400, 600, 800, high]
 
 
 def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]:
-    bins = np.linspace(low, high, 4).tolist()  # type:ignore
-    return bins
+    return list(np.linspace(low, high, 4))
 
 
 # Dict of binnings for each track type and variable
@@ -175,27 +171,25 @@ def get_binning(
             Defaults to False.
         quiet: Optional. Suppress all logging messages. Defaults to False.
     """
-    if particle not in binnings or variable not in binnings[particle]:
-        # Remove particle suffix, e.g., 'DsPhi' in 'K_DsPhi'
-        pure_particle = particle.split("_", 1)[0]
-        if pure_particle not in binnings or variable not in binnings[pure_particle]:
-            if not quiet:
-                log.error(f"No '{variable}' binning defined for particle {particle}")
-            raise KeyError
-        else:
-            if not quiet:
-                if verbose:
-                    log.info(
-                        (
-                            f"No '{variable}' binning defined for particle "
-                            f"'{particle}'. Falling back to particle "
-                            f"'{pure_particle}' binning."
-                        )
-                    )
-            return binnings[pure_particle][variable]["bin_edges"]
-
-    else:
+    if particle in binnings and variable in binnings[particle]:
         return binnings[particle][variable]["bin_edges"]
+
+    # Remove particle suffix, e.g., 'DsPhi' in 'K_DsPhi'
+    pure_particle = particle.split("_", 1)[0]
+    if pure_particle not in binnings or variable not in binnings[pure_particle]:
+        if not quiet:
+            log.error(f"No '{variable}' binning defined for particle {particle}")
+        raise KeyError
+    else:
+        if not quiet and verbose:
+            log.info(
+                (
+                    f"No '{variable}' binning defined for particle "
+                    f"'{particle}'. Falling back to particle "
+                    f"'{pure_particle}' binning."
+                )
+            )
+        return binnings[pure_particle][variable]["bin_edges"]
 
 
 def load_binnings(path: str) -> Dict[str, Dict]:

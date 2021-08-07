@@ -161,8 +161,7 @@ def decode_arguments(args):
         help="(debug) increase verbosity",
     )
     parser.add_argument("-V", "--version", action="version", version=version)
-    parsed_args = parser.parse_args(args)
-    return parsed_args
+    return parser.parse_args(args)
 
 
 def plot_calib_distributions(config: Dict) -> None:
@@ -180,7 +179,6 @@ def plot_calib_distributions(config: Dict) -> None:
         logzero.loglevel(logging.DEBUG)
     else:
         logzero.loglevel(logging.INFO)
-    pass
 
     config["version"] = version
     log.info("Running PIDCalib2 plot_calib_distributions with the following config:")
@@ -310,9 +308,10 @@ def create_plot_histograms(
             # Empty the list to avoid redefining the binning in each step
             bin_vars_without_binnings = []
 
-            hists = {}
-            for var in config["bin_vars"]:
-                hists[var] = utils.make_hist(df, config["particle"], [var])
+            hists = {
+                var: utils.make_hist(df, config["particle"], [var])
+                for var in config["bin_vars"]
+            }
 
             all_hists[path] = hists
 

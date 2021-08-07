@@ -39,9 +39,7 @@ def test_create_eff_histograms(test_path):
     pid_cut = "DLLK>4"
     bin_vars = ["P"]
 
-    hists = {}
-    hists["total"] = utils.make_hist(df, particle, bin_vars)
-
+    hists = {"total": utils.make_hist(df, particle, bin_vars)}
     df_passing = df.query(pid_cut)
     hists[f"passing_{pid_cut}"] = utils.make_hist(df_passing, particle, bin_vars)
 
@@ -54,8 +52,7 @@ def test_get_per_event_effs(test_path):
     df_ref = pd.read_csv(str(test_path / "test_data/ref_test_data.csv"), index_col=0)
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
-    hists = {}
-    hists["Bach"] = {}
+    hists = {"Bach": {}}
     with open(
         test_path / "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl", "rb"
     ) as f:
@@ -73,31 +70,29 @@ def test_get_multiparticle_per_event_effs(test_path):
     df_ref = pd.read_csv(str(test_path / "test_data/ref_test_data.csv"), index_col=0)
     prefixes = ["h1", "h2"]
     bin_vars = {"P": "P"}
-    hists = {}
-    hists["h1"] = {}
+    hists = {"h1": {}}
     with open(test_path / "test_data/effhists-Turbo18-up-K-DLLK>0-P.pkl", "rb") as f:
-        hists["h1"]["eff"] = pickle.load(f)
-        hists["h1"]["passing"] = pickle.load(f)
-        hists["h1"]["total"] = pickle.load(f)
-
+        _extracted_from_test_get_multiparticle_per_event_effs_8(hists, "h1", f)
     hists["h2"] = {}
     with open(test_path / "test_data/effhists-Turbo18-up-Pi-DLLK<0-P.pkl", "rb") as f:
-        hists["h2"]["eff"] = pickle.load(f)
-        hists["h2"]["passing"] = pickle.load(f)
-        hists["h2"]["total"] = pickle.load(f)
-
+        _extracted_from_test_get_multiparticle_per_event_effs_8(hists, "h2", f)
     df_ref = utils.add_bin_indices(df_ref, prefixes, bin_vars, hists)
     df_ref = utils.add_efficiencies(df_ref, prefixes, hists)
     assert df_ref.PIDCalibEff.mean() == pytest.approx(0.928205513381871)
     assert df_ref.PIDCalibErr.mean() == pytest.approx(0.004805856952295592)
 
 
+def _extracted_from_test_get_multiparticle_per_event_effs_8(hists, arg1, f):
+    hists[arg1]["eff"] = pickle.load(f)
+    hists[arg1]["passing"] = pickle.load(f)
+    hists[arg1]["total"] = pickle.load(f)
+
+
 def test_add_bin_indices(test_path):
     df_ref = pd.read_csv(str(test_path / "test_data/ref_test_data.csv"), index_col=0)
     prefixes = ["Bach"]
     bin_vars = {"P": "P", "ETA": "ETA", "nTracks": "nTracks"}
-    hists = {}
-    hists["Bach"] = {}
+    hists = {"Bach": {}}
     with open(
         test_path / "test_data/effhists-Turbo18-up-K-DLLK>4-P.ETA.nTracks.pkl", "rb"
     ) as f:

@@ -114,9 +114,9 @@ def log_config(config: dict) -> None:
     """Pretty-print a config/dict."""
     longest_key = len(max(config, key=len))
     log.info("=" * longest_key)
-    for entry in config:
-        if config[entry] is not None:
-            log.info(f"{entry:{longest_key}}: {config[entry]}")
+    for entry, value in config.items():
+        if value is not None:
+            log.info(f"{entry:{longest_key}}: {value}")
     log.info("=" * longest_key)
 
 
@@ -229,7 +229,7 @@ def add_efficiencies(
         df_new[f"{prefix}_PIDCalibErr"] = np.take(
             error_table, df_new[f"{prefix}_PIDCalibBin"]
         )
-        df_new["PIDCalibEff"] = df_new["PIDCalibEff"] * df_new[f"{prefix}_PIDCalibEff"]
+        df_new["PIDCalibEff"] *= df_new[f"{prefix}_PIDCalibEff"]
         df_new["PIDCalibRelErr2"] += (
             df_new[f"{prefix}_PIDCalibErr"] / df_new[f"{prefix}_PIDCalibEff"]
         ) ** 2
@@ -245,8 +245,9 @@ def add_efficiencies(
     # Assign -999 to events where any track has negative efficiency; this
     # behavior is different to the original PIDCalib
     negative_mask = df_new.eval(
-        "|".join([f"{prefix}_PIDCalibEff<0" for prefix in prefixes])
+        "|".join(f"{prefix}_PIDCalibEff<0" for prefix in prefixes)
     )
+
     if any(negative_mask):
         df_new.loc[negative_mask, ["PIDCalibEff"]] = -999
         df_new.loc[negative_mask, ["PIDCalibErr"]] = -999
@@ -357,11 +358,7 @@ def extract_variable_names(expression: str) -> List[str]:
         A list of variable names found in the expression.
     """
     parts = re.split(r"<|>|==|!=|\(|\)|\*|/|\+|-|\^|&", expression)
-    variables = []
-    for part in parts:
-        if not is_float(part) and part != "":
-            variables.append(part)
-    return variables
+    return [part for part in parts if not is_float(part) and part != ""]
 
 
 def is_float(entity: Any) -> bool:
@@ -488,9 +485,7 @@ def create_histograms(config):
                 config["cuts"] if "cuts" in config else [],
             )
 
-            hists = {}
-            hists["total"] = make_hist(df, config["particle"], config["bin_vars"])
-
+            hists = {"total": make_hist(df, config["particle"], config["bin_vars"])}
             hists_passing = create_passing_histograms(
                 df,
                 cut_stats,
@@ -523,9 +518,7 @@ def create_histograms_from_local_dataframe(config):
     bin_vars = config["bin_vars"]
     pid_cuts = config["pid_cuts"]
 
-    hists = {}
-    hists["total"] = make_hist(df, particle, bin_vars)
-
+    hists = {"total": make_hist(df, particle, bin_vars)}
     for i, pid_cut in enumerate(pid_cuts):
         log.info(f"Processing '{pid_cuts[i]}' cut")
         df_passing = df.query(pid_cut)
