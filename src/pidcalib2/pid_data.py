@@ -163,6 +163,7 @@ aliases = {
     "Brunel_IPCHI2": "probe_Brunel_IPCHI2",
     "TRACK_GHOSTPROB": "probe_TRACK_GHOSTPROB",
     "Brunel_TRACK_GHOSTPROB": "probe_Brunel_TRACK_GHOSTPROB",
+    "trackcharge": "probe_trackcharge",
 }
 
 
