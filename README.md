@@ -11,6 +11,8 @@ The package includes several user-callable modules:
 
 The term "reference dataset/sample" refers to the user's dataset to which they want to assign PID efficiencies. The "calibration datasets/samples" are the special, centrally managed samples used internally by PIDCalib for PID efficiency estimation. The `--sample` argument always concerns these calibration samples.
 
+Slides with additional information, example output, and plots are available on [Indico](https://indico.cern.ch/event/1055804/contributions/4440878/attachments/2277451/3869206/Run12_210707_v2.pdf).
+
 ## Setup
 
 When working on a computer that where the LHCb software stack is available (LXPLUS, university cluster, etc.), one can setup PIDCalib2 by running
