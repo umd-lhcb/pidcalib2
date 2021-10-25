@@ -167,7 +167,7 @@ A plot for every requested variable will be created in the `--output-dir` direct
 
 ## `pklhisto2root`
 
-This tool converts pickled PIDCalib2 histograms to TH*D & saves them in a ROOT file. It can be used on histograms produced by `make_eff_hists` or `plot_calib_distributions`. Note that ROOT supports only 1-, 2-, and 3-dimensional histograms; attempting to convert higher-dimensional histograms will fail.
+This tool converts pickled PIDCalib2 histograms to `TH*D` and saves them in a ROOT file. It can be used on histograms produced by `make_eff_hists` or `plot_calib_distributions`. Note that ROOT supports only 1-, 2-, and 3-dimensional histograms; attempting to convert higher-dimensional histograms will fail.
 
 ### Example
 
@@ -178,6 +178,24 @@ This tool converts pickled PIDCalib2 histograms to TH*D & saves them in a ROOT f
   This will translate the histograms and save them to `pidcalib_output/effhists-Turbo18-up-Pi-DLLK>4-P.ETA.nSPDhits.root`.
 
 ## Development
+
+### With lb-conda
+
+On machines where `lb-conda` is available, you may use the `pidcalib` environment for PIDCalib2 development. This is mainly useful for small modifications and only if you don't need to add any new dependencies.
+
+1. Clone the repository from [GitLab](https://gitlab.cern.ch/lhcb-rta/pidcalib2)
+2. Start a new BASH shell within the `pidcalib` environment
+```sh
+lb-conda pidcalib bash
+```
+3. Run your *local* PIDCalib2 code
+```sh
+python -m src.pidcalib2.make_eff_hists -h
+```
+
+### Without lb-conda
+
+This is a more versatile (if convoluted) method. It gives you full control of the dev environment and the ability to use IDEs, etc.
 
 1. Clone the repository from [GitLab](https://gitlab.cern.ch/lhcb-rta/pidcalib2)
 2. (Optional) Set up a virtual environment
