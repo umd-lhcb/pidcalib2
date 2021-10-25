@@ -164,6 +164,8 @@ aliases = {
     "TRACK_GHOSTPROB": "probe_TRACK_GHOSTPROB",
     "Brunel_TRACK_GHOSTPROB": "probe_Brunel_TRACK_GHOSTPROB",
     "trackcharge": "probe_trackcharge",
+    "MuonUnbiased": "probe_MuonUnbiased",
+    "Brunel_MuonUnbiased": "probe_Brunel_MuonUnbiased",
 }
 
 
