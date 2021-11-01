@@ -179,6 +179,11 @@ def make_eff_hists(config: dict) -> None:
     log.info("Running PIDCalib2 make_eff_hists with the following config:")
     utils.log_config(config)
 
+    if not config["cuts"]:
+        log.warning(
+            "No --cut specified. Cuts on PID samples should match your sample cuts."
+        )
+
     output_dir = pathlib.Path(config["output_dir"])
     output_dir.mkdir(parents=True, exist_ok=True)
 

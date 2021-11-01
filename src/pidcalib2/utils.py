@@ -358,7 +358,17 @@ def extract_variable_names(expression: str) -> List[str]:
         A list of variable names found in the expression.
     """
     parts = re.split(r"<|>|==|!=|\(|\)|\*|/|\+|-|\^|&", expression)
-    return [part for part in parts if not is_float(part) and part != ""]
+    var_names = [part for part in parts if not is_float(part) and part != ""]
+    # Check that the user uses valid variable names in cuts
+    for var_name in var_names:
+        if not re.match("^[A-Za-z0-9_]+$", var_name):
+            if "=" in var_name:
+                log.error(f"A single '=' used in a cut. Did you mean '=='?")
+                raise SyntaxError
+            else:
+                log.error(f"'{var_name}' is not a valid variable name")
+                raise KeyError
+    return var_names
 
 
 def is_float(entity: Any) -> bool:
