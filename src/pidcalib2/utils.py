@@ -363,7 +363,7 @@ def extract_variable_names(expression: str) -> List[str]:
     for var_name in var_names:
         if not re.match("^[A-Za-z0-9_]+$", var_name):
             if "=" in var_name:
-                log.error(f"A single '=' used in a cut. Did you mean '=='?")
+                log.error("A single '=' used in a cut. Did you mean '=='?")
                 raise SyntaxError
             else:
                 log.error(f"'{var_name}' is not a valid variable name")
