@@ -10,6 +10,11 @@
 ###############################################################################
 
 aliases = {
+    "Brunel_DLLK": "probe_Brunel_PIDK",
+    "Brunel_DLLd": "probe_Brunel_PIDd",
+    "Brunel_DLLe": "probe_Brunel_PIDe",
+    "Brunel_DLLmu": "probe_Brunel_PIDmu",
+    "Brunel_DLLp": "probe_Brunel_PIDp",
     "Brunel_ETA": "probe_Brunel_ETA",
     "Brunel_HasRich": "probe_Brunel_hasRich",
     "Brunel_IPCHI2": "probe_Brunel_IPCHI2",
