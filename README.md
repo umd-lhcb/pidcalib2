@@ -26,6 +26,10 @@ pidcalib2.ref_calib
 pidcalib2.merge_trees
 pidcalib2.pklhisto2root
 ```
+You can skip the bash invocation and join the setup and run phases into a single command
+```sh
+lb-conda pidcalib pidcalib2.make_eff_hists
+```
 To run `make_eff_hists`, you will need access to CERN EOS. You don't need to do anything special on LXPLUS. On other machines, you will usually need to obtain a Kerberos ticket by running
 ```sh
 kinit [username]@CERN.CH
