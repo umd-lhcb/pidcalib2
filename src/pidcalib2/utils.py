@@ -11,6 +11,7 @@
 
 import difflib
 import re
+import sys
 from typing import Any, Dict, List, Tuple, Union
 
 import boost_histogram as bh
@@ -477,7 +478,12 @@ def create_histograms(config):
         "user": {"before": 0, "after": 0},
     }
     all_hists = {}
-    for path in tqdm(calib_sample["files"], leave=False, desc="Processing files"):
+
+    for path in (
+        tqdm(calib_sample["files"], leave=False, desc="Processing files")
+        if sys.stderr.isatty()  # Use tqdm only when running interactively
+        else calib_sample["files"]
+    ):
         df = pid_data.root_to_dataframe(
             path, tree_paths, list(branch_names.values()), True
         )
