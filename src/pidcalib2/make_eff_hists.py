@@ -98,7 +98,10 @@ def decode_arguments(args):
     parser.add_argument(
         "-b",
         "--bin-var",
-        help="binning variable (-b can be used multiple times for multiple variables)",
+        help=(
+            "binning variable (-b can be used multiple times for a multi-dimensional "
+            "binning)"
+        ),
         action="append",
         dest="bin_vars",
         required=True,

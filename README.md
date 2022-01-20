@@ -79,7 +79,7 @@ An arbitrary number of binnings can be defined in a single file.
 Complex cut expressions can be created by chaining simpler expressions using `&`. One can also use standard mathematical symbols, like `*`, `/`, `+`, `-`, `(`, `)`. Whitespace does not matter.
 
 ### Examples
-- Create a single efficiency histogram for a single PID cut
+- Create a single 3D efficiency histogram for a single PID cut
   ```sh
   pidcalib2.make_eff_hists --sample Turbo18 --magnet up --particle Pi --pid-cut "DLLK > 4" --bin-var P --bin-var ETA --bin-var nSPDhits --output-dir pidcalib_output
   ```
