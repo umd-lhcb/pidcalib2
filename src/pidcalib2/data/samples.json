@@ -1223,6 +1223,11 @@
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/Jpsi_Mu_MagDown_Strip21_79.root"
         ]
     },
+    "21-MagDown-Mu_nopt": {
+        "files": [
+            "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/Jpsi_Mu_nopt_MagDown_Strip21_2012.root"
+        ]
+    },
     "21-MagDown-P": {
         "files": [
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/Lam0_P_MagDown_Strip21_0.root",
@@ -1611,6 +1616,11 @@
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21_79.root",
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21_80.root",
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21_81.root"
+        ]
+    },
+    "21-MagUp-Mu_nopt": {
+        "files": [
+            "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_nopt_MagUp_Strip21_2012.root"
         ]
     },
     "21-MagUp-P": {
@@ -2671,6 +2681,11 @@
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/Jpsi_Mu_MagDown_Strip21r1_11.root"
         ]
     },
+    "21r1-MagDown-Mu_nopt": {
+        "files": [
+            "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/Jpsi_Mu_nopt_MagDown_Strip21r1_2011.root"
+        ]
+    },
     "21r1-MagDown-P": {
         "files": [
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagDown/Lam0_P_MagDown_Strip21r1_0.root",
@@ -2818,6 +2833,11 @@
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21r1_5.root",
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21r1_6.root",
             "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_MagUp_Strip21r1_7.root"
+        ]
+    },
+    "21r1-MagUp-Mu_nopt": {
+        "files": [
+            "root://eoslhcb.cern.ch//eos/lhcb/wg/PID/PIDCalib_Run1_conversion/Reco14_DATA/MagUp/Jpsi_Mu_nopt_MagUp_Strip21r1_2011.root"
         ]
     },
     "21r1-MagUp-P": {
