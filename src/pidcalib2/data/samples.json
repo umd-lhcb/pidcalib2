@@ -5323,13 +5323,21 @@
         "link": "Turbo17-MagDown"
     },
     "Turbo17-MagDown-K_DD": {
-        "link": "Turbo17-MagDown"
+        "link": "Turbo17-MagDown",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo17-MagDown-K_DsPhi": {
         "link": "Turbo17-MagDown"
     },
     "Turbo17-MagDown-K_Omega": {
-        "link": "Turbo17-MagDown"
+        "link": "Turbo17-MagDown",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo17-MagDown-Mu": {
         "link": "Turbo17-MagDown"
@@ -5723,13 +5731,21 @@
         "link": "Turbo17-MagUp"
     },
     "Turbo17-MagUp-K_DD": {
-        "link": "Turbo17-MagUp"
+        "link": "Turbo17-MagUp",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo17-MagUp-K_DsPhi": {
         "link": "Turbo17-MagUp"
     },
     "Turbo17-MagUp-K_Omega": {
-        "link": "Turbo17-MagUp"
+        "link": "Turbo17-MagUp",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo17-MagUp-Mu": {
         "link": "Turbo17-MagUp"
@@ -6207,13 +6223,21 @@
         "link": "Turbo18-MagDown"
     },
     "Turbo18-MagDown-K_DD": {
-        "link": "Turbo18-MagDown"
+        "link": "Turbo18-MagDown",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo18-MagDown-K_DsPhi": {
         "link": "Turbo18-MagDown"
     },
     "Turbo18-MagDown-K_Omega": {
-        "link": "Turbo18-MagDown"
+        "link": "Turbo18-MagDown",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo18-MagDown-Mu": {
         "link": "Turbo18-MagDown"
@@ -6738,13 +6762,21 @@
         "link": "Turbo18-MagUp"
     },
     "Turbo18-MagUp-K_DD": {
-        "link": "Turbo18-MagUp"
+        "link": "Turbo18-MagUp",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo18-MagUp-K_DsPhi": {
         "link": "Turbo18-MagUp"
     },
     "Turbo18-MagUp-K_Omega": {
-        "link": "Turbo18-MagUp"
+        "link": "Turbo18-MagUp",
+        "cuts": [
+            "Omega0_M > 1655",
+            "Omega0_M < 1695"
+        ]
     },
     "Turbo18-MagUp-Mu": {
         "link": "Turbo18-MagUp"
