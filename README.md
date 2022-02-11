@@ -148,6 +148,10 @@ You might notice that some of the events in your reference sample are assigned `
 
 Because of `double` → `float` conversion in the original PIDCalib, tiny discrepancies (<1e−3 relative difference) in the efficiencies and/or uncertainties are to be expected.
 
+A bug in the original PIDCalib caused the electron calibration datasets to be read twice, resulting in incorrect efficiency map uncertainties.
+
+The original PIDCalib didn't apply the correct cuts to Omega samples (`K_Omega` and `K_DD`), leading to non-sensical efficiency maps.
+
 ## `plot_calib_distributions`
 
 This tool allows you to plot distributions of variables in the calibration datasets. You can supply the same cuts and custom binnings that you would use for `make_eff_hists`. If you wish to plot a variable for which no binning exists, a uniform binning with 50 bins will be used. You can change the number of bins using `--bins` and force a uniform binning even if another binning is defined via `--force-uniform`.
