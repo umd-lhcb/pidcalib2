@@ -232,3 +232,7 @@ Certain tests can be excluded like this
   pytest -m "not xrootd"
   ```
 See available tags in the `src/pidcalib2/tests/test_*.py` files.
+
+## Links
+
+- [PIDGen2](https://gitlab.cern.ch/lhcb-rta/pidgen2) - a tool to resample MC PID variables based on distributions from data calibration samples
