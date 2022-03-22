@@ -72,7 +72,7 @@ pidcalib2.make_eff_hists --list aliases
 
 A file with alternative binnings can be specified using `--binning-file`. The file must contain valid JSON specifying bin edges. For example, a two-bin binning for particle `Pi`, variable `P` can be defined as
 ```json
-{"Pi": {"P": [10000, 15000, 30000]}}
+{"Pi": {"P": [10000, 15000, 30000], "PT": [6000, 10000, 20000]}}
 ```
 An arbitrary number of binnings can be defined in a single file.
 
