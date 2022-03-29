@@ -15,7 +15,7 @@ import os
 import pickle
 import re
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import boost_histogram as bh
 import pandas as pd
@@ -25,7 +25,7 @@ from logzero import logger as log
 
 from . import utils
 from .aliases import aliases
-from .samples import tuple_names, simple_samples
+from .samples import simple_samples, tuple_names
 
 
 def is_simple(sample: str) -> bool:
@@ -43,7 +43,7 @@ def is_simple(sample: str) -> bool:
 
 
 def get_relevant_branch_names(
-    pid_cuts: List[str], bin_vars: List[str], cuts: List[str] = None
+    pid_cuts: List[str], bin_vars: List[str], cuts: Optional[List[str]] = None
 ) -> Dict[str, str]:
     """Return a dict of branch names relevant to the cuts and binning vars.
 
@@ -154,7 +154,7 @@ def get_reference_branch_name(prefix: str, bin_var: str, bin_var_branch: str) ->
     return f"{prefix}_{bin_var_branch}"
 
 
-def get_calibration_samples(samples_file: str = None) -> Dict:
+def get_calibration_samples(samples_file: Optional[str] = None) -> Dict:
     """Return a dictionary of all files for all calibration samples.
 
     Args:
@@ -175,7 +175,7 @@ def get_calibration_sample(
     magnet: str,
     particle: str,
     samples_file: str,
-    max_files: int = None,
+    max_files: Optional[int] = None,
 ) -> Dict[str, Any]:
     """Return a list of calibration files.
 
@@ -314,7 +314,9 @@ def root_to_dataframe(
 
 
 def get_tree_paths(
-    particle: str, sample: str, override_tuple_names: Dict[str, List[str]] = None
+    particle: str,
+    sample: str,
+    override_tuple_names: Optional[Dict[str, List[str]]] = None,
 ) -> List[str]:
     """Return a list of internal ROOT paths to relevant trees in the files
 
@@ -424,7 +426,7 @@ def get_calib_hists(
 
 
 def save_dataframe_as_root(
-    df: pd.DataFrame, name: str, filename: str, columns: List[str] = None
+    df: pd.DataFrame, name: str, filename: str, columns: Optional[List[str]] = None
 ):
     """Save a DataFrame as a TTree in a ROOT file.
 

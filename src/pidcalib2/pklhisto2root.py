@@ -20,13 +20,14 @@ import math
 import pathlib
 import pickle
 import sys
+from typing import Optional
 
 import boost_histogram as bh
 import ROOT
 
 
 def convert_to_root_histo(
-    name: str, bh_histo: bh.Histogram, bh_error_histo: bh.Histogram = None
+    name: str, bh_histo: bh.Histogram, bh_error_histo: Optional[bh.Histogram] = None
 ):
     """Convert boost_histogram histogram to a ROOT histogram.
 
