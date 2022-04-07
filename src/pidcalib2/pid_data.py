@@ -20,7 +20,6 @@ from typing import Any, Dict, List, Optional
 import boost_histogram as bh
 import pandas as pd
 import uproot
-import uproot3
 from logzero import logger as log
 
 from . import utils
@@ -443,9 +442,9 @@ def save_dataframe_as_root(
     if columns is None:
         columns = list(df_wo_nan.keys())
     branches_w_types = {branch: df_wo_nan[branch].dtype for branch in columns}
-    with uproot3.recreate(filename) as f:
+    with uproot.recreate(filename) as f:
         log.debug(f"Creating a TTree with the following branches: {branches_w_types}")
-        f[name] = uproot3.newtree(branches_w_types)
+        f.mktree(name, branches_w_types)
         branch_dict = {branch: df_wo_nan[branch] for branch in branches_w_types}
         f[name].extend(branch_dict)
     log.info(f"Efficiency tree saved to {filename}")

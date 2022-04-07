@@ -40,10 +40,8 @@ toml==0.10.2
 tqdm==4.59.0
 typed-ast==1.4.2
 typing-extensions==3.7.4.3
-uproot==4.0.8
+uproot==4.2.2
 uproot-methods==0.9.2
-uproot3==3.14.4
-uproot3-methods==0.10.1
 virtualenv==20.4.3
 wheel==0.36.2
 xrootd==5.2.0
