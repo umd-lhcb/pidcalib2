@@ -40,7 +40,6 @@ tuple_names = {
     "P_Sigmac0": ["Sigmac0_PbarTuple", "Sigmac0_PTuple"],
     "P_Sigmacpp": ["Sigmacpp_PbarTuple", "Sigmacpp_PTuple"],
     "P_B_Jpsi": ["B_Jpsi_PTuple", "B_Jpsi_PbarTuple"],
-    "e_B_Jpsi": ["B_Jpsi_EPTuple", "B_Jpsi_EMTuple"],
     "Mu_B_Jpsi": ["B_Jpsi_MuPTuple", "B_Jpsi_MuMTuple"],
     "e": ["Jpsi_EPTuple", "Jpsi_EMTuple"],
     "P_LcfB": ["LbLcMu_PTuple", "LbLcMu_PbarTuple"],
