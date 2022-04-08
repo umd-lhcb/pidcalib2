@@ -45,7 +45,7 @@ pidcalib_env_tests:
   stage: test
   allow_failure: true
   script:
-    - lb-conda pidcalib/2021-06-30 pytest -v
+    - lb-conda pidcalib/2022-04-08 pytest -v
   before_script:
     - echo $LBDATARO_KEYTAB | base64 -d > .keytab && kinit lbdataro@CERN.CH -k -t .keytab && rm .keytab
     - klist
