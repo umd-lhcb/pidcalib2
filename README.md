@@ -24,6 +24,7 @@ After this, the following commands will be available
 pidcalib2.make_eff_hists
 pidcalib2.ref_calib
 pidcalib2.merge_trees
+pidcalib2.plot_calib_distributions
 pidcalib2.pklhisto2root
 ```
 You can skip the bash invocation and join the setup and run phases into a single command
@@ -137,11 +138,11 @@ The `--merge` option will copy the PID efficiency tree to your input file and ma
 
 You might notice that some of the events in your reference sample are assigned `PIDCalibEff`, `PIDCalibErr`, or both of -999.
 - `PIDCalibEff` is -999 when for at least one track
-  - The event is out of range
+  - The event is out of binning range
   - The relevant bin in the efficiency histogram has no events whatsoever
   - The efficiency is negative
 - `PIDCalibErr` is -999 when for at least one track
-  - The event is out of range
+  - The event is out of binning range
   - The relevant bin in the efficiency histogram has no events whatsoever
   - The relevant bin in the efficiency histogram has no events passing PID cuts
   - The efficiency is negative
