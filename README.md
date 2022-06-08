@@ -3,10 +3,10 @@
 A set of software tools for estimating LHCb PID efficiencies.
 
 The package includes several user-callable modules:
-- [`make_eff_hists`](#makeeffhists) creates histograms that can be used to estimate the PID efficiency of a user's sample
-- [`ref_calib`](#refcalib) calculates the LHCb PID efficiency of a user reference sample
+- [`make_eff_hists`](#make_eff_hists) creates histograms that can be used to estimate the PID efficiency of a user's sample
+- [`ref_calib`](#ref_calib) calculates the LHCb PID efficiency of a user reference sample
 - `merge_trees` merges two ROOT files with compatible `TTree`s
-- [`plot_calib_distributions`](#plotcalibdistributions) allows you to plot distributions of variables in the calibration datasets
+- [`plot_calib_distributions`](#plot_calib_distributions) allows you to plot distributions of variables in the calibration datasets
 - [`pklhisto2root`](#pklhisto2root) converts [Pickled](https://docs.python.org/3/library/pickle.html) [boost-histogram](https://github.com/scikit-hep/boost-histogram)s to ROOT histograms
 
 The term "reference dataset/sample" refers to the user's dataset to which they want to assign PID efficiencies. The "calibration datasets/samples" are the special, centrally managed samples used internally by PIDCalib for PID efficiency estimation. The `--sample` argument always concerns these calibration samples.
