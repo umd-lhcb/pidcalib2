@@ -3,11 +3,11 @@
 A set of software tools for estimating LHCb PID efficiencies.
 
 The package includes several user-callable modules:
-- `make_eff_hists` creates histograms that can be used to estimate the PID efficiency of a user's sample
-- `ref_calib` calculates the LHCb PID efficiency of a user reference sample
+- [`make_eff_hists`](#makeeffhists) creates histograms that can be used to estimate the PID efficiency of a user's sample
+- [`ref_calib`](#refcalib) calculates the LHCb PID efficiency of a user reference sample
 - `merge_trees` merges two ROOT files with compatible `TTree`s
-- `plot_calib_distributions` allows you to plot distributions of variables in the calibration datasets
-- `pklhisto2root` converts [Pickled](https://docs.python.org/3/library/pickle.html) [boost-histogram](https://github.com/scikit-hep/boost-histogram)s to ROOT histograms
+- [`plot_calib_distributions`](#plotcalibdistributions) allows you to plot distributions of variables in the calibration datasets
+- [`pklhisto2root`](#pklhisto2root) converts [Pickled](https://docs.python.org/3/library/pickle.html) [boost-histogram](https://github.com/scikit-hep/boost-histogram)s to ROOT histograms
 
 The term "reference dataset/sample" refers to the user's dataset to which they want to assign PID efficiencies. The "calibration datasets/samples" are the special, centrally managed samples used internally by PIDCalib for PID efficiency estimation. The `--sample` argument always concerns these calibration samples.
 
@@ -15,7 +15,7 @@ Slides with additional information, example output, and plots are available on [
 
 ## Setup
 
-When working on a computer that where the LHCb software stack is available (LXPLUS, university cluster, etc.), one can setup PIDCalib2 by running
+When working on a computer where the LHCb software stack is available (LXPLUS, university cluster, etc.), one can setup PIDCalib2 by running
 ```sh
 lb-conda pidcalib bash
 ```
@@ -62,7 +62,7 @@ The calibration files to be processed are determined by the `sample`, `magnet`, 
 pidcalib2.make_eff_hists --list configs
 ```
 
-Aliases for standard variables are defined to simplify the commands. We recommend users use only the aliases when specifying variables. When you use a name that isn't an alias, a warning message like the following will show up in the log. Use with caution.
+Aliases for standard variables are defined to simplify the commands. We recommend users use the aliases when specifying variables. When you use a name that isn't an alias, a warning message like the following will show up in the log.
 ```
 'probe_PIDK' is not a known PID variable alias, using raw variable
 ```
@@ -70,6 +70,7 @@ All aliases can be listed by running
 ```sh
 pidcalib2.make_eff_hists --list aliases
 ```
+Note that there are many more variables than there are aliases. If you want to find a variable for which no alias exists, you can check one of the calibration files yourself. The paths to the calibration files are printed when the `--verbose` option is specified. Alternatively, you can simply guess the name - if it doesn't exist, PIDCalib2 will let you know and might provide a list of similar names that do exist.
 
 A file with alternative binnings can be specified using `--binning-file`. The file must contain valid JSON specifying bin edges. For example, a two-bin binning for particle `Pi`, variable `P` can be defined as
 ```json
@@ -99,7 +100,7 @@ make_eff_hists sequentially)
 
 ## `ref_calib`
 
-This module uses the histograms created by `make_eff_hists` to assign efficiency to events in a reference sample supplied by the user. Adding of efficiency to the user-supplied file requires PyROOT and is optional.
+This module uses the histograms created by `make_eff_hists` to assign efficiency to events in a reference sample supplied by the user. Adding efficiency to the user-supplied file requires PyROOT and is optional.
 
 The module works in two steps:
 
