@@ -34,9 +34,6 @@
             numpy
             pandas
             tqdm
-
-            # Build dependencies
-            pkg-config
           ]);
 
           shellHook = ''
