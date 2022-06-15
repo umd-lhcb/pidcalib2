@@ -51,6 +51,9 @@
 
             # allow for the environment to pick up packages installed with virtualenv
             export PYTHONPATH=$VENV/${python.sitePackages}/:$PYTHONPATH
+            # from https://discourse.nixos.org/t/python-package-with-runtime-dependencies/5522/2
+            # still mess up with system tools with the libc are diifferent
+            #export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.stdenv.cc.cc]}
           '';
         };
       });
