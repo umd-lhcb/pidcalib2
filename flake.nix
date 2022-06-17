@@ -2,11 +2,12 @@
   description = "pidcalib2.";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
-    flake-utils.url = "github:numtide/flake-utils";
+    root-curated.url = "github:umd-lhcb/root-curated";
+    nixpkgs.follows = "root-curated/nixpkgs";
+    flake-utils.follows = "root-curated/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, root-curated, nixpkgs, flake-utils }:
     {
       overlay = import ./nix/overlay.nix;
     } //
@@ -15,6 +16,7 @@
         pkgs = import nixpkgs {
           inherit system;
           config = { allowUnfree = true; };
+          overlays = [ root-curated.overlay self.overlay ];
         };
         python = pkgs.python3;
         pythonPackages = python.pkgs;
@@ -27,30 +29,19 @@
           name = "pidcalib2-dev";
           buildInputs = (with pkgs; with pythonPackages; [
             # Python stack
-            virtualenvwrapper
-            boost-histogram
-            logzero
-            matplotlib
-            numpy
-            pandas
-            tqdm
+            pidcalib2
           ]);
 
+          FONTCONFIG_FILE = pkgs.makeFontsConf {
+            fontDirectories = with pkgs; [
+              gyre-fonts
+            ];
+          };
+
           shellHook = ''
-            export PATH=$(pwd)/scripts:$(pwd)/bin:$PATH
+            export MPLBACKEND=agg  # the backend w/o a UI
+            export MPLCONFIGDIR=$(pwd)/.matplotlib
 
-            # Allow the use of wheels.
-            SOURCE_DATE_EPOCH=$(date +%s)
-
-            VENV=./.virtualenv
-
-            if test ! -d $VENV; then
-              virtualenv $VENV
-            fi
-            source $VENV/bin/activate
-
-            # allow for the environment to pick up packages installed with virtualenv
-            export PYTHONPATH=$VENV/${python.sitePackages}/:$PYTHONPATH
             # from https://discourse.nixos.org/t/python-package-with-runtime-dependencies/5522/2
             # still mess up with system tools with the libc are diifferent
             #export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.stdenv.cc.cc]}
