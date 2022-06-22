@@ -28,6 +28,7 @@
         devShell = pkgs.mkShell rec {
           name = "pidcalib2-dev";
           buildInputs = (with pkgs; with pythonPackages; [
+            root
             # Python stack
             pidcalib2
           ]);
