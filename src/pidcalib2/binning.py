@@ -17,10 +17,30 @@ from logzero import logger as log
 
 valid_particles = ["Pi", "K", "P", "Mu", "e"]
 
+# def p_binning(particle: str, low: float = 0, high: float = 80000) -> List[float]:
+#     """Return a binning for the momentum.
 
-def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[float]:
+#     Args:
+#         particle: Particle type ["Pi", "K", ...]
+#         low: Optional. Lowest momentum [MeV]. Defaults to 3000.
+#         high: Optional. Highest momentum [MeV]. Defaults to 100000.
+#     """
+#     if particle not in valid_particles:
+#         log.error(f"'{particle}' is not a valid particle for P binning")
+#         raise KeyError
+
+#     bins = []
+#     elif particle in {"Pi", "K", "P", "e", "Mu"}:
+#         bins.append(low)
+#         bins.append(9300)  # R1 kaon threshold
+#         bins.append(15600)  # R2 kaon threshold
+#         # Uniform bin boundaries
+#         uniform_bins = np.linspace(16000, high, 16).tolist()  # type:ignore
+#         bins.extend(uniform_bins)
+#     return bins
+
+def p_binning(particle: str, low: float = 0, high: float = 80000) -> List[float]:
     """Return a binning for the momentum.
-
     Args:
         particle: Particle type ["Pi", "K", ...]
         low: Optional. Lowest momentum [MeV]. Defaults to 3000.
@@ -31,32 +51,51 @@ def p_binning(particle: str, low: float = 3000, high: float = 100000) -> List[fl
         raise KeyError
 
     bins = []
-    if particle in {"Pi", "K", "P", "e"}:
+    if particle in {"Pi", "K", "P", "e", "Mu"}:
         bins.append(low)
         bins.append(9300)  # R1 kaon threshold
         bins.append(15600)  # R2 kaon threshold
         # Uniform bin boundaries
-        uniform_bins = np.linspace(19000, high, 16).tolist()  # type:ignore
+        uniform_bins = np.linspace(16000, high, 16).tolist()  # type:ignore
         bins.extend(uniform_bins)
-    elif particle == "Mu":
-        bins = [
-            low,
-            6000,
-            8000,
-            10000,
-            12000,
-            14500,
-            17500,
-            21500,
-            27000,
-            32000,
-            40000,
-            60000,
-            70000,
-            high,
-        ]
+    # elif particle == "Mu":
+    #     bins = [
+    #         low,
+    #         6000,
+    #         8000,
+    #         10000,
+    #         12000,
+    #         14500,
+    #         17500,
+    #         21500,
+    #         27000,
+    #         32000,
+    #         40000,
+    #         60000,
+    #         70000,
+    #         high,
+    #     ]
     return bins
 
+def pt_binning(particle: str, low: float = 0, high: float = 2000) -> List[float]:
+    if particle not in valid_particles:
+        log.error(f"'{particle}' is not a valid particle for PT binning")
+        raise KeyError
+
+    bins = []
+    if particle in {"K", "e", "P"}:
+        # Uniform bin boundaries
+        uniform_bins = np.linspace(0, high, 20).tolist()  # type:ignore
+        bins.extend(uniform_bins)
+    elif particle == "Pi":
+        bins.append(low)
+        uniform_bins = np.linspace(500, high, 15).tolist()
+        bins.extend(uniform_bins)
+    elif particle == "Mu":
+        bins.append(low)
+        uniform_bins = np.linspace(1000, high, 10).tolist()  # type:ignore
+        bins.extend(uniform_bins)
+    return bins
 
 def eta_binning(particle, low: float = 1.5, high: float = 5.0) -> List[float]:
     return list(np.linspace(low, high, 5))
@@ -80,6 +119,8 @@ binnings = {}
 binnings["Pi"] = {
     "P": {"bin_edges": p_binning("Pi")},
     "Brunel_P": {"bin_edges": p_binning("Pi")},
+    "PT": {"bin_edges": pt_binning("Pi")},
+    "Brunel_PT": {"bin_edges": pt_binning("Pi")},
     "ETA": {"bin_edges": eta_binning("Pi")},
     "Brunel_ETA": {"bin_edges": eta_binning("Pi")},
     "nTracks": {"bin_edges": ntracks_binning("Pi")},
@@ -92,6 +133,8 @@ binnings["Pi"] = {
 binnings["K"] = {
     "P": {"bin_edges": p_binning("K")},
     "Brunel_P": {"bin_edges": p_binning("K")},
+    "PT": {"bin_edges": pt_binning("K")},
+    "Brunel_PT": {"bin_edges": pt_binning("K")},
     "ETA": {"bin_edges": eta_binning("K")},
     "Brunel_ETA": {"bin_edges": eta_binning("K")},
     "nTracks": {"bin_edges": ntracks_binning("K")},
@@ -104,6 +147,8 @@ binnings["K"] = {
 binnings["Mu"] = {
     "P": {"bin_edges": p_binning("Mu")},
     "Brunel_P": {"bin_edges": p_binning("Mu")},
+    "PT": {"bin_edges": pt_binning("Mu")},
+    "Brunel_PT": {"bin_edges": pt_binning("Mu")},
     "ETA": {"bin_edges": eta_binning("Mu")},
     "Brunel_ETA": {"bin_edges": eta_binning("Mu")},
     "nTracks": {"bin_edges": ntracks_binning("Mu")},
@@ -116,6 +161,8 @@ binnings["Mu"] = {
 binnings["P"] = {
     "P": {"bin_edges": p_binning("P")},
     "Brunel_P": {"bin_edges": p_binning("P")},
+    "PT": {"bin_edges": pt_binning("P")},
+    "Brunel_PT": {"bin_edges": pt_binning("P")},
     "ETA": {"bin_edges": eta_binning("P")},
     "Brunel_ETA": {"bin_edges": eta_binning("P")},
     "nTracks": {"bin_edges": ntracks_binning("P")},
@@ -128,6 +175,8 @@ binnings["P"] = {
 binnings["e"] = {
     "P": {"bin_edges": p_binning("e")},
     "Brunel_P": {"bin_edges": p_binning("e")},
+    "PT": {"bin_edges": pt_binning("e")},
+    "Brunel_PT": {"bin_edges": pt_binning("e")},
     "ETA": {"bin_edges": eta_binning("e")},
     "Brunel_ETA": {"bin_edges": eta_binning("e")},
     "nTracks": {"bin_edges": ntracks_binning("e")},
