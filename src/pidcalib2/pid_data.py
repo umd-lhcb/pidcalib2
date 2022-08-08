@@ -279,22 +279,24 @@ def root_to_dataframe(
 
             df = pd.concat([df_main.reset_index(drop=True), df_friend.reset_index(drop=True)], axis=1)
             dfs.append(df)  # type: ignore
+            known_keys = list(tree)  + list(tree_friend)
+
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
             similar_keys = []
             if calibration:
                 aliases_in_tree = []
                 for alias, var in aliases.items():
-                    if var in tree.keys():  # type: ignore
+                    if var in known_keys:  # type: ignore
                         aliases_in_tree.append(alias)
                 similar_keys += utils.find_similar_strings(
                     exc.key, aliases_in_tree, 0.80
                 )
                 similar_keys += utils.find_similar_strings(
-                    "probe_" + exc.key, tree.keys(), 0.80  # type: ignore
+                    "probe_" + exc.key, known_keys, 0.80  # type: ignore
                 )
-            similar_keys += utils.find_similar_strings(exc.key, tree.keys(), 0.80)  # type: ignore # noqa
+            similar_keys += utils.find_similar_strings(exc.key, known_keys, 0.80)  # type: ignore # noqa
             similar_keys += utils.find_similar_strings(
-                exc.key.replace("Brunel", ""), tree.keys(), 0.80  # type: ignore
+                exc.key.replace("Brunel", ""), known_keys, 0.80  # type: ignore
             )
             # Remove duplicates while preserving ordering
             similar_keys = list(dict.fromkeys(similar_keys))
