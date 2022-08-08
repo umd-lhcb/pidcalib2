@@ -246,6 +246,9 @@ def root_to_dataframe(
     # message if this happens.
     try:
         root_file = uproot.open(path)
+
+        # NOTE: UMD special
+        friend_file = uproot.open(path.replace('remote', 'friends'))
     except FileNotFoundError as exc:
         if "Server responded with an error: [3010]" in exc.args[0]:
             log.error(
@@ -269,7 +272,13 @@ def root_to_dataframe(
     for tree_name in tree_names:
         try:
             tree = root_file[tree_name]
-            dfs.append(tree.arrays(branches, library="pd"))  # type: ignore
+            df_main = tree.arrays(branches, library="pd")
+
+            tree_friend = friend_file[tree_name]
+            df_friend = tree_friend.arrays(branches, library="pd")
+
+            df = pd.concat([df_main.reset_index(drop=True), df_friend.reset_index(drop=True)], axis=1)
+            dfs.append(df)  # type: ignore
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
             similar_keys = []
             if calibration:
