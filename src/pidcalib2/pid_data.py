@@ -272,10 +272,12 @@ def root_to_dataframe(
     for tree_name in tree_names:
         try:
             tree = root_file[tree_name]
-            df_main = tree.arrays(branches, library="pd")
+            branches_main = [b for b in branches if 'UBDT' not in b]
+            df_main = tree.arrays(branches_main, library="pd")
 
             tree_friend = friend_file[tree_name]
-            df_friend = tree_friend.arrays(branches, library="pd")
+            branches_friend = [b for b in branches if b not in branches_main]
+            df_friend = tree_friend.arrays(branches_friend, library="pd")
 
             df = pd.concat([df_main.reset_index(drop=True), df_friend.reset_index(drop=True)], axis=1)
             dfs.append(df)  # type: ignore
