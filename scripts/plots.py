@@ -38,7 +38,7 @@ for cut in np.linspace(0, 1, 21):
     cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
 mags = ["up"]
 vars = ["Brunel_P", "Brunel_PT"]
-dirs = ["pidcalib_output_many_8_8"]
+dirs = ["pidcalib_output_8_9"]
 
 for mag in mags:
     for particle in particles:
@@ -106,7 +106,7 @@ for dir in dirs:
                     plt.ylabel("Efficiency")
                     plt.figtext(0.2, 0.8, "LHCb\n $\\sqrt{s}$=13 TeV 2016 Validation")
             if plots_save:
-                plt.savefig("plots_new/eff_"+var+"_"+mag+"_"+dir+plots_format)
+                plt.savefig("plots_8_9/eff_"+var+"_"+mag+"_"+dir+plots_format)
             
 for var in vars:        
     plt.figure(i)
@@ -170,7 +170,7 @@ for var in vars:
         plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Online")
         plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
     if plots_save:
-        plt.savefig("plots_new/rej_v_eff_unbiased_"+var+plots_format)
+        plt.savefig("plots_8_9/rej_v_eff_unbiased_"+var+plots_format)
                 
 # for var in vars:        
 #     plt.figure(i)

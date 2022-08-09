@@ -9,7 +9,7 @@ for year in 16; do
 	for var in "Brunel_P" "Brunel_PT"; do
             for part in "Mu" "K" "Pi"; do
 		pidcalib2.make_eff_hists \
-		    --output-dir pidcalib_output_many_online \
+		    --output-dir pidcalib_output_8_9 \
 		    --sample "Turbo${year}" --magnet ${polarity} \
 		    --particle ${part} \
 		    $(for I in $(seq 0 0.05 1); do echo "--pid-cut UBDT>${I} "; done) \
