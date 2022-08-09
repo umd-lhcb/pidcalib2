@@ -28,7 +28,7 @@ plt.rcParams["axes.formatter.min_exponent"] = 0
 
 hists = {}
 hists2 = {}
-particles = ["K", "Pi", "Mu", "P"]
+particles = ["K", "Pi", "Mu"]
 pidcuts = ["UBDT>0.25", "UBDT>0.65"]
 cuts2 = []
 cuts3 = []
@@ -36,10 +36,9 @@ for cut in np.linspace(0, 1, 21):
     cut = format(cut, '.2f')
     cuts2.append(f"UBDT>{cut}")
     cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
-print(cuts2)
 mags = ["up"]
 vars = ["Brunel_P", "Brunel_PT"]
-dirs = ["pidcalib_output", "pidcalib_output_precut", "pidcalib_output_sy"]
+dirs = ["pidcalib_output_many_8_8"]
 
 for mag in mags:
     for particle in particles:
@@ -51,28 +50,20 @@ for mag in mags:
                     ) as f:
                         hists[f"{particle}_{mag}_{pidcut}_{var}_{dir}"] = pickle.load(f)
 
-for mag in mags:
-    for particle in particles:
-        for cut in cuts3:
-            for var in vars:
-                with open(
-                        f"../efficiency_gen/pidcalib_output_many_offline/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
-                ) as f:
-                    hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                    hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                    hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-
-for mag in mags:
-    for particle in particles:
-        for cut in cuts2:
-            for var in vars:
-                with open(
-                        f"../efficiency_gen/pidcalib_output_many_offline/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
-                ) as f:
-                    hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                    hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                    hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                
+                    for cut in cuts3:
+                        with open(
+                                f"../efficiency_gen/{dir}/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
+                        ) as f:
+                            hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                            hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                            hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    for cut in cuts2:
+                        with open(
+                                f"../efficiency_gen/{dir}/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
+                        ) as f:
+                            hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                            hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                            hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
 plots_save = True
 plots_format = ".pdf"
 
@@ -115,7 +106,7 @@ for dir in dirs:
                     plt.ylabel("Efficiency")
                     plt.figtext(0.2, 0.8, "LHCb\n $\\sqrt{s}$=13 TeV 2016 Validation")
             if plots_save:
-                plt.savefig("eff_"+var+"_"+mag+"_"+dir+plots_format)
+                plt.savefig("plots_new/eff_"+var+"_"+mag+"_"+dir+plots_format)
             
 for var in vars:        
     plt.figure(i)
@@ -179,42 +170,42 @@ for var in vars:
         plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Online")
         plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
     if plots_save:
-        plt.savefig("plots/rej_v_eff_unbiased_"+var+plots_format)
+        plt.savefig("plots_new/rej_v_eff_unbiased_"+var+plots_format)
                 
-for var in vars:        
-    plt.figure(i)
-    i+=1
-    Mu_eff_up = [
-        hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
-        for cut in cuts2
-    ]
-    bg_eff_up = [
-        1-0.8*(hists2[f"passing_Pi_up_{cut}_{var}"].sum().value / hists2[f"total_Pi_up_{cut}_{var}"].sum().value)-0.15*(hists2[f"passing_K_up_{cut}_{var}"].sum().value / hists2[f"total_K_up_{cut}_{var}"].sum().value)-0.05*(hists2[f"passing_P_up_{cut}_{var}"].sum().value / hists2[f"total_P_up_{cut}_{var}"].sum().value)
-        for cut in cuts2
-    ]
+# for var in vars:        
+#     plt.figure(i)
+#     i+=1
+#     Mu_eff_up = [
+#         hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
+#         for cut in cuts2
+#     ]
+#     bg_eff_up = [
+#         1-0.8*(hists2[f"passing_Pi_up_{cut}_{var}"].sum().value / hists2[f"total_Pi_up_{cut}_{var}"].sum().value)-0.15*(hists2[f"passing_K_up_{cut}_{var}"].sum().value / hists2[f"total_K_up_{cut}_{var}"].sum().value)-0.05*(hists2[f"passing_P_up_{cut}_{var}"].sum().value / hists2[f"total_P_up_{cut}_{var}"].sum().value)
+#         for cut in cuts2
+#     ]
     
-    Mu_eff_up_pnnmu = [
-        hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
-        for cut in cuts3
-    ]
-    bg_eff_up_pnnmu = [
-        1-0.8*(hists2[f"passing_Pi_up_{cut}_{var}"].sum().value / hists2[f"total_Pi_up_{cut}_{var}"].sum().value)-0.15*(hists2[f"passing_K_up_{cut}_{var}"].sum().value / hists2[f"total_K_up_{cut}_{var}"].sum().value)-0.05*(hists2[f"passing_P_up_{cut}_{var}"].sum().value / hists2[f"total_P_up_{cut}_{var}"].sum().value)
-        for cut in cuts3
-    ]
-    plt.plot(Mu_eff_up, bg_eff_up,
-             "s-", markersize=8,
-             color=colors["Mu_UBDT>0.25"],
-             label="Bkg Up UBDT")
-    plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
-             "s-", markersize=8,
-             color=colors["Mu_UBDT>0.65"],
-             label="Bkg Up ProbNNmu")
-    plt.xlim(0.695, 1.05)
-    plt.ylim(0.295, 1.05)
-    plt.xlabel("Signal Efficiency")
-    plt.ylabel("Background Rejection Efficiency")
-    plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Offline")
-    plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
-    if plots_save:
-        plt.savefig("plots/rej_v_eff_weighted_"+var+plots_format)
+#     Mu_eff_up_pnnmu = [
+#         hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
+#         for cut in cuts3
+#     ]
+#     bg_eff_up_pnnmu = [
+#         1-0.8*(hists2[f"passing_Pi_up_{cut}_{var}"].sum().value / hists2[f"total_Pi_up_{cut}_{var}"].sum().value)-0.15*(hists2[f"passing_K_up_{cut}_{var}"].sum().value / hists2[f"total_K_up_{cut}_{var}"].sum().value)-0.05*(hists2[f"passing_P_up_{cut}_{var}"].sum().value / hists2[f"total_P_up_{cut}_{var}"].sum().value)
+#         for cut in cuts3
+#     ]
+#     plt.plot(Mu_eff_up, bg_eff_up,
+#              "s-", markersize=8,
+#              color=colors["Mu_UBDT>0.25"],
+#              label="Bkg Up UBDT")
+#     plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
+#              "s-", markersize=8,
+#              color=colors["Mu_UBDT>0.65"],
+#              label="Bkg Up ProbNNmu")
+#     plt.xlim(0.695, 1.05)
+#     plt.ylim(0.295, 1.05)
+#     plt.xlabel("Signal Efficiency")
+#     plt.ylabel("Background Rejection Efficiency")
+#     plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Offline")
+#     plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
+#     if plots_save:
+#         plt.savefig("plots/rej_v_eff_weighted_"+var+plots_format)
                 
