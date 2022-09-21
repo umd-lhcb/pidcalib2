@@ -3,7 +3,7 @@
 # Note: Run this on glacier!
 
 declare -A SAMPLES
-SAMPLES[Mu_nopt]="DLLmu > 2.0 & DLLe < 1.0 & IsMuon == 1.0 & UBDT <= 0.25"
+SAMPLES[Mu_nopt]="DLLmu > 2.0 & DLLe < 1.0 & IsMuon == 1.0 & UBDT < 0.25"
 
 for year in 16; do
     for polarity in "up" "down"; do
