@@ -3,20 +3,26 @@
 # Note: Run this on glacier!
 
 declare -A SAMPLES
-SAMPLES[Mu_nopt]="DLLmu > 2.0 & DLLe < 1.0 & IsMuon == 1.0 & UBDT > 0.25"
+SAMPLES[Mu_ubdt]="DLLmu > 2.0 & DLLe < 1.0 & IsMuon == 1.0 & UBDT > 0.25"
+SAMPLES[Mu_ubdt_veto]="DLLmu > 2.0 & DLLe < 1.0 & IsMuon == 1.0 & UBDT < 0.25"
 
+declare -A POLARITY
+POLARITY[up]="mu"
+POLARITY[down]="md"
+
+PARTICLE=Mu_nopt
 BASE_FOLDER=pidcalib_ubdt
 rm -rf ${BASE_FOLDER}
 
 for year in 16; do
     for polarity in "up" "down"; do
         for part in "${!SAMPLES[@]}"; do
-            folder_name="{BASE_FOLDER}/run2-rdx-20${year}-${POLARITY[${polarity}]}-${part}_ubdt-p_eta_ntracks"
+            folder_name="${BASE_FOLDER}/run2-rdx-20${year}-${POLARITY[${polarity}]}-${part}-p_eta_ntracks"
             echo "Output folder: ${folder_name}"
             pidcalib2.make_eff_hists \
                 --output-dir ${folder_name} \
                 --sample "Turbo${year}" --magnet ${polarity} \
-                --particle ${part} --pid-cut "${SAMPLES[${part}]}" \
+                --particle ${PARTICLE} --pid-cut "${SAMPLES[${part}]}" \
                 --bin-var Brunel_P --bin-var Brunel_ETA --bin-var nTracks_Brunel \
                 --binning-file ./binning.json
         done
