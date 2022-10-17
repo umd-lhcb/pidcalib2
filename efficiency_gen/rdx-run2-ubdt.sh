@@ -14,6 +14,8 @@ PARTICLE=Mu_nopt
 BASE_FOLDER=pidcalib_ubdt
 rm -rf ${BASE_FOLDER}
 
+GLOBAL_CUTS="Brunel_IPCHI2 > 45 & Brunel_TRACK_GHOSTPROB < 0.5"
+
 for year in 16; do
     for polarity in "up" "down"; do
         for part in "${!SAMPLES[@]}"; do
@@ -23,6 +25,7 @@ for year in 16; do
                 --output-dir ${folder_name} \
                 --sample "Turbo${year}" --magnet ${polarity} \
                 --particle ${PARTICLE} \
+                --cut "${GLOBAL_CUTS}" \
                 --pid-cut "${SAMPLES[${part}]}" \
                 --bin-var Brunel_P --bin-var Brunel_ETA --bin-var nTracks_Brunel \
                 --binning-file ./binning.json
