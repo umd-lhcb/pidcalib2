@@ -25,7 +25,7 @@ for year in 16; do
                 --output-dir ${folder_name} \
                 --sample "Turbo${year}" --magnet ${polarity} \
                 --particle ${PARTICLE} \
-                --cut ${GLOBAL_CUTS} \
+                --cut "${GLOBAL_CUTS}" \
                 --pid-cut "${SAMPLES[${part}]}" \
                 --bin-var Brunel_P --bin-var Brunel_ETA --bin-var nTracks_Brunel \
                 --binning-file ./binning.json
