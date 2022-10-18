@@ -76,6 +76,24 @@ def p_binning(particle: str, low: float = 0, high: float = 80000) -> List[float]
     #         high,
     #     ]
     return bins
+
+
+def eta_binning(particle, low: float = 1.5, high: float = 5.0) -> List[float]:
+    return list(np.linspace(low, high, 5))
+
+
+def ntracks_binning(particle, low: float = 0, high: float = 500) -> List[float]:
+    return [low, 50, 200, 300, high]
+
+
+def nspdhits_binning(particle, low: float = 0, high: float = 1000) -> List[float]:
+    return [low, 200, 400, 600, 800, high]
+
+
+def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]:
+    return list(np.linspace(low, high, 4))
+
+
 # New
 def pt_binning(particle: str, low: float = 0, high: float = 2000) -> List[float]:
     if particle not in valid_particles:
@@ -96,21 +114,6 @@ def pt_binning(particle: str, low: float = 0, high: float = 2000) -> List[float]
         uniform_bins = np.linspace(1000, high, 10).tolist()  # type:ignore
         bins.extend(uniform_bins)
     return bins
-
-def eta_binning(particle, low: float = 1.5, high: float = 5.0) -> List[float]:
-    return list(np.linspace(low, high, 5))
-
-
-def ntracks_binning(particle, low: float = 0, high: float = 500) -> List[float]:
-    return [low, 50, 200, 300, high]
-
-
-def nspdhits_binning(particle, low: float = 0, high: float = 1000) -> List[float]:
-    return [low, 200, 400, 600, 800, high]
-
-
-def trchi2_binning(particle, low: float = 0.0, high: float = 3.0) -> List[float]:
-    return list(np.linspace(low, high, 4))
 
 
 # Dict of binnings for each track type and variable
