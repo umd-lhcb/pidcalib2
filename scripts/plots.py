@@ -26,20 +26,25 @@ plt.rcParams["font.size"] = 20
 plt.rcParams["figure.dpi"] = 50  # Comment out/set to 300 for production plots
 plt.rcParams["axes.formatter.min_exponent"] = 0
 
-hists = {}
-hists2 = {}
+# Config
 particles = ["K", "Pi", "Mu"]
 pidcuts = ["UBDT>0.25", "UBDT>0.65"]
+mags = ["up"]
+vars = ["Brunel_P", "Brunel_PT"]
+dirs = ["pidcalib_output_many_8_8"]
+output = "plots_9_20_old"
+
+# To be filled
+hists = {}
+hists2 = {}
 cuts2 = []
 cuts3 = []
 for cut in np.linspace(0, 1, 21): 
     cut = format(cut, '.2f')
     cuts2.append(f"UBDT>{cut}")
     cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
-mags = ["up"]
-vars = ["Brunel_P", "Brunel_PT"]
-dirs = ["pidcalib_output_8_9"]
 
+# Open files and obtain all the histograms
 for mag in mags:
     for particle in particles:
         for pidcut in pidcuts:
@@ -78,6 +83,8 @@ colors = {
     "P_UBDT>0.65": "xkcd:pastel purple",
     
 }
+
+# Efficiency as a function of a variable, with binning
 i=0
 for dir in dirs:
     for mag in mags:
@@ -87,12 +94,13 @@ for dir in dirs:
             for particle in particles:
                 for pidcut in pidcuts:
                     name=particle+"_"+mag+"_"+pidcut+"_"+var+"_"+dir
+                    name_label = particle+"_"+mag+"_"+pidcut+"_"+var
                     plt.hist(
                         hists[name].axes[0].edges[:-1],
                         bins=hists[name].axes[0].edges,
                         weights=hists[name].values(),
                         histtype="stepfilled",
-                        label=name.replace("_", " ").replace("Pi", r"$\pi$").replace("Mu", r"$\mu$"),
+                        label=name_label.replace("_", " ").replace("Pi", r"$\pi$").replace("Mu", r"$\mu$"),
                         color=colors[particle+"_"+pidcut],
                         edgecolor=colors[particle+"_"+pidcut],
                         linewidth=1.5,
@@ -106,8 +114,9 @@ for dir in dirs:
                     plt.ylabel("Efficiency")
                     plt.figtext(0.2, 0.8, "LHCb\n $\\sqrt{s}$=13 TeV 2016 Validation")
             if plots_save:
-                plt.savefig("plots_8_9/eff_"+var+"_"+mag+"_"+dir+plots_format)
-            
+                plt.savefig(output+"/eff_"+var+"_"+mag+"_"+dir+plots_format)
+
+# Efficiency curves                
 for var in vars:        
     plt.figure(i)
     i+=1
@@ -170,7 +179,7 @@ for var in vars:
         plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Online")
         plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
     if plots_save:
-        plt.savefig("plots_8_9/rej_v_eff_unbiased_"+var+plots_format)
+        plt.savefig(output+"/rej_v_eff_unbiased_"+var+plots_format)
                 
 # for var in vars:        
 #     plt.figure(i)

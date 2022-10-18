@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 # Note: Run this on glacier!
+# Generates files necessary for efficiency vs. bkg efficiency plots
 
 declare -A SAMPLES
 
