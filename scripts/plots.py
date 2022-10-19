@@ -29,10 +29,12 @@ plt.rcParams["figure.dpi"] = 50  # Comment out/set to 300 for production plots
 plt.rcParams["axes.formatter.min_exponent"] = 0
 
 # Config
-particles = ["K", "Pi", "Mu_nopt", "P"]
+particles = ["K", "Pi", "P", "Mu_nopt"]
+particles_label = {"K": "$K$", "Pi": "$\\pi$", "Mu_nopt": "$\\mu$", "P": "$p$"}
 pidcuts = ["UBDT>0.25"]
 mags = ["up"]
 vars = ["Brunel_P", "Brunel_PT"]
+vars_label = {"Brunel_P": "$p$", "Brunel_PT": "$p_T$"}
 dirs = ["pidcalib_ubdt_eff"]
 output = "plots"
 
@@ -101,7 +103,8 @@ for dir in dirs:
             for particle in particles:
                 for pidcut in pidcuts:
                     name=particle+"_"+mag+"_"+pidcut+"_"+var+"_"+dir
-                    name_label = particle+"_"+mag+"_"+pidcut+"_"+var
+                    pidcut_lbl = pidcut.replace("UBDT", r"\mu$BDT$")
+                    name_label = particle_label[particle]+fr", ${pidcut_lbl}$"
                     plt.hist(
                         hists[name].axes[0].edges[:-1],
                         bins=hists[name].axes[0].edges,
@@ -117,9 +120,10 @@ for dir in dirs:
                     plt.margins(x=-0.01)
                     plt.legend()
                     plt.legend(fontsize=20)
-                    plt.xlabel(var+" [MeV]")
+                    plt.xlabel(vars_label[var]+" [MeV]")
                     plt.ylabel("Efficiency")
-                    plt.figtext(0.2, 0.8, "LHCb\n 2016, $\\sqrt{s} = 13$ TeV")
+                    plt.figtext(0.15, 0.85, "LHCb $\\sqrt{s} = 13$ TeV\n2016 MagUp")
+                    plt.figtext(0.15, 0.8, "IsMuon & MuonUnbiased & DLL$\\mu$ > 2")
             if plots_save:
                 plt.savefig(output+"/eff_"+var+"_"+mag+"_"+dir+plots_format)
 
@@ -150,36 +154,14 @@ for var in vars:
         plt.plot(Mu_eff_up, bg_eff_up,
                  "s-", markersize=8,
                  color=colors[particle+"_UBDT>0.25"],
-                 label=particle_label[particle]+" Up $\\mu$BDT")
-        # Mu_eff_down = [
-        #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
-        #     for cut in cuts2
-        # ]
-        # bg_eff_down = [
-        #     1-hists2[f"passing_{particle}_down_{cut}_{var}"].sum().value / hists2[f"total_{particle}_down_{cut}_{var}"].sum().value
-        #     for cut in cuts2
-        # ]
-        # Mu_eff_down_pnnmu = [
-        #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
-        #     for cut in cuts3
-        # ]
-        # bg_eff_down_pnnmu = [
-        #     1-hists2[f"passing_{particle}_down_{cut}_{var}"].sum().value / hists2[f"total_{particle}_down_{cut}_{var}"].sum().value
-        #     for cut in cuts3
-        # ]
-        # plt.plot(Mu_eff_down, bg_eff_down,
-        #          ".-",
-        #          color=colors[particle+"_UBDT>0.25"],
-        #          label=particle+" Down UBDT")
-        # plt.plot(Mu_eff_down_pnnmu, bg_eff_down_pnnmu,
-        #          ".-",
-        #          color=colors[particle+"_UBDT>0.65"],
-        #          label=particle+" Down ProbNNmu")
+                 label=particle_label[particle])
+
         plt.xlim(0, 1.05)
         plt.ylim(0, 1.05)
-        plt.xlabel("Signal Efficiency")
-        plt.ylabel("Background Rejection Efficiency")
-        plt.figtext(0.2, 0.2, "IsMuon & MuonUnbiased & DLL$\\mu$ > 2")
-        plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 12)
+        plt.xlabel("Signal efficiency")
+        plt.ylabel("Background rejection efficiency")
+        plt.figtext(0.15, 0.25, "LHCb $\\sqrt{s} = 13$ TeV\n2016 MagUp")
+        plt.figtext(0.15, 0.2, "IsMuon & MuonUnbiased & DLL$\\mu$ > 2")
+        plt.legend(bbox_to_anchor=(0.02, 0.96), loc="upper left", fontsize = 18)
     if plots_save:
         plt.savefig(output+"/rej_v_eff_unbiased_"+var+plots_format)
