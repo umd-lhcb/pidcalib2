@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Standard includes
 import pickle
 import numpy as np
@@ -22,24 +24,25 @@ import mplhep as hep
 
 hep.style.use("LHCb2")
 
-plt.rcParams["font.size"] = 20
+plt.rcParams["font.size"] = 16
 plt.rcParams["figure.dpi"] = 50  # Comment out/set to 300 for production plots
 plt.rcParams["axes.formatter.min_exponent"] = 0
 
 # Config
-particles = ["K", "Pi", "Mu"]
-pidcuts = ["UBDT>0.25", "UBDT>0.65"]
+particles = ["K", "Pi", "Mu_nopt", "P"]
+pidcuts = ["UBDT>0.25"]
 mags = ["up"]
 vars = ["Brunel_P", "Brunel_PT"]
-dirs = ["pidcalib_output_many_8_8"]
-output = "plots_9_20_old"
+dirs = ["pidcalib_ubdt_eff"]
+output = "plots"
 
 # To be filled
 hists = {}
 hists2 = {}
 cuts2 = []
 cuts3 = []
-for cut in np.linspace(0, 1, 21): 
+#  for cut in np.linspace(0, 1, 21):
+for cut in [0.25]:
     cut = format(cut, '.2f')
     cuts2.append(f"UBDT>{cut}")
     cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
@@ -73,22 +76,26 @@ plots_save = True
 plots_format = ".pdf"
 
 colors = {
-    "Mu_UBDT>0.25": "xkcd:blue",
-    "Mu_UBDT>0.65": "xkcd:pastel blue",
+    "Mu_nopt_UBDT>0.25": "xkcd:blue",
     "K_UBDT>0.25": "xkcd:red",
-    "K_UBDT>0.65": "xkcd:pink",
     "Pi_UBDT>0.25": "xkcd:green",
-    "Pi_UBDT>0.65": "xkcd:pastel green",
     "P_UBDT>0.25": "xkcd:purple",
-    "P_UBDT>0.65": "xkcd:pastel purple",
-    
+
+}
+
+particle_label = {
+    'Mu': r'$\mu$',
+    'Mu_nopt': r'$\mu$',
+    'K': '$K$',
+    'Pi': r'$\pi$',
+    'P': '$p$',
 }
 
 # Efficiency as a function of a variable, with binning
 i=0
 for dir in dirs:
     for mag in mags:
-        for var in vars:        
+        for var in vars:
             plt.figure(i)
             i+=1
             for particle in particles:
@@ -110,21 +117,21 @@ for dir in dirs:
                     plt.margins(x=-0.01)
                     plt.legend()
                     plt.legend(fontsize=20)
-                    plt.xlabel(var+" [MeV/c]")
+                    plt.xlabel(var+" [MeV]")
                     plt.ylabel("Efficiency")
-                    plt.figtext(0.2, 0.8, "LHCb\n $\\sqrt{s}$=13 TeV 2016 Validation")
+                    plt.figtext(0.2, 0.8, "LHCb\n 2016, $\\sqrt{s} = 13$ TeV")
             if plots_save:
                 plt.savefig(output+"/eff_"+var+"_"+mag+"_"+dir+plots_format)
 
-# Efficiency curves                
-for var in vars:        
+# Efficiency curves
+for var in vars:
     plt.figure(i)
     i+=1
     for particle in particles:
-        if particle == "Mu":
-            continue
+        #  if particle == "Mu":
+        #      continue
         Mu_eff_up = [
-            hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
+            hists2[f"passing_Mu_nopt_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_nopt_up_{cut}_{var}"].sum().value
             for cut in cuts2
         ]
         bg_eff_up = [
@@ -133,7 +140,7 @@ for var in vars:
         ]
 
         Mu_eff_up_pnnmu = [
-            hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
+            hists2[f"passing_Mu_nopt_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_nopt_up_{cut}_{var}"].sum().value
             for cut in cuts3
         ]
         bg_eff_up_pnnmu = [
@@ -143,11 +150,7 @@ for var in vars:
         plt.plot(Mu_eff_up, bg_eff_up,
                  "s-", markersize=8,
                  color=colors[particle+"_UBDT>0.25"],
-                 label=particle+" Up UBDT")
-        plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
-                 "s-", markersize=8,
-                 color=colors[particle+"_UBDT>0.65"],
-                 label=particle+" Up ProbNNmu")
+                 label=particle_label[particle]+" Up $\\mu$BDT")
         # Mu_eff_down = [
         #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
         #     for cut in cuts2
@@ -176,45 +179,7 @@ for var in vars:
         plt.ylim(0, 1.05)
         plt.xlabel("Signal Efficiency")
         plt.ylabel("Background Rejection Efficiency")
-        plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Online")
-        plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
+        plt.figtext(0.2, 0.2, "IsMuon & MuonUnbiased & DLL$\\mu$ > 2")
+        plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 12)
     if plots_save:
         plt.savefig(output+"/rej_v_eff_unbiased_"+var+plots_format)
-                
-# for var in vars:        
-#     plt.figure(i)
-#     i+=1
-#     Mu_eff_up = [
-#         hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
-#         for cut in cuts2
-#     ]
-#     bg_eff_up = [
-#         1-0.8*(hists2[f"passing_Pi_up_{cut}_{var}"].sum().value / hists2[f"total_Pi_up_{cut}_{var}"].sum().value)-0.15*(hists2[f"passing_K_up_{cut}_{var}"].sum().value / hists2[f"total_K_up_{cut}_{var}"].sum().value)-0.05*(hists2[f"passing_P_up_{cut}_{var}"].sum().value / hists2[f"total_P_up_{cut}_{var}"].sum().value)
-#         for cut in cuts2
-#     ]
-    
-#     Mu_eff_up_pnnmu = [
-#         hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
-#         for cut in cuts3
-#     ]
-#     bg_eff_up_pnnmu = [
-#         1-0.8*(hists2[f"passing_Pi_up_{cut}_{var}"].sum().value / hists2[f"total_Pi_up_{cut}_{var}"].sum().value)-0.15*(hists2[f"passing_K_up_{cut}_{var}"].sum().value / hists2[f"total_K_up_{cut}_{var}"].sum().value)-0.05*(hists2[f"passing_P_up_{cut}_{var}"].sum().value / hists2[f"total_P_up_{cut}_{var}"].sum().value)
-#         for cut in cuts3
-#     ]
-#     plt.plot(Mu_eff_up, bg_eff_up,
-#              "s-", markersize=8,
-#              color=colors["Mu_UBDT>0.25"],
-#              label="Bkg Up UBDT")
-#     plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
-#              "s-", markersize=8,
-#              color=colors["Mu_UBDT>0.65"],
-#              label="Bkg Up ProbNNmu")
-#     plt.xlim(0.695, 1.05)
-#     plt.ylim(0.295, 1.05)
-#     plt.xlabel("Signal Efficiency")
-#     plt.ylabel("Background Rejection Efficiency")
-#     plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Offline")
-#     plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
-#     if plots_save:
-#         plt.savefig("plots/rej_v_eff_weighted_"+var+plots_format)
-                
