@@ -77,11 +77,15 @@ plots_save = True
 plots_format = ".pdf"
 
 colors = {
-    "Mu_nopt_UBDT>0.25": "xkcd:blue",
-    "K_UBDT>0.25": "xkcd:red",
-    "Pi_UBDT>0.25": "xkcd:green",
-    "P_UBDT>0.25": "xkcd:purple",
-
+    "Mu_nopt_UBDT": "xkcd:blue",
+    "K_UBDT": "xkcd:red",
+    "Pi_UBDT": "xkcd:green",
+    "P_UBDT": "xkcd:purple",
+    ####
+    "Mu_nopt_ProbNN": "xkcd:blue",
+    "K_ProbNN": "xkcd:red",
+    "Pi_ProbNN": "xkcd:green",
+    "P_ProbNN": "xkcd:purple",
 }
 
 particle_label = {
@@ -110,10 +114,10 @@ for dir in dirs:
                         weights=hists[name].values(),
                         histtype="stepfilled",
                         label=name_label.replace("_", " ").replace("Pi", r"$\pi$").replace("Mu", r"$\mu$"),
-                        color=colors[particle+"_"+pidcut],
-                        edgecolor=colors[particle+"_"+pidcut],
+                        color=colors[particle+"_UBDT"],
+                        edgecolor=colors[particle+"_UBDT"],
                         linewidth=1.5,
-                        fc=(*mpl.colors.to_rgb(colors[particle+"_"+pidcut]), 0.03),
+                        fc=(*mpl.colors.to_rgb(colors[particle+"_UBDT"]), 0.03),
                     )
                     plt.ylim(0, 1.6)
                     plt.margins(x=-0.01)
@@ -131,8 +135,9 @@ for var in vars:
     plt.figure(i)
     i+=1
     for particle in particles:
-        #  if particle == "Mu":
-        #      continue
+        if particle == "Mu_nopt":
+            continue
+
         Mu_eff_up = [
             hists2[f"passing_Mu_nopt_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_nopt_up_{cut}_{var}"].sum().value
             for cut in cuts2
@@ -150,10 +155,17 @@ for var in vars:
             1-hists2[f"passing_{particle}_up_{cut}_{var}"].sum().value / hists2[f"total_{particle}_up_{cut}_{var}"].sum().value
             for cut in cuts3
         ]
+
         plt.plot(Mu_eff_up, bg_eff_up,
                  "s-", markersize=8,
-                 color=colors[particle+"_UBDT>0.25"],
-                 label=particle_label[particle])
+                 color=colors[particle+"_UBDT"],
+                 label=particle_label[particle] + r" $\mu$BDT")
+
+        plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
+                 "o--", markersize=8,
+                 alpha=0.7,
+                 color=colors[particle+"_ProbNN"],
+                 label=particle_label[particle] + r" ProbNN$\mu$")
 
         plt.xlim(0, 1.05)
         plt.ylim(0, 1.05)
