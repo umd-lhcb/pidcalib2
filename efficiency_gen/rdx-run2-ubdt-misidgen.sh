@@ -21,8 +21,8 @@ for year in 16; do
                     --output-dir ${OUTPUT_FOLDER} \
                     --sample "${PREFIX[${part}]}${year}" --magnet ${polarity} \
                     --particle ${part} \
-                    $(for I in $(seq 0 0.05 0.3); do echo "--pid-cut UBDT>${I} "; done) \
-                    $(for I in $(seq 0 0.05 0.3); do echo "--pid-cut Brunel_MC15TuneV1_ProbNNmu>${I} "; done) \
+                    $(for I in $(seq 0 0.05 1); do echo "--pid-cut UBDT>${I} "; done) \
+                    $(for I in $(seq 0 0.05 1); do echo "--pid-cut Brunel_MC15TuneV1_ProbNNmu>${I} "; done) \
                     --cut "IsMuon==1 & MuonUnbiased==1 & DLLmu>2" \
                     --bin-var ${var}
             done
