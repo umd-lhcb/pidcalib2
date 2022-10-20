@@ -43,8 +43,7 @@ hists = {}
 hists2 = {}
 cuts2 = []
 cuts3 = []
-#  for cut in np.linspace(0, 1, 21):
-for cut in [0.25]:
+for cut in np.linspace(0, 1, 21):
     cut = format(cut, '.2f')
     cuts2.append(f"UBDT>{cut}")
     cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
@@ -158,10 +157,10 @@ for var in vars:
 
         plt.xlim(0, 1.05)
         plt.ylim(0, 1.05)
-        plt.xlabel("Signal efficiency")
+        plt.xlabel("Signal selection efficiency")
         plt.ylabel("Background rejection efficiency")
         plt.figtext(0.15, 0.25, "LHCb $\\sqrt{s} = 13$ TeV\n2016 MagUp")
         plt.figtext(0.15, 0.2, "IsMuon & MuonUnbiased & DLL$\\mu$ > 2")
-        plt.legend(bbox_to_anchor=(0.02, 0.96), loc="upper left", fontsize = 18)
+        plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 18)
     if plots_save:
         plt.savefig(output+"/rej_v_eff_unbiased_"+var+plots_format)
