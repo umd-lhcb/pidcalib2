@@ -28,11 +28,12 @@ plt.rcParams["axes.formatter.min_exponent"] = 0
 
 # Config
 particles = ["K", "Pi", "Mu"]
-pidcuts = ["UBDT>0.25", "UBDT>0.65"]
+pidcuts = ["IsMuon==1.0&UBDT>0.65&DLLmu>2.0&DLLe<-1.0&probe_Brunel_ANNTraining_MuonNShared==1"]
 mags = ["up"]
 vars = ["Brunel_P", "Brunel_PT"]
-dirs = ["pidcalib_output_many_8_8"]
-output = "plots_9_20_old"
+# Brunel_P.Brunel_ETA.nTracks_Brunel
+dirs = ["pidcalib_output_uBDT_DLL"]
+output = "plots_7_24"
 
 # To be filled
 hists = {}
@@ -117,69 +118,69 @@ for dir in dirs:
                 plt.savefig(output+"/eff_"+var+"_"+mag+"_"+dir+plots_format)
 
 # Efficiency curves                
-for var in vars:        
-    plt.figure(i)
-    i+=1
-    for particle in particles:
-        if particle == "Mu":
-            continue
-        Mu_eff_up = [
-            hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
-            for cut in cuts2
-        ]
-        bg_eff_up = [
-            1-hists2[f"passing_{particle}_up_{cut}_{var}"].sum().value / hists2[f"total_{particle}_up_{cut}_{var}"].sum().value
-            for cut in cuts2
-        ]
+# for var in vars:        
+#     plt.figure(i)
+#     i+=1
+#     for particle in particles:
+#         if particle == "Mu":
+#             continue
+#         Mu_eff_up = [
+#             hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
+#             for cut in cuts2
+#         ]
+#         bg_eff_up = [
+#             1-hists2[f"passing_{particle}_up_{cut}_{var}"].sum().value / hists2[f"total_{particle}_up_{cut}_{var}"].sum().value
+#             for cut in cuts2
+#         ]
 
-        Mu_eff_up_pnnmu = [
-            hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
-            for cut in cuts3
-        ]
-        bg_eff_up_pnnmu = [
-            1-hists2[f"passing_{particle}_up_{cut}_{var}"].sum().value / hists2[f"total_{particle}_up_{cut}_{var}"].sum().value
-            for cut in cuts3
-        ]
-        plt.plot(Mu_eff_up, bg_eff_up,
-                 "s-", markersize=8,
-                 color=colors[particle+"_UBDT>0.25"],
-                 label=particle+" Up UBDT")
-        plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
-                 "s-", markersize=8,
-                 color=colors[particle+"_UBDT>0.65"],
-                 label=particle+" Up ProbNNmu")
-        # Mu_eff_down = [
-        #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
-        #     for cut in cuts2
-        # ]
-        # bg_eff_down = [
-        #     1-hists2[f"passing_{particle}_down_{cut}_{var}"].sum().value / hists2[f"total_{particle}_down_{cut}_{var}"].sum().value
-        #     for cut in cuts2
-        # ]
-        # Mu_eff_down_pnnmu = [
-        #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
-        #     for cut in cuts3
-        # ]
-        # bg_eff_down_pnnmu = [
-        #     1-hists2[f"passing_{particle}_down_{cut}_{var}"].sum().value / hists2[f"total_{particle}_down_{cut}_{var}"].sum().value
-        #     for cut in cuts3
-        # ]
-        # plt.plot(Mu_eff_down, bg_eff_down,
-        #          ".-",
-        #          color=colors[particle+"_UBDT>0.25"],
-        #          label=particle+" Down UBDT")
-        # plt.plot(Mu_eff_down_pnnmu, bg_eff_down_pnnmu,
-        #          ".-",
-        #          color=colors[particle+"_UBDT>0.65"],
-        #          label=particle+" Down ProbNNmu")
-        plt.xlim(0, 1.05)
-        plt.ylim(0, 1.05)
-        plt.xlabel("Signal Efficiency")
-        plt.ylabel("Background Rejection Efficiency")
-        plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Online")
-        plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
-    if plots_save:
-        plt.savefig(output+"/rej_v_eff_unbiased_"+var+plots_format)
+#         Mu_eff_up_pnnmu = [
+#             hists2[f"passing_Mu_up_{cut}_{var}"].sum().value / hists2[f"total_Mu_up_{cut}_{var}"].sum().value
+#             for cut in cuts3
+#         ]
+#         bg_eff_up_pnnmu = [
+#             1-hists2[f"passing_{particle}_up_{cut}_{var}"].sum().value / hists2[f"total_{particle}_up_{cut}_{var}"].sum().value
+#             for cut in cuts3
+#         ]
+#         plt.plot(Mu_eff_up, bg_eff_up,
+#                  "s-", markersize=8,
+#                  color=colors[particle+"_UBDT>0.25"],
+#                  label=particle+" Up UBDT")
+#         plt.plot(Mu_eff_up_pnnmu, bg_eff_up_pnnmu,
+#                  "s-", markersize=8,
+#                  color=colors[particle+"_UBDT>0.65"],
+#                  label=particle+" Up ProbNNmu")
+#         # Mu_eff_down = [
+#         #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
+#         #     for cut in cuts2
+#         # ]
+#         # bg_eff_down = [
+#         #     1-hists2[f"passing_{particle}_down_{cut}_{var}"].sum().value / hists2[f"total_{particle}_down_{cut}_{var}"].sum().value
+#         #     for cut in cuts2
+#         # ]
+#         # Mu_eff_down_pnnmu = [
+#         #     hists2[f"passing_Mu_down_{cut}_{var}"].sum().value / hists2[f"total_Mu_down_{cut}_{var}"].sum().value
+#         #     for cut in cuts3
+#         # ]
+#         # bg_eff_down_pnnmu = [
+#         #     1-hists2[f"passing_{particle}_down_{cut}_{var}"].sum().value / hists2[f"total_{particle}_down_{cut}_{var}"].sum().value
+#         #     for cut in cuts3
+#         # ]
+#         # plt.plot(Mu_eff_down, bg_eff_down,
+#         #          ".-",
+#         #          color=colors[particle+"_UBDT>0.25"],
+#         #          label=particle+" Down UBDT")
+#         # plt.plot(Mu_eff_down_pnnmu, bg_eff_down_pnnmu,
+#         #          ".-",
+#         #          color=colors[particle+"_UBDT>0.65"],
+#         #          label=particle+" Down ProbNNmu")
+#         plt.xlim(0, 1.05)
+#         plt.ylim(0, 1.05)
+#         plt.xlabel("Signal Efficiency")
+#         plt.ylabel("Background Rejection Efficiency")
+#         plt.figtext(0.2, 0.2, "IsMuon==1 & MuonUnbiased==1 & DLLmu>2 Online")
+#         plt.legend(bbox_to_anchor=(0.02, 0.8), loc="upper left", fontsize = 20)
+#     if plots_save:
+#         plt.savefig(output+"/rej_v_eff_unbiased_"+var+plots_format)
                 
 # for var in vars:        
 #     plt.figure(i)
