@@ -28,11 +28,11 @@ plt.rcParams["axes.formatter.min_exponent"] = 0
 
 # Config
 particles = ["K", "Pi", "Mu"]
-pidcuts = ["IsMuon==1.0&UBDT>0.65&DLLmu>2.0&DLLe<-1.0&probe_Brunel_ANNTraining_MuonNShared==1"]
-mags = ["up"]
+pidcuts = ["UBDT>0.65"]
+mags = ["up", "down"]
 vars = ["Brunel_P", "Brunel_PT"]
 # Brunel_P.Brunel_ETA.nTracks_Brunel
-dirs = ["pidcalib_output_uBDT_DLL"]
+dirs = ["rdx_output/pidcalib_output_precut"]
 output = "plots_7_24"
 
 # To be filled
@@ -42,8 +42,8 @@ cuts2 = []
 cuts3 = []
 for cut in np.linspace(0, 1, 21): 
     cut = format(cut, '.2f')
-    cuts2.append(f"UBDT>{cut}")
-    cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
+    # cuts2.append(f"UBDT>{cut}")
+    # cuts3.append(f"Brunel_MC15TuneV1_ProbNNmu>{cut}")
 
 # Open files and obtain all the histograms
 for mag in mags:
@@ -56,32 +56,28 @@ for mag in mags:
                     ) as f:
                         hists[f"{particle}_{mag}_{pidcut}_{var}_{dir}"] = pickle.load(f)
 
-                    for cut in cuts3:
-                        with open(
-                                f"../efficiency_gen/{dir}/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
-                        ) as f:
-                            hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                            hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                            hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                    for cut in cuts2:
-                        with open(
-                                f"../efficiency_gen/{dir}/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
-                        ) as f:
-                            hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                            hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
-                            hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    # for cut in cuts3:
+                    #     with open(
+                    #             f"../efficiency_gen/{dir}/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
+                    #     ) as f:
+                    #         hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    #         hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    #         hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    # for cut in cuts2:
+                    #     with open(
+                    #             f"../efficiency_gen/{dir}/effhists-Turbo16-{mag}-{particle}-{cut}-{var}.pkl", "rb"
+                    #     ) as f:
+                    #         hists2[f"eff_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    #         hists2[f"passing_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
+                    #         hists2[f"total_{particle}_{mag}_{cut}_{var}"] = pickle.load(f)
 plots_save = True
 plots_format = ".pdf"
 
 colors = {
-    "Mu_UBDT>0.25": "xkcd:blue",
-    "Mu_UBDT>0.65": "xkcd:pastel blue",
-    "K_UBDT>0.25": "xkcd:red",
-    "K_UBDT>0.65": "xkcd:pink",
-    "Pi_UBDT>0.25": "xkcd:green",
-    "Pi_UBDT>0.65": "xkcd:pastel green",
-    "P_UBDT>0.25": "xkcd:purple",
-    "P_UBDT>0.65": "xkcd:pastel purple",
+    "Mu": "xkcd:blue",
+    "K": "xkcd:pink",
+    "Pi": "xkcd:green",
+    "P": "xkcd:purple",
     
 }
 
@@ -90,22 +86,25 @@ i=0
 for dir in dirs:
     for mag in mags:
         for var in vars:        
-            plt.figure(i)
-            i+=1
             for particle in particles:
+                plt.figure(i)
+                i+=1
                 for pidcut in pidcuts:
                     name=particle+"_"+mag+"_"+pidcut+"_"+var+"_"+dir
                     name_label = particle+"_"+mag+"_"+pidcut+"_"+var
+                    print(name)
+                    print(hists[name].values())
+                    print(hists[name].axes[0].edges[:-1])
                     plt.hist(
                         hists[name].axes[0].edges[:-1],
                         bins=hists[name].axes[0].edges,
                         weights=hists[name].values(),
                         histtype="stepfilled",
                         label=name_label.replace("_", " ").replace("Pi", r"$\pi$").replace("Mu", r"$\mu$"),
-                        color=colors[particle+"_"+pidcut],
-                        edgecolor=colors[particle+"_"+pidcut],
+                        color=colors[particle],
+                        edgecolor=colors[particle],
                         linewidth=1.5,
-                        fc=(*mpl.colors.to_rgb(colors[particle+"_"+pidcut]), 0.03),
+                        fc=(*mpl.colors.to_rgb(colors[particle]), 0.03),
                     )
                     plt.ylim(0, 1.6)
                     plt.margins(x=-0.01)
@@ -114,8 +113,8 @@ for dir in dirs:
                     plt.xlabel(var+" [MeV/c]")
                     plt.ylabel("Efficiency")
                     plt.figtext(0.2, 0.8, "LHCb\n $\\sqrt{s}$=13 TeV 2016 Validation")
-            if plots_save:
-                plt.savefig(output+"/eff_"+var+"_"+mag+"_"+dir+plots_format)
+                    if plots_save:
+                        plt.savefig(output+"/eff_"+particle+"_"+var+"_"+mag+"_"+plots_format)
 
 # Efficiency curves                
 # for var in vars:        
