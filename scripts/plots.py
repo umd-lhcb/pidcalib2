@@ -27,12 +27,12 @@ plt.rcParams["figure.dpi"] = 50  # Comment out/set to 300 for production plots
 plt.rcParams["axes.formatter.min_exponent"] = 0
 
 # Config
-particles = ["K", "Pi", "Mu"]
-pidcuts = ["UBDT>0.65"]
+particles = ["K", "Pi", "Mu", "P"]
+pidcuts = ["UBDT>0.65&DLLmu>2.0&DLLe<-1.0"]
 mags = ["up", "down"]
 vars = ["Brunel_P", "Brunel_PT"]
 # Brunel_P.Brunel_ETA.nTracks_Brunel
-dirs = ["rdx_output/pidcalib_output_precut"]
+dirs = ["pidcalib_output_uBDT_DLL"]
 output = "plots_7_24"
 
 # To be filled
@@ -86,15 +86,15 @@ i=0
 for dir in dirs:
     for mag in mags:
         for var in vars:        
+            plt.figure(i)
+            i+=1
             for particle in particles:
-                plt.figure(i)
-                i+=1
                 for pidcut in pidcuts:
                     name=particle+"_"+mag+"_"+pidcut+"_"+var+"_"+dir
                     name_label = particle+"_"+mag+"_"+pidcut+"_"+var
                     print(name)
-                    print(hists[name].values())
-                    print(hists[name].axes[0].edges[:-1])
+                    print(hists[name].values().mean())
+                    # print(hists[name].axes[0].edges[:-1])
                     plt.hist(
                         hists[name].axes[0].edges[:-1],
                         bins=hists[name].axes[0].edges,
@@ -113,9 +113,9 @@ for dir in dirs:
                     plt.xlabel(var+" [MeV/c]")
                     plt.ylabel("Efficiency")
                     plt.figtext(0.2, 0.8, "LHCb\n $\\sqrt{s}$=13 TeV 2016 Validation")
-                    if plots_save:
-                        plt.savefig(output+"/eff_"+particle+"_"+var+"_"+mag+"_"+plots_format)
-
+            if plots_save:
+                plt.savefig(output+"/eff_"+var+"_"+mag+plots_format)
+                print("Saved "+output+"/eff_"+var+"_"+mag+plots_format)
 # Efficiency curves                
 # for var in vars:        
 #     plt.figure(i)
