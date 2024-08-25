@@ -152,6 +152,9 @@ dmypy.json
 /data
 /temp
 .virtual_documents
+*~
+bin/*
+gen/*
 
 pidcalib_output
 .matplotlib

@@ -29,6 +29,7 @@
           name = "pidcalib2-dev";
           buildInputs = (with pkgs; with pythonPackages; [
             root
+            cxxopts
             # Python stack
             pidcalib2
           ]);
