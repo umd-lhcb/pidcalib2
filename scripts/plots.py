@@ -27,7 +27,8 @@ plt.rcParams["figure.dpi"] = 50  # Comment out/set to 300 for production plots
 plt.rcParams["axes.formatter.min_exponent"] = 0
 
 # Config
-particles = ["K", "Pi", "Mu", "P"]
+# particles = ["K", "Pi", "Mu", "P"]
+particles = ["Pi"]
 pidcuts = ["UBDT>0.65&DLLmu>2.0&DLLe<-1.0"]
 mags = ["up", "down"]
 vars = ["Brunel_P", "Brunel_PT"]
