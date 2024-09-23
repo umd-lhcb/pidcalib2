@@ -248,7 +248,7 @@ def root_to_dataframe(
         root_file = uproot.open(path)
 
         # NOTE: UMD special
-        friend_file = uproot.open(path.replace('remote', 'friends'))
+        friend_file = uproot.open(path.replace('remote', 'friends-no_cut'))
     except FileNotFoundError as exc:
         if "Server responded with an error: [3010]" in exc.args[0]:
             log.error(
