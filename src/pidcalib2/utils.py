@@ -479,13 +479,24 @@ def create_histograms(config):
     }
     all_hists = {}
 
+    ubdt_version = config["ubdt_version"]
+    if ubdt_version == 'run1rdx':
+        log.info('Using Run 1 RDx uBDT training (friends-all_cuts)')
+    elif ubdt_version == 'run2ang':
+        log.info('Using Run 2 Angular uBDT training (friends-no_cut)')
+    else:
+        log.error(
+            f'Unexpected ubdt-version argument "{ubdt_version}".'
+            ' Options are "run1rdx" and "run2ang".'
+        )
+
     for path in (
         tqdm(calib_sample["files"], leave=False, desc="Processing files")
         if sys.stderr.isatty()  # Use tqdm only when running interactively
         else calib_sample["files"]
     ):
         df = pid_data.root_to_dataframe(
-            path, tree_paths, list(branch_names.values()), True
+            path, tree_paths, list(branch_names.values()), True, ubdt_version
         )
         if df is not None:
             # Rename colums of the dataset from branch names to simple user-level

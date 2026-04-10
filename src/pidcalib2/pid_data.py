@@ -228,7 +228,8 @@ def get_calibration_sample(
 
 
 def root_to_dataframe(
-    path: str, tree_names: List[str], branches: List[str], calibration: bool = False
+    path: str, tree_names: List[str], branches: List[str], calibration: bool = False,
+    ubdt_version: str = 'run1rdx'
 ) -> pd.DataFrame:
     """Return DataFrame with requested branches from tree in ROOT file.
 
@@ -248,7 +249,16 @@ def root_to_dataframe(
         root_file = uproot.open(path)
 
         # NOTE: UMD special
-        friend_file = uproot.open(path.replace('remote', 'friends-all_cuts'))
+        if ubdt_version == 'run1rdx':
+            friend_file = uproot.open(path.replace('remote', 'friends-all_cuts'))
+        elif ubdt_version == 'run2ang':
+            friend_file = uproot.open(path.replace('remote', 'friends-no_cut'))
+        else:
+            log.error(
+                f'Unexpected ubdt-version argument "{ubdt_version}".'
+                ' Options are "run1rdx" and "run2ang".'
+            )
+            raise RuntimeError()
     except FileNotFoundError as exc:
         if "Server responded with an error: [3010]" in exc.args[0]:
             log.error(
@@ -279,9 +289,12 @@ def root_to_dataframe(
             branches_friend = [b for b in branches if b not in branches_main]
             df_friend = tree_friend.arrays(branches_friend, library="pd")
 
-            df = pd.concat([df_main.reset_index(drop=True), df_friend.reset_index(drop=True)], axis=1)
+            df = pd.concat(
+                [df_main.reset_index(drop=True), df_friend.reset_index(drop=True)],
+                axis=1
+            )
             dfs.append(df)  # type: ignore
-            known_keys = list(tree)  + list(tree_friend)
+            known_keys = list(tree) + list(tree_friend)
 
         except uproot.exceptions.KeyInFileError as exc:  # type: ignore
             similar_keys = []
