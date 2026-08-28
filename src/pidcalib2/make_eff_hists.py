@@ -69,6 +69,12 @@ def decode_arguments(args):
         choices=["up", "down"],
     )
     parser.add_argument(
+        "-u",
+        "--ubdt-version",
+        help="Select uBDT training",
+        choices=["run1rdx", "run2ang"]
+    )
+    parser.add_argument(
         "-p",
         "--particle",
         help="particle type; see pidcalib2.make_eff_hists --list configs",
